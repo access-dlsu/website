@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setTimeout(() => {
         const accessLogo = document.createElement('img');
-        accessLogo.src = 'access.png';
+        accessLogo.src = 'logo/access.png';
         accessLogo.alt = 'Access Logo';
         accessLogo.classList.add('access-logo');
         accessLogo.style.position = 'absolute';
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setTimeout(() => {
             const csoLogo = document.createElement('img');
-            csoLogo.src = 'cso.png';
+            csoLogo.src = 'logo/cso.png';
             csoLogo.alt = 'CSO Logo';
             csoLogo.classList.add('cso-logo');
             csoLogo.style.position = 'absolute';
