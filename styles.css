@@ -1,0 +1,60 @@
+@font-face {
+    font-family: 'Ethnocentric';
+    src: url('fonts/Ethnocentric.ttf') format('truetype');
+}
+
+.coming-soon {
+    font-family: 'Ethnocentric', sans-serif;
+    font-size: 72px;
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    font-style: italic;
+    text-align: center;
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: black;
+}
+
+#star-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    perspective: 1000px;
+}
+
+.star {
+    position: absolute;
+    border-radius: 50%;
+    background-color: white;
+    filter: blur(2px);
+    animation: moveStar 5s linear infinite;
+}
+
+@keyframes moveStar {
+    0% {
+        transform: translateZ(0) scale(0.5);
+        opacity: 1;
+    }
+    100% {
+        transform: translateZ(1000px) scale(2);
+        opacity: 0;
+    }
+}
+
+nav {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 3s;
+    bottom: 5vh;
+    display: flex;
+    gap: 20px;
+}
