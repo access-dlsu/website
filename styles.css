@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Ethnocentric';
-    src: url('fonts/Ethnocentric.ttf') format('truetype');
+    src: url('fonts/Ethnocentric.otf') format('opentype');
 }
 
 .coming-soon {
