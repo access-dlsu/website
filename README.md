@@ -62,7 +62,7 @@ gantt
 ## 🤝 Contributing
 
 We welcome contributions! Please feel free to:
-1. Check the [Issues](https://github.com/your-username/infinity/issues) tab
+1. Check the [Issues](https://github.com/ACCESS-DLSU/infinity/issues) tab
 2. Suggest new features
 3. Report bugs
 4. Submit pull requests
