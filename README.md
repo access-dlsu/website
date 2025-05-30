@@ -67,10 +67,6 @@ We welcome contributions! Please feel free to:
 3. Report bugs
 4. Submit pull requests
 
-## 📞 Communication
-
-We maintain a minimal-meeting approach. Meetings will only be scheduled when absolutely necessary.
-
 ## 🚀 Getting Started
 
 *Coming soon...*
