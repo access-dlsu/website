@@ -6,7 +6,8 @@ import { Router, Route } from "@solidjs/router";
 import './index.css';
 import App from './App';
 
-const Home = lazy(() => import('./pages/Home'))
+const Teaser = lazy(() => import('./pages/Teaser'))
+//const Home = lazy(() => import('./pages/Home'))
 
 const root = document.getElementById('root');
 
@@ -18,6 +19,7 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
 
 render(() => (
   <Router root={App}>
-    <Route path="/" component={Home} />
+    <Route path="/" component={Teaser} />
+    {/*<Route path="/" component={Home} />*/}
   </Router>
 ), root!);

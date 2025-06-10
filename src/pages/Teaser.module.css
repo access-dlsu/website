@@ -43,10 +43,14 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  opacity: 0;
   font-style: italic;
   text-align: center;
+  opacity: 0;
   transition: opacity 3s;
+  transition-delay: 7.5s;
+}
+.ComingSoon.Animated {
+  opacity: 1;
 }
 
 .QuickLinks {
@@ -55,9 +59,13 @@ body {
   transform: translateX(-50%);
   opacity: 0;
   transition: opacity 3s;
+  transition-delay: 7.5s;
   bottom: 5vh;
   display: flex;
   gap: 20px;
+}
+.QuickLinks.Animated {
+  opacity: 1;
 }
 
 .AccessLogo {
@@ -67,8 +75,14 @@ body {
   transform: translate(-50%, -50%);
   width: 200px;
   height: auto;
-  opacity: 0;
   transition: opacity 3s, top 3s, left 3s, width 3s, transform 3s;
+  transition-delay: 3s;
+}
+.AccessLogo.Animated {
+  top: 25px;
+  left: 25px;
+  transform: translate(0, 0);
+  width: 80px;
 }
 
 .CsoLogo {
@@ -79,4 +93,8 @@ body {
   height: auto;
   opacity: 0;
   transition: opacity 3s;
+  transition-delay: 6s;
+}
+.CsoLogo.Animated {
+  opacity: 1;
 }
