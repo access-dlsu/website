@@ -1,15 +1,21 @@
-import type { Component } from 'solid-js';
+import type { Component, JSX } from 'solid-js';
 
 import styles from './App.module.css';
 
-const App: Component = (props: { children?: any }) => {
+const App: Component<{ children?: JSX.Element }> = (props) => {
   return (
     <div class={styles.App}>
-      {/* Insert header */}
-
-      {props.children}
+      <header class={styles.header}>
+        {/* Insert header content */}
+      </header>
       
-      {/* Insert footer */}
+      <main class={styles.main}>
+        {props.children}
+      </main>
+      
+      <footer class={styles.footer}>
+        {/* Insert footer content */}
+      </footer>
     </div>
   );
 };

@@ -1,13 +1,13 @@
-import { onMount } from 'solid-js';
-import './Home.css';
+import { Component, onMount } from 'solid-js';
+
+import styles from './Home.module.css';
+
 import accessLogoSrc from '/src/assets/logo/access.png';
 import csoLogoSrc from '/src/assets/logo/cso.png';
 
-
-export default function Home() {
+const Home: Component = () => {
   onMount(() => {
-    const starContainer = document.getElementById('star-container');
-    console.log('Star container:', starContainer);
+    const starContainer = document.querySelector('.' + styles.StarContainer) as HTMLDivElement | null;
     if (!starContainer) {
       console.error('Star container not found');
       return;
@@ -15,7 +15,7 @@ export default function Home() {
 
     for (let i = 0; i < 100; i++) {
       const star = document.createElement('div');
-      star.classList.add('star');
+      star.classList.add(styles.Star);
       star.style.width = `${Math.random() * 5 + 2}px`;
       star.style.height = star.style.width;
       star.style.top = `${Math.random() * 100}vh`;
@@ -28,15 +28,7 @@ export default function Home() {
       const accessLogo = document.createElement('img');
       accessLogo.src = accessLogoSrc;
       accessLogo.alt = 'Access Logo';
-      accessLogo.classList.add('access-logo');
-      accessLogo.style.position = 'absolute';
-      accessLogo.style.top = '50%';
-      accessLogo.style.left = '50%';
-      accessLogo.style.transform = 'translate(-50%, -50%)';
-      accessLogo.style.width = '200px';
-      accessLogo.style.height = 'auto';
-      accessLogo.style.opacity = '0';
-      accessLogo.style.transition = 'opacity 3s, top 3s, left 3s, width 3s, transform 3s';
+      accessLogo.classList.add(styles.AccessLogo);
       starContainer.appendChild(accessLogo);
 
       setTimeout(() => {
@@ -54,14 +46,7 @@ export default function Home() {
         const csoLogo = document.createElement('img');
         csoLogo.src = csoLogoSrc;
         csoLogo.alt = 'CSO Logo';
-        csoLogo.classList.add('cso-logo');
-        csoLogo.style.position = 'absolute';
-        csoLogo.style.top = '20px';
-        csoLogo.style.left = '110px';
-        csoLogo.style.width = '90px';
-        csoLogo.style.height = 'auto';
-        csoLogo.style.opacity = '0';
-        csoLogo.style.transition = 'opacity 3s';
+        csoLogo.classList.add(styles.CsoLogo);
         starContainer.appendChild(csoLogo);
 
         setTimeout(() => {
@@ -72,16 +57,11 @@ export default function Home() {
       
       setTimeout(() => {
         const comingSoon = document.createElement('div');
-        comingSoon.classList.add('coming-soon');
+        comingSoon.classList.add(styles.ComingSoon);
         comingSoon.textContent = 'Coming Soon...';
-        comingSoon.style.transition = 'opacity 3s';
         starContainer.appendChild(comingSoon);
 
         const nav = document.querySelector('nav');
-        if (nav) {
-          nav.style.transition = 'opacity 3s';
-          nav.style.opacity = '0';
-        }
 
         setTimeout(() => {
           comingSoon.style.opacity = '1';
@@ -95,8 +75,8 @@ export default function Home() {
 
   return (
     <>
-      <div id="star-container"></div>
-      <nav>
+      <div class={styles.StarContainer}></div>
+      <nav class={styles.QuickLinks}>
           <a href="https://facebook.com/AccessDLSU"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="#fff" height="40" width="40"><defs><mask id="f"><rect fill="#fff" width="36" height="36"/><path fill="#000" d="m25 23 .8-5H21v-3.5c0-1.4.5-2.5 2.7-2.5H26V7.4c-1.3-.2-2.7-.4-4-.4-4.1 0-7 2.5-7 7v4h-4.5v5H15v12.7c1 .2 2 .3 3 .3s2-.1 3-.3V23h4z"/></mask></defs><path d="M15 35.8C6.5 34.3 0 26.9 0 18 0 8.1 8.1 0 18 0s18 8.1 18 18c0 8.9-6.5 16.3-15 17.8l-1-.8h-4l-1 .8z" mask="url(#f)"/></svg></a>
           <a href="https://instagram.com/dlsu_access"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" preserveAspectRatio="xMidYMid" viewBox="0 0 256 256" fill="#fff"><path d="M128 23.064c34.177 0 38.225.13 51.722.745 12.48.57 19.258 2.655 23.769 4.408 5.974 2.322 10.238 5.096 14.717 9.575 4.48 4.479 7.253 8.743 9.575 14.717 1.753 4.511 3.838 11.289 4.408 23.768.615 13.498.745 17.546.745 51.723 0 34.178-.13 38.226-.745 51.723-.57 12.48-2.655 19.257-4.408 23.768-2.322 5.974-5.096 10.239-9.575 14.718-4.479 4.479-8.743 7.253-14.717 9.574-4.511 1.753-11.289 3.839-23.769 4.408-13.495.616-17.543.746-51.722.746-34.18 0-38.228-.13-51.723-.746-12.48-.57-19.257-2.655-23.768-4.408-5.974-2.321-10.239-5.095-14.718-9.574-4.479-4.48-7.253-8.744-9.574-14.718-1.753-4.51-3.839-11.288-4.408-23.768-.616-13.497-.746-17.545-.746-51.723 0-34.177.13-38.225.746-51.722.57-12.48 2.655-19.258 4.408-23.769 2.321-5.974 5.095-10.238 9.574-14.717 4.48-4.48 8.744-7.253 14.718-9.575 4.51-1.753 11.288-3.838 23.768-4.408 13.497-.615 17.545-.745 51.723-.745M128 0C93.237 0 88.878.147 75.226.77c-13.625.622-22.93 2.786-31.071 5.95-8.418 3.271-15.556 7.648-22.672 14.764C14.367 28.6 9.991 35.738 6.72 44.155 3.555 52.297 1.392 61.602.77 75.226.147 88.878 0 93.237 0 128c0 34.763.147 39.122.77 52.774.622 13.625 2.785 22.93 5.95 31.071 3.27 8.417 7.647 15.556 14.763 22.672 7.116 7.116 14.254 11.492 22.672 14.763 8.142 3.165 17.446 5.328 31.07 5.95 13.653.623 18.012.77 52.775.77s39.122-.147 52.774-.77c13.624-.622 22.929-2.785 31.07-5.95 8.418-3.27 15.556-7.647 22.672-14.763 7.116-7.116 11.493-14.254 14.764-22.672 3.164-8.142 5.328-17.446 5.95-31.07.623-13.653.77-18.012.77-52.775s-.147-39.122-.77-52.774c-.622-13.624-2.786-22.929-5.95-31.07-3.271-8.418-7.648-15.556-14.764-22.672C227.4 14.368 220.262 9.99 211.845 6.72c-8.142-3.164-17.447-5.328-31.071-5.95C167.122.147 162.763 0 128 0Zm0 62.27C91.698 62.27 62.27 91.7 62.27 128c0 36.302 29.428 65.73 65.73 65.73 36.301 0 65.73-29.428 65.73-65.73 0-36.301-29.429-65.73-65.73-65.73Zm0 108.397c-23.564 0-42.667-19.103-42.667-42.667S104.436 85.333 128 85.333s42.667 19.103 42.667 42.667-19.103 42.667-42.667 42.667Zm83.686-110.994c0 8.484-6.876 15.36-15.36 15.36-8.483 0-15.36-6.876-15.36-15.36 0-8.483 6.877-15.36 15.36-15.36 8.484 0 15.36 6.877 15.36 15.36Z"/></svg></a>
           <a href="https://linkedin.com/company/accessdlsu"><svg width="40" height="40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" viewBox="0 0 256 256" fill="#fff"><path d="M218.123 218.127h-37.931v-59.403c0-14.165-.253-32.4-19.728-32.4-19.756 0-22.779 15.434-22.779 31.369v60.43h-37.93V95.967h36.413v16.694h.51a39.907 39.907 0 0 1 35.928-19.733c38.445 0 45.533 25.288 45.533 58.186l-.016 67.013ZM56.955 79.27c-12.157.002-22.014-9.852-22.016-22.009-.002-12.157 9.851-22.014 22.008-22.016 12.157-.003 22.014 9.851 22.016 22.008A22.013 22.013 0 0 1 56.955 79.27m18.966 138.858H37.95V95.967h37.97v122.16ZM237.033.018H18.89C8.58-.098.125 8.161-.001 18.471v219.053c.122 10.315 8.576 18.582 18.89 18.474h218.144c10.336.128 18.823-8.139 18.966-18.474V18.454c-.147-10.33-8.635-18.588-18.966-18.453"/></svg></a>
@@ -105,4 +85,6 @@ export default function Home() {
       </nav>
     </>
   )
-}
+};
+
+export default Home;

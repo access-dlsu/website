@@ -1,19 +1,6 @@
 @font-face {
-  font-family: 'Ethnocentric';
+  font-family: Ethnocentric;
   src: url('/src/assets/font/Ethnocentric.otf') format('opentype');
-}
-
-.coming-soon {
-  font-family: 'Ethnocentric', sans-serif;
-  font-size: 72px;
-  color: white;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  font-style: italic;
-  text-align: center;
 }
 
 body {
@@ -22,14 +9,14 @@ body {
   background-color: black;
 }
 
-#star-container {
+.StarContainer {
   position: relative;
   width: 100vw;
   height: 100vh;
   perspective: 1000px;
 }
 
-.star {
+.Star {
   position: absolute;
   border-radius: 50%;
   background-color: white;
@@ -48,7 +35,21 @@ body {
   }
 }
 
-nav {
+.ComingSoon {
+  font-family: Ethnocentric, sans-serif;
+  font-size: 72px;
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  font-style: italic;
+  text-align: center;
+  transition: opacity 3s;
+}
+
+.QuickLinks {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -57,4 +58,25 @@ nav {
   bottom: 5vh;
   display: flex;
   gap: 20px;
+}
+
+.AccessLogo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: auto;
+  opacity: 0;
+  transition: opacity 3s, top 3s, left 3s, width 3s, transform 3s;
+}
+
+.CsoLogo {
+  position: absolute;
+  top: 20px;
+  left: 110px;
+  width: 90px;
+  height: auto;
+  opacity: 0;
+  transition: opacity 3s;
 }
