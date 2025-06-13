@@ -1,4 +1,4 @@
-import { Component, onMount } from 'solid-js';
+import { Component, onMount, createSignal, createEffect, onCleanup } from 'solid-js';
 
 import styles from './Teaser.module.css';
 
@@ -11,6 +11,11 @@ const Teaser: Component = () => {
   let accessLogo!: HTMLImageElement;
   let csoLogo!: HTMLImageElement;
   let comingSoon!: HTMLSpanElement;
+
+  const [now, setNow] = createSignal(new Date());
+  const countdownStart = new Date('2025-06-12T00:00:00');
+  const launchDate = new Date('2025-07-01T00:00:00');
+  let intervalId: number | undefined;
 
   onMount(() => {
     for (let i = 0; i < 100; i++) {
@@ -31,14 +36,56 @@ const Teaser: Component = () => {
         }
       });
     });
+
+    // Start timer if in countdown window
+    if (now() >= countdownStart && now() < launchDate) {
+      intervalId = setInterval(() => {
+        setNow(new Date());
+      }, 1000);
+    }
   });
+
+  createEffect(() => {
+    if (now() >= countdownStart && now() < launchDate && !intervalId) {
+      intervalId = setInterval(() => {
+        setNow(new Date());
+      }, 1000);
+    }
+    if ((now() < countdownStart || now() >= launchDate) && intervalId) {
+      clearInterval(intervalId);
+      intervalId = undefined;
+    }
+  });
+
+  onCleanup(() => {
+    if (intervalId) clearInterval(intervalId);
+  });
+
+  function getCountdown() {
+    const diff = launchDate.getTime() - now().getTime();
+    if (diff <= 0) return null;
+    let seconds = Math.floor(diff / 1000);
+    const days = Math.floor(seconds / (3600 * 24));
+    seconds -= days * 3600 * 24;
+    const hours = Math.floor(seconds / 3600);
+    seconds -= hours * 3600;
+    const minutes = Math.floor(seconds / 60);
+    seconds -= minutes * 60;
+    return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  }
 
   return (
     <>
       <div ref={starContainer} class={styles.StarContainer}>
         <img ref={accessLogo} src={accessLogoSrc} alt="ACCESS DLSU Logo" class={styles.AccessLogo} />
         <img ref={csoLogo} src={csoLogoSrc} alt="DLSU CSO Logo" class={styles.CsoLogo} />
-        <span ref={comingSoon} class={styles.ComingSoon}>Coming Soon...</span>
+        <span ref={comingSoon} class={styles.ComingSoon}>
+          {now() < countdownStart
+            ? 'Coming Soon...'
+            : now() < launchDate
+              ? `Countdown:\n\n${getCountdown()}`
+              : 'Launched!'}
+        </span>
       </div>
       <nav ref={quickLinks} class={styles.QuickLinks}>
           <a href="https://facebook.com/AccessDLSU"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="#fff" height="40" width="40"><defs><mask id="f"><rect fill="#fff" width="36" height="36"/><path fill="#000" d="m25 23 .8-5H21v-3.5c0-1.4.5-2.5 2.7-2.5H26V7.4c-1.3-.2-2.7-.4-4-.4-4.1 0-7 2.5-7 7v4h-4.5v5H15v12.7c1 .2 2 .3 3 .3s2-.1 3-.3V23h4z"/></mask></defs><path d="M15 35.8C6.5 34.3 0 26.9 0 18 0 8.1 8.1 0 18 0s18 8.1 18 18c0 8.9-6.5 16.3-15 17.8l-1-.8h-4l-1 .8z" mask="url(#f)"/></svg></a>

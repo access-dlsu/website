@@ -9,6 +9,16 @@ body {
   background-color: black;
 }
 
+/* Hide other stuff first */
+header, footer {
+  opacity: 0;
+}
+main {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+}
+
 .StarContainer {
   position: relative;
   width: 100vw;
@@ -45,6 +55,8 @@ body {
   transform: translate(-50%, -50%);
   font-style: italic;
   text-align: center;
+  width: 100%;
+  white-space: pre-line;
   opacity: 0;
   transition: opacity 3s;
   transition-delay: 7.5s;
