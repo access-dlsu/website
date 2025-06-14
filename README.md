@@ -45,6 +45,7 @@ gantt
 | SQL Database | For structured data storage |
 | CDN | For image/media storage |
 | Authentication | Hybrid approach (Traditional login + DLSU Gmail) |
+| [Firebase](https://firebase.google.com/) | Google account authentication and backend services |
 
 ### Hosting
 | Technology | Description |
@@ -67,10 +68,12 @@ We welcome contributions! Please feel free to:
 3. Report bugs
 4. Submit pull requests
 
-## 🚀 Getting Started
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-*Coming soon...*
+## 📜 Code of Conduct
+
+Please review our [Code of Conduct](CODE_OF_CONDUCT.md) to foster a welcoming and respectful community.
 
 ## 📝 License
 
-*Coming soon...*
+This project is licensed under the terms of the [MIT License](LICENSE).
