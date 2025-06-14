@@ -3,20 +3,11 @@
   src: url('/src/assets/font/Ethnocentric.otf') format('opentype');
 }
 
-body {
-  margin: 0;
-  overflow: hidden;
-  background-color: black;
-}
-
-/* Hide other stuff first */
-header, footer {
-  opacity: 0;
-}
-main {
+.Teaser {
   position: fixed;
   inset: 0;
-  z-index: 10;
+  overflow: hidden;
+  background-color: black;
 }
 
 .StarContainer {
