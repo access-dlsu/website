@@ -76,4 +76,4 @@ Please review our [Code of Conduct](CODE_OF_CONDUCT.md) to foster a welcoming an
 
 ## 📝 License
 
-This project is licensed under the terms of the [MIT License](LICENSE).
+This project is licensed under the terms of the [AGPL-3.0 License](LICENSE).
