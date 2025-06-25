@@ -9,6 +9,7 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
   const [activeRoute, setActiveRoute] = createSignal('/');
   const [sliderStyle, setSliderStyle] = createSignal('');
   const [isAnimating, setIsAnimating] = createSignal(false);
+  let animatingTimeout: number;
   let navList: HTMLElement | undefined;
   let navRef: HTMLUListElement | undefined;
 
@@ -124,7 +125,13 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
     // Convert CSS duration (e.g., "0.3s") to milliseconds
     const durationMs = parseFloat(animationDuration) * 1000;
 
-    setTimeout(() => setIsAnimating(false), durationMs);
+    if (isAnimating()) {
+      clearTimeout(animatingTimeout);
+      setIsAnimating(false);
+      requestAnimationFrame(() => setIsAnimating(true));
+    }
+
+    animatingTimeout = setTimeout(() => setIsAnimating(false), durationMs);
   };
 
   onMount(() => {
@@ -173,7 +180,7 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
           <img src={accessLogoSrc} alt="ACCESS Logo" />
           <span>ACCESS</span>
         </a>
-        <nav class={styles.navList} ref={navList}>
+        <nav class={`${styles.navList} ${isAnimating() ? styles.animating : ''}`} ref={navList}>
           <ul ref={navRef}>
             <div class={`${styles.activeSlider} ${isAnimating() ? styles.animating : ''}`} style={sliderStyle()}></div>
             <li class={isActive('/') ? styles.active : ''}>
