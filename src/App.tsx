@@ -290,7 +290,16 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
       </main>
 
       <footer class={styles.footer}>
-        {/* Insert footer content */}
+        <p class={styles.footerText}>
+          <img src={accessLogoSrc} alt="ACCESS Logo" />
+          <span>© 2025 by The Association of Computer Engineering Students</span>
+        </p>
+        <nav class={styles.footerLinks}>
+          <a href="https://www.facebook.com/AccessDLSU/"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/dlsu_access/"><i class="fab fa-instagram"></i></a>
+          <a href="https://github.com/ACCESS-DLSU"><i class="fab fa-github"></i></a>
+          <a href="https://www.linkedin.com/company/accessdlsu/"><i class="fab fa-linkedin-in"></i></a>
+        </nav>
       </footer>
     </>
   );
