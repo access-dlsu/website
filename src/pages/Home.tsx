@@ -24,6 +24,7 @@ const Home: Component = () => {
       ))}
     </>
   );
+  
 }
 
 export default Home;
