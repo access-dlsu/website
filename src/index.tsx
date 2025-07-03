@@ -8,6 +8,8 @@ import App from './App';
 
 const Teaser = lazy(() => import('./pages/Teaser'))
 const Home = lazy(() => import('./pages/Home'))
+const MembersHub = lazy(() => import('./pages/members-hub'))
+const DPBlast = lazy(() => import('./pages/members-hub/dp-blast'))
 
 const root = document.getElementById('root');
 
@@ -21,5 +23,7 @@ render(() => (
   <Router root={App}>
     <Route path="/teaser" component={Teaser} />
     <Route path="/" component={Home} />
+    <Route path="/members-hub" component={MembersHub} />
+    <Route path="/members-hub/dp-blast" component={DPBlast} />
   </Router>
 ), root!);

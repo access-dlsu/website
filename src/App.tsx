@@ -198,6 +198,9 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
             <li class={isActive('/tutorials') ? styles.active : ''}>
               <a href="/tutorials" onClick={() => handleNavClick('/tutorials')}>Tutorials</a>
             </li>
+            <li class={isActive('/members-hub') ? styles.active : ''}>
+              <a href="/members-hub" onClick={() => handleNavClick('/members-hub')}>Members Hub</a>
+            </li>
             <li class={isActive('/contact') ? styles.active : ''}>
               <a href="/contact" onClick={() => handleNavClick('/contact')}>Contact</a>
             </li>
