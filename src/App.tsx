@@ -9,9 +9,12 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
   const [activeRoute, setActiveRoute] = createSignal('/');
   const [sliderStyle, setSliderStyle] = createSignal('');
   const [isAnimating, setIsAnimating] = createSignal(false);
-  let animatingTimeout: number;
+  const [isLowQuality, setIsLowQuality] = createSignal(false);
+  const [isNavOpen, setIsNavOpen] = createSignal(false);
+  let animatingTimeout: ReturnType<typeof setTimeout>;
   let navList: HTMLElement | undefined;
   let navRef: HTMLUListElement | undefined;
+  let navMoreRef: HTMLSpanElement | undefined;
 
   const isActive = (route: string) => activeRoute() === route;
 
@@ -101,14 +104,15 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
 
     const activeLink = navRef.querySelector(`a[href="${activeRoute()}"]`);
     if (activeLink) {
-      const parentLi = activeLink.parentElement;
-      if (parentLi) {
-        const rect = parentLi.getBoundingClientRect();
-        const navRect = navRef.getBoundingClientRect();
-        const left = rect.left - navRect.left;
-        const width = rect.width;
+      const parentLi = activeLink.parentElement as HTMLElement;
+      if (parentLi && navRef) {
+        // Use offset properties to ignore transforms like scale()
+        const left = parentLi.offsetLeft;
+        const top = parentLi.offsetTop;
+        const width = parentLi.offsetWidth;
+        const height = parentLi.offsetHeight;
 
-        setSliderStyle(`left: ${left}px; width: ${width}px;`);
+        setSliderStyle(`left: ${left}px; top: ${top}px; width: ${width}px; height: ${height}px`);
       }
     }
   };
@@ -131,27 +135,46 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
       requestAnimationFrame(() => setIsAnimating(true));
     }
 
-    animatingTimeout = setTimeout(() => setIsAnimating(false), durationMs);
+    animatingTimeout = setTimeout(() => {
+      setIsAnimating(false);
+      // Call handleNavBlur to close nav menu if open
+      handleNavBlur({ relatedTarget: null } as FocusEvent);
+    }, durationMs);
+  };
+
+  const navLink = (route: string, title: string) => {
+    return (<li class={isActive(route) ? styles.active : ''}>
+              <a href={route} onClick={() => handleNavClick(route)}>{title}</a>
+            </li>)
+  }
+
+  // Helper to update lowQuality class based on screen width
+  const updateLowQuality = () => {
+    // 64rem = 1024px (assuming 1rem = 16px)
+    setIsLowQuality(!document.startViewTransition || window.innerWidth < 64 * 16);
   };
 
   onMount(() => {
+    updateLowQuality();
+    window.addEventListener('resize', updateLowQuality);
+    window.addEventListener('resize', updateSliderPosition);
+
     if (navList) {
       config.width = navList.getBoundingClientRect().width;
       config.height = navList.getBoundingClientRect().height;
 
-      if (!document.startViewTransition) {
-        navList.classList.add(styles.lowQuality);
-      }
-      else document.startViewTransition(() => {
-        buildDisplacementImage();
-        [redChannel, greenChannel, blueChannel].forEach(ch => {
-          ch?.setAttribute('scale', String(config.scale));
+      if (document.startViewTransition) {
+        document.startViewTransition(() => {
+          buildDisplacementImage();
+          [redChannel, greenChannel, blueChannel].forEach(ch => {
+            ch?.setAttribute('scale', String(config.scale));
+          });
+          redChannel?.setAttribute('scale', String(config.scale + config.r));
+          greenChannel?.setAttribute('scale', String(config.scale + config.g));
+          blueChannel?.setAttribute('scale', String(config.scale + config.b));
+          feGaussianBlur?.setAttribute('stdDeviation', String(config.displace));
         });
-        redChannel?.setAttribute('scale', String(config.scale + config.r));
-        greenChannel?.setAttribute('scale', String(config.scale + config.g));
-        blueChannel?.setAttribute('scale', String(config.scale + config.b));
-        feGaussianBlur?.setAttribute('stdDeviation', String(config.displace));
-      });
+      }
     }
 
     setActiveRoute(window.location.pathname);
@@ -164,6 +187,8 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
     // Cleanup event listener
     return () => {
       window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('resize', updateLowQuality);
+      window.removeEventListener('resize', updateSliderPosition);
     };
   });
 
@@ -173,6 +198,20 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
     setTimeout(updateSliderPosition, 0);
   });
 
+  // Show and focus nav menu on .navMore click
+  const handleNavMoreClick = (e: MouseEvent) => {
+    setIsNavOpen(true);
+    navRef?.focus();
+    updateSliderPosition();
+  };
+
+  // Hide nav menu when focus is lost
+  const handleNavBlur = (e: FocusEvent) => {
+    if (!navRef?.contains(e.relatedTarget as Node)) {
+      setIsNavOpen(false);
+    }
+  };
+
   return (
     <>
       <header class={styles.header}>
@@ -180,30 +219,38 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
           <img src={accessLogoSrc} alt="ACCESS Logo" />
           <span>ACCESS</span>
         </a>
-        <nav class={`${styles.navList} ${isAnimating() ? styles.animating : ''}`} ref={navList}>
-          <ul ref={navRef}>
+        <nav
+          classList={{
+            [styles.navList]: true,
+            [styles.lowQuality]: isLowQuality(),
+            [styles.animating]: isAnimating()
+          }}
+          ref={navList}
+        >
+          <span
+            class={styles.navMore}
+            ref={navMoreRef}
+            onClick={handleNavMoreClick}
+            tabIndex={0}
+            role="button"
+            aria-haspopup="true"
+            //aria-expanded={isNavOpen()}
+          >
+            <i class="fas fa-ellipsis-vertical"></i>
+          </span>
+          <ul
+            ref={navRef}
+            tabIndex={-1}
+            classList={{ [styles.open]: isNavOpen() }}
+            onBlur={handleNavBlur}
+          >
             <div class={`${styles.activeSlider} ${isAnimating() ? styles.animating : ''}`} style={sliderStyle()}></div>
-            <li class={isActive('/') ? styles.active : ''}>
-              <a href="/" onClick={() => handleNavClick('/')}>Home</a>
-            </li>
-            <li class={isActive('/teaser') ? styles.active : ''}>
-              <a href="/teaser" onClick={() => handleNavClick('/teaser')}>Teaser</a>
-            </li>
-            <li class={isActive('/events') ? styles.active : ''}>
-              <a href="/events" onClick={() => handleNavClick('/events')}>Events</a>
-            </li>
-            <li class={isActive('/reviewers') ? styles.active : ''}>
-              <a href="/reviewers" onClick={() => handleNavClick('/reviewers')}>Reviewers</a>
-            </li>
-            <li class={isActive('/tutorials') ? styles.active : ''}>
-              <a href="/tutorials" onClick={() => handleNavClick('/tutorials')}>Tutorials</a>
-            </li>
-            <li class={isActive('/members-hub') ? styles.active : ''}>
-              <a href="/members-hub" onClick={() => handleNavClick('/members-hub')}>Members Hub</a>
-            </li>
-            <li class={isActive('/contact') ? styles.active : ''}>
-              <a href="/contact" onClick={() => handleNavClick('/contact')}>Contact</a>
-            </li>
+            {navLink('/', 'Home')}
+            {navLink('/teaser', 'Teaser')}
+            {navLink('/about', 'About')}
+            {navLink('/events', 'Events')}
+            {navLink('/academics', 'Academics')}
+            {navLink('/members-hub', 'Members Hub')}
           </ul>
           <svg class={styles.filter} xmlns="http://www.w3.org/2000/svg">
             <defs>
@@ -295,7 +342,8 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
       <footer class={styles.footer}>
         <p class={styles.footerText}>
           <img src={accessLogoSrc} alt="ACCESS Logo" />
-          <span>© 2025 by The Association of Computer Engineering Students</span>
+          <span class="max-lg:hidden">© 2025 by The Association of Computer Engineering Students</span>
+          <span class="lg:hidden">© ACCESS 2025</span>
         </p>
         <nav class={styles.footerLinks}>
           <a href="https://www.facebook.com/AccessDLSU/"><i class="fab fa-facebook-f"></i></a>

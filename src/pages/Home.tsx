@@ -1,13 +1,10 @@
 import { Component } from 'solid-js';
-import { generateParagraphs } from '../utils/lorem';
 
 import styles from './Home.module.css';
 
 import accessWordmarkSrc from '/src/assets/logo/access_wordmark.png';
 
 const Home: Component = () => {
-  const paragraphs = generateParagraphs(10);
-
   return (
     <>
       <div class={styles.intro}>
@@ -35,12 +32,6 @@ const Home: Component = () => {
         ))}
       </div>
     </div>
-
-
-    
-      {paragraphs.map((paragraph) => (
-        <p>{paragraph}</p>
-      ))}
     </>
   );
   
