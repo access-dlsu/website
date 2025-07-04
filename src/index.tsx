@@ -10,6 +10,7 @@ const Teaser = lazy(() => import('./pages/Teaser'))
 const Home = lazy(() => import('./pages/Home'))
 const MembersHub = lazy(() => import('./pages/members-hub'))
 const DPBlast = lazy(() => import('./pages/members-hub/dp-blast'))
+const TinyURL = lazy(() => import('./pages/members-hub/tinyurl'))
 
 const root = document.getElementById('root');
 
@@ -25,5 +26,8 @@ render(() => (
     <Route path="/" component={Home} />
     <Route path="/members-hub" component={MembersHub} />
     <Route path="/members-hub/dp-blast" component={DPBlast} />
+    <Route path="/members-hub/tinyurl" component={TinyURL} />
+    <Route path="/link/:path" component={TinyURL} />
+    <Route path="*" component={lazy(() => import('./pages/404'))} />
   </Router>
 ), root!);

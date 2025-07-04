@@ -3,6 +3,9 @@
   padding-left: 2rem;
   padding-top: 5rem;
 }
+.intro.showFooter {
+  height: calc(100vh - 15rem);
+}
 
 .intro img {
   max-height: 35vh;
@@ -12,7 +15,6 @@
   color: #a0aca1;
 }
 .intro ul {
-  display: flex;
   gap: 1.5rem;
   margin-top: 1rem;
 }
