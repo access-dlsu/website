@@ -2,7 +2,7 @@
 
 ## 📅 Release Date
 
-The first version of the website is scheduled for release on **July 9, 2025 (Wednesday)**.
+The first version of the website is scheduled for release on **July 14, 2025 (Monday)**.
 
 ## 🤝 Contributing
 
