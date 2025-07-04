@@ -142,10 +142,34 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
     }, durationMs);
   };
 
+  // Track last pointer type to prevent double execution
+  let lastPointerType: 'touch' | 'mouse' | null = null;
+
+  const handleNavPointer = (route: string, e: Event) => {
+    if (e.type === 'touchstart') {
+      lastPointerType = 'touch';
+    } else if (e.type === 'click') {
+      if (lastPointerType === 'touch') {
+        lastPointerType = null;
+        return;
+      }
+      lastPointerType = 'mouse';
+    }
+    handleNavClick(route);
+  };
+
   const navLink = (route: string, title: string) => {
-    return (<li class={isActive(route) ? styles.active : ''}>
-              <a href={route} onClick={() => handleNavClick(route)}>{title}</a>
-            </li>)
+    return (
+      <li class={isActive(route) ? styles.active : ''}>
+        <a
+          href={route}
+          onTouchStart={e => handleNavPointer(route, e)}
+          onClick={e => handleNavPointer(route, e)}
+        >
+          {title}
+        </a>
+      </li>
+    );
   }
 
   // Helper to update lowQuality class based on screen width
@@ -199,7 +223,10 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
   });
 
   // Show and focus nav menu on .navMore click
-  const handleNavMoreClick = (e: MouseEvent) => {
+  const handleNavMoreClick = (e: MouseEvent | TouchEvent) => {
+    if (e.type === "touchstart") {
+      e.stopPropagation();
+    }
     setIsNavOpen(true);
     navRef?.focus();
     updateSliderPosition();
@@ -231,6 +258,7 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
             class={styles.navMore}
             ref={navMoreRef}
             onClick={handleNavMoreClick}
+            onTouchStart={handleNavMoreClick}
             tabIndex={0}
             role="button"
             aria-haspopup="true"
