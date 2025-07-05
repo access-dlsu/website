@@ -6,8 +6,9 @@ import { Router, Route } from "@solidjs/router";
 import './index.css';
 import App from './App';
 
-const Teaser = lazy(() => import('./pages/Teaser'))
 const Home = lazy(() => import('./pages/Home'))
+const Teaser = lazy(() => import('./pages/Teaser'))
+const Events = lazy(() => import('./pages/Events'))
 const MembersHub = lazy(() => import('./pages/members-hub'))
 const DPBlast = lazy(() => import('./pages/members-hub/dp-blast'))
 const TinyURL = lazy(() => import('./pages/members-hub/tinyurl'))
@@ -22,8 +23,9 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
 
 render(() => (
   <Router root={App}>
-    <Route path="/teaser" component={Teaser} />
     <Route path="/" component={Home} />
+    <Route path="/teaser" component={Teaser} />
+    <Route path="/events" component={Events} />
     <Route path="/members-hub" component={MembersHub} />
     <Route path="/members-hub/dp-blast" component={DPBlast} />
     <Route path="/members-hub/tinyurl" component={TinyURL} />
