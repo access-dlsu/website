@@ -2,8 +2,8 @@ import { Component, onMount, createSignal, createEffect, onCleanup } from 'solid
 
 import styles from './teaser.module.css';
 
-import accessLogoSrc from '/logo/access.png';
-import csoLogoSrc from '/logo/cso.png';
+const accessLogoSrc = '/logo/access.png';
+const csoLogoSrc = '/logo/cso.png';
 
 const Teaser: Component = () => {
   let starContainer!: HTMLDivElement;

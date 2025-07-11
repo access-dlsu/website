@@ -3,7 +3,7 @@ import { generateParagraphs } from '~/components/lorem';
 
 import styles from './index.module.css';
 
-import accessWordmarkSrc from '/logo/access_wordmark.png';
+const accessWordmarkSrc = '/logo/access_wordmark.png';
 
 const Home: Component = () => {
   const paragraphs = generateParagraphs(10);

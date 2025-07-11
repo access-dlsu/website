@@ -2,7 +2,7 @@ import { createSignal, onMount, createEffect } from 'solid-js';
 
 import styles from './layout.module.css';
 
-import accessLogoSrc from '/logo/access.png';
+const accessLogoSrc = '/logo/access.png';
 
 export function Header() {
   const [activeRoute, setActiveRoute] = createSignal('/');
