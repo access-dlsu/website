@@ -32,7 +32,7 @@ Thank you for your interest in contributing to the project! This document outlin
 4. **Test the Application**
   Start the development server to ensure everything is working correctly:
     ```sh
-    npm start
+    npm run dev
     ```
     The website should run in your browser at `http://localhost:3000`.
 

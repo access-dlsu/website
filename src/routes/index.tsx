@@ -1,9 +1,9 @@
 import { Component } from 'solid-js';
-import { generateParagraphs } from '../utils/lorem';
+import { generateParagraphs } from '~/components/lorem';
 
-import styles from './Home.module.css';
+import styles from './index.module.css';
 
-import accessWordmarkSrc from '/src/assets/logo/access_wordmark.png';
+import accessWordmarkSrc from '/logo/access_wordmark.png';
 
 const Home: Component = () => {
   const paragraphs = generateParagraphs(10);
