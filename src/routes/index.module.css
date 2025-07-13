@@ -1,18 +1,26 @@
 .intro {
   height: calc(100vh - 7rem);
-  padding-left: 2rem;
-  padding-top: 5rem;
+  padding-left: 7.5%;
+  padding-top: 7%;
+}
+.intro.showFooter {
+  height: calc(100vh - 15rem);
+}
+@media (width < 64rem) {
+  .intro {
+    padding-left: 0;
+  }
 }
 
 .intro img {
   max-height: 35vh;
 }
 .intro p {
-  width: 58%;
+  width: max(58%, 25rem);
+  max-width: 100%;
   color: #a0aca1;
 }
 .intro ul {
-  display: flex;
   gap: 1.5rem;
   margin-top: 1rem;
 }
@@ -25,4 +33,78 @@
 .intro a:hover {
   color: #0aba48;
   text-shadow: 0 0 10px rgba(10, 186, 72, 0.5);
+}
+.announcementBoard {
+  margin-top: 4rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  background-color: #121212;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  border-radius: 1.5rem; /* ⬅️ more rounded board */
+}
+
+.announcementBoard h2 {
+  font-size: 2rem;
+  color: #6ade6a;
+  margin-bottom: 1rem;
+}
+
+.announcementList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.announcement {
+  background-color: #1e1e1e;
+  padding: 1.5rem;
+  border-left: 6px solid #4d924f;
+  border-radius: 1.25rem; /* ⬅️ more rounded card */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  max-width: 60%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.announcement:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.7);
+}
+
+.announcement h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: #e0ffe1;
+}
+
+.announcement p {
+  margin: 0.5rem 0 0;
+  color: #c0cfc2;
+}
+
+.announcement .date {
+  display: block;
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: #aaa;
+  font-style: italic;
+}
+.announcementImage {
+  max-width: 100%;
+  max-height: 200px; /* Limit height */
+  width: auto;
+  height: auto;
+  object-fit: contain; /* ⬅️ This prevents cropping */
+  display: block;
+  margin-bottom: 1rem;
+  border-radius: 1rem;
+  background-color: #1e1e1e; /* fallback bg */
+}
+.announcementImagePlaceholder {
+  width: 100%;
+  height: 200px;
+  border-radius: 1rem;
+  background-color: #1a1a1a;
+  margin-bottom: 1rem;
+  opacity: 0.2;
 }

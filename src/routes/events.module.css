@@ -1,0 +1,181 @@
+.events {
+  padding: 0 5%;
+}
+.events h2 {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 500;
+  text-align: center;
+  margin-top: 2.25rem;
+}
+@media (width < 80rem) {
+  .events {
+    padding: 0;
+  }
+}
+@media (width < 64rem) {
+  .events h2 {
+    margin-top: 1rem;
+  }
+}
+
+.flagshipEvents > div {
+  padding: 5% 2.5%;
+  display: grid;
+  grid-template-columns: min-content 4fr 3fr max-content;
+}
+.flagshipEvents .number,
+.flagshipEvents .details h3,
+.flagshipEvents .highlights {
+  color: #44f24d;
+}
+
+.flagshipEvents .number {
+  text-align: center;
+  padding-top: 0.5rem;
+  margin-right: 1rem;
+}
+.flagshipEvents .details h3 {
+  font-size: 1.75rem;
+  font-weight: 500;
+}
+.flagshipEvents .details a {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background-color: #000;
+  border: 1px solid #0ABA48;
+  color: white;
+  transition: all 0.3s ease;
+  height: 2rem;
+  width: 100%;
+  margin-top: 2rem;
+}
+.flagshipEvents .details a:hover {
+  transform: scale(1.02);
+  background-color: #0ABA48;
+}
+.flagshipEvents .image {
+  margin-left: 1rem;
+}
+.flagshipEvents .image img {
+  width: 100%;
+  height: 55vh;
+  object-fit: cover;
+  box-shadow: 4px 11px 26.9px 2px rgba(68, 242, 77, 0.49);
+  border-radius: 2rem;
+}
+.flagshipEvents .highlights ul {
+  list-style-type: disc;
+  margin-left: 3rem;
+}
+@media (width < 80rem) {
+  .flagshipEvents > div {
+    padding: 5% 0;
+  }
+}
+@media (width < 64rem) {
+  .flagshipEvents .highlights {
+    display: none;
+  }
+}
+@media (width < 48rem) {
+  .flagshipEvents .details {
+    grid-column-end: end;
+  }
+  .flagshipEvents .image {
+    margin-left: 0;
+    margin-top: 1rem;
+    grid-column: 1 / end;
+  }
+  .flagshipEvents .image img {
+    height: auto;
+  }
+}
+
+.otherEvents {
+  padding: 5% 2.5%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+}
+.otherEvents img {
+  border-radius: 1rem;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.otherEvents img:hover {
+  transform: scale(1.05);
+}
+@media (width < 80rem) {
+  .otherEvents {
+    padding: 5% 0;
+    gap: 2rem;
+  }
+}
+@media (width < 64rem) {
+  .otherEvents {
+    gap: 1.5rem;
+  }
+}
+@media (width < 48rem) {
+  .otherEvents {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.calendar {
+  padding: 0 10%;
+}
+.calendar h5 {
+  color: rgb(201, 218, 195);
+  margin-left: 3%;
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 4rem;
+}
+.calendarMonth {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+.calendarItem {
+  border: 2px solid green;
+  box-sizing: border-box;
+  background: linear-gradient(333.7deg, #0aba48 1.22%, #1c2820 32.91%, #000 75.02%);
+  padding: 1rem;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 8rem;
+  text-align: center;
+}
+.calendarItem h3 {
+  color: #44f24d;
+  font-size: 1.75rem;
+  font-weight: 500;
+}
+.calendarItem h6 {
+  color: #568266;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+@media (width < 80rem) {
+  .calendar {
+    padding: 0;
+  }
+}
+@media (width < 64rem) {
+  .calendarMonth {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (width < 48rem) {
+  .calendarMonth {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

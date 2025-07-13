@@ -15,7 +15,7 @@ const Teaser: Component = () => {
   const [now, setNow] = createSignal(new Date());
   const countdownStart = new Date('2025-06-12T00:00:00');
   const launchDate = new Date('2025-07-01T00:00:00');
-  let intervalId: number | undefined;
+  let intervalId: ReturnType<typeof setInterval> | undefined;
 
   onMount(() => {
     for (let i = 0; i < 100; i++) {
