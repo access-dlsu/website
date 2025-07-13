@@ -6,5 +6,6 @@ export default defineConfig({
     plugins: [
       tailwindcss(),
     ]
-  }
+  },
+  middleware: "src/middleware/middleware.ts",
 });

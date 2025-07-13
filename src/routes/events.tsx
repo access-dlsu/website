@@ -1,4 +1,4 @@
-import styles from './Events.module.css';
+import styles from './events.module.css';
 
 export default function Events() {
   // Group calendarData by month and year

@@ -9,7 +9,7 @@
     "start": "vinxi start",
     "version": "vinxi version"
   },
-  "license": "MIT",
+  "license": "AGPL-3.0-or-later",
   "devDependencies": {
     "vite": "^6.0.0",
     "vite-plugin-solid": "^2.11.6"

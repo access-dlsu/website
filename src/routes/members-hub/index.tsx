@@ -1,4 +1,4 @@
-import styles from '../Home.module.css';
+import styles from '../index.module.css';
 
 export default function MembersHub() {
   return (
