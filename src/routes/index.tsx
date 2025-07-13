@@ -1,8 +1,12 @@
 import { Component } from 'solid-js';
+<<<<<<< HEAD:src/pages/Home.tsx
+=======
+import { generateParagraphs } from '~/components/lorem';
+>>>>>>> becffef532dfc8cc15e41ef4fe0231c0964b629c:src/routes/index.tsx
 
-import styles from './Home.module.css';
+import styles from './index.module.css';
 
-import accessWordmarkSrc from '/src/assets/logo/access_wordmark.png';
+const accessWordmarkSrc = '/logo/access_wordmark.png';
 
 const Home: Component = () => {
   return (

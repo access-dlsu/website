@@ -1,0 +1,5 @@
+{
+  "name": "infinity",
+  "main": "index.mjs",
+  "type": "module"
+}

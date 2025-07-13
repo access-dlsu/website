@@ -3,7 +3,7 @@
 
 body {
   background-color: black;
-  background-image: url('/src/assets/space-green.png');
+  background-image: url('/space-green.png');
   background-size: cover;
   background-position: center top;
   background-attachment: fixed;
@@ -214,11 +214,6 @@ svg.filter {
     box-shadow: inset 0 0 3px -1px white;
     transform: scaleX(1.3) scaleY(1.5);
   }
-}
-
-.main {
-  padding: 0 10%;
-  padding-top: 7rem;
 }
 
 .footer {

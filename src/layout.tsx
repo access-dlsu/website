@@ -1,11 +1,10 @@
-import type { Component, JSX } from 'solid-js';
 import { createSignal, onMount, createEffect } from 'solid-js';
 
-import styles from './App.module.css';
+import styles from './layout.module.css';
 
-import accessLogoSrc from '/src/assets/logo/access.png';
+const accessLogoSrc = '/logo/access.png';
 
-const App: Component<{ children?: JSX.Element }> = (props) => {
+export function Header() {
   const [activeRoute, setActiveRoute] = createSignal('/');
   const [sliderStyle, setSliderStyle] = createSignal('');
   const [isAnimating, setIsAnimating] = createSignal(false);
@@ -362,11 +361,13 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
         </nav>
         <div ref={debugPen} style="display: none"></div>
       </header>
+    </>
+  );
+};
 
-      <main class={styles.main}>
-        {props.children}
-      </main>
-
+export function Footer() {
+  return (
+    <>
       <footer class={styles.footer}>
         <p class={styles.footerText}>
           <img src={accessLogoSrc} alt="ACCESS Logo" />
@@ -381,7 +382,5 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
         </nav>
       </footer>
     </>
-  );
-};
-
-export default App;
+  )
+}
