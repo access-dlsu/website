@@ -44,7 +44,7 @@ const announcements = [
     title: "General Assembly 2025",
     description: "Join us for the first GA of the term! Meet the officers and learn about upcoming events.",
     date: "July 15, 2025",
-    image: "/src/assets/logo/access.png", // ✅ optional image
+    image: "/logo/access.png", // ✅ optional image
   },
   {
     title: "Project Proposal Deadline",

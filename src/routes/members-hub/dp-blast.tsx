@@ -234,7 +234,7 @@ export default function DPBlast() {
       else if (frameElement.alt.includes('LEAP2025')) captionFile = 'caption4.txt';
       else if (frameElement.alt.includes('Full Throttle')) captionFile = 'caption5.txt';
 
-      fetch(`/src/assets/dp-blast/${captionFile}`)
+      fetch(`/dp-blast/${captionFile}`)
         .then(response => {
           if (!response.ok) throw new Error();
           return response.text();
@@ -303,7 +303,7 @@ export default function DPBlast() {
     }
     function setFrame5Preview(sub: string) {
       if (!frame5PreviewImg) return;
-      frame5PreviewImg.src = `/src/assets/dp-blast/images/frame5/${sub}.png`;
+      frame5PreviewImg.src = `/dp-blast/images/frame5/${sub}.png`;
       frame5PreviewImg.alt = `ACCESS Full Throttle (${sub.charAt(0).toUpperCase() + sub.slice(1)})`;
       frame5PreviewImg.setAttribute('data-frame', `frame5-${sub}`);
       selectedFrame = frame5PreviewImg;
@@ -571,7 +571,7 @@ export default function DPBlast() {
                   <div class="frames">
                     <div class="frame-item" data-category="old">
                       <div class="frame-preview">
-                        <img src="/src/assets/dp-blast/images/frame1.png" class="frame-option" alt="ARW24 Frame" data-frame="frame1"/>
+                        <img src="/dp-blast/images/frame1.png" class="frame-option" alt="ARW24 Frame" data-frame="frame1"/>
                         <div class="frame-overlay">
                           <i class="fas fa-check"></i>
                         </div>
@@ -584,7 +584,7 @@ export default function DPBlast() {
 
                     <div class="frame-item" data-category="old">
                       <div class="frame-preview">
-                        <img src="/src/assets/dp-blast/images/frame2.png" class="frame-option" alt="ACCESS Scares Frame" data-frame="frame2"/>
+                        <img src="/dp-blast/images/frame2.png" class="frame-option" alt="ACCESS Scares Frame" data-frame="frame2"/>
                         <div class="frame-overlay">
                           <i class="fas fa-check"></i>
                         </div>
@@ -597,7 +597,7 @@ export default function DPBlast() {
 
                     <div class="frame-item" data-category="old">
                       <div class="frame-preview">
-                        <img src="/src/assets/dp-blast/images/frame3.png" class="frame-option active" alt="ACCESS Under the Sea Frame" data-frame="frame3"/>
+                        <img src="/dp-blast/images/frame3.png" class="frame-option active" alt="ACCESS Under the Sea Frame" data-frame="frame3"/>
                         <div class="frame-overlay">
                           <i class="fas fa-check"></i>
                         </div>
@@ -609,7 +609,7 @@ export default function DPBlast() {
                     </div>
                     <div class="frame-item" data-category="old">
                       <div class="frame-preview">
-                        <img src="/src/assets/dp-blast/images/frame4.png" class="frame-option" alt="LEAP2025 Rank Up Frame" data-frame="frame4"/>
+                        <img src="/dp-blast/images/frame4.png" class="frame-option" alt="LEAP2025 Rank Up Frame" data-frame="frame4"/>
                         <div class="frame-overlay">
                           <i class="fas fa-check"></i>
                         </div>
@@ -621,7 +621,7 @@ export default function DPBlast() {
                     </div>
                     <div class="frame-item" data-category="new" id="frame5-item" ref={frame5ItemRef}>
                       <div class="frame-preview" id="frame5-preview-container">
-                        <img src="/src/assets/dp-blast/images/frame5/dp.png" class="frame-option" alt="ACCESS Full Throttle (DP)" data-frame="frame5-dp" id="frame5-preview-img" ref={frame5PreviewImgRef}/>
+                        <img src="/dp-blast/images/frame5/dp.png" class="frame-option" alt="ACCESS Full Throttle (DP)" data-frame="frame5-dp" id="frame5-preview-img" ref={frame5PreviewImgRef}/>
                         <div class="frame-overlay">
                           <i class="fas fa-check"></i>
                         </div>
