@@ -27,7 +27,7 @@ export default function TinyURL() {
         <For each={shortenedUrls()}>
           {(s) => (
             <li>
-              <a href={"/link/" + s.path}>{s.path}</a> &rarr; {s.url}
+              <a href={"/" + s.path}>{s.path}</a> &rarr; {s.url}
             </li>
           )}
         </For>
