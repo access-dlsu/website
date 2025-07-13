@@ -1,6 +1,8 @@
 dist
 .wrangler
-.output
+.output/**
+!.output/server
+!.output/server/wrangler.json
 .vercel
 .netlify
 .vinxi

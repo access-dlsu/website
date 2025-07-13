@@ -1,0 +1,5 @@
+{
+  "name": "access-dlsu-infinity",
+  "main": "index.mjs",
+  "type": "module"
+}
