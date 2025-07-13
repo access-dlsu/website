@@ -1,5 +1,5 @@
 {
-  "name": "infinity",
+  "name": "infinity-public",
   "main": "index.mjs",
   "type": "module",
   "observability": {
