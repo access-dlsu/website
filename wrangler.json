@@ -1,5 +1,10 @@
 {
   "name": "infinity",
   "main": "index.mjs",
-  "type": "module"
+  "type": "module",
+  "observability": {
+    "logs": {
+      "enabled": true
+    }
+  }
 }
