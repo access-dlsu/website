@@ -2,7 +2,7 @@ import { createMiddleware } from "@solidjs/start/middleware";
 import { redirect } from "@solidjs/router";
 
 // Import the shortened URLs statically for edge compatibility
-import shortenedUrlsData from "/public/tinyurl.json";
+import shortenedUrlsData from "/private/tinyurl.json";
 
 type ShortenedUrl = { path: string; url: string };
 const shortenedUrls = shortenedUrlsData as ShortenedUrl[];

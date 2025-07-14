@@ -2,15 +2,15 @@ import styles from '../index.module.css';
 import { createAsync, query } from "@solidjs/router";
 import { For } from "solid-js";
 
+// Import the shortened URLs statically for edge compatibility
+import shortenedUrlsData from "/private/tinyurl.json";
+
 type ShortenedUrl = { path: string; url: string };
 
 const getShortenedUrls = query(async () => {
   "use server";
-  // Replace with your data fetching logic
-  const { readFileSync } = await import("fs");
-  const { resolve } = await import("path");
-  const filePath = resolve(process.cwd(), "public/tinyurl.json");
-  return JSON.parse(readFileSync(filePath, "utf-8")) as ShortenedUrl[];
+  // Use statically imported data instead of readFileSync
+  return shortenedUrlsData as ShortenedUrl[];
 }, "shortenedUrls");
 
 export const route = {
