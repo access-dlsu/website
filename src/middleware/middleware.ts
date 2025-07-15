@@ -15,7 +15,7 @@ export default createMiddleware({
     const entry = shortenedUrls.find((s) => s.path === match);
     if (entry) {
       console.log("Found TinyURL link: " + match)
-      return redirect(entry.url, 302);
+      return redirect(entry.url, 301);
     }
   },
 });
