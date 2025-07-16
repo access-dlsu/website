@@ -1,0 +1,285 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Oswald:wght@200..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+.bingo {
+  --primary-color: #458230;
+  --primary-hover: #2f5a21;
+  --secondary-color: #334155;
+  --secondary-hover: #475569;
+  --success-color: #458230;
+  --error-color: #ef4444;
+  --error-hover: #b91c1c;
+  --warning-color: #f59e0b;
+  --warning-hover: #b45309;
+  --background: #0a0a0a;
+  --surface: #18181b;
+  --text-primary: #f1f5f9;
+  --text-secondary: #a1a1aa;
+  --border: #27272a;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.2);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.2);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  --radius: 10px;
+  --radius-sm: 4px;
+  --transition: all 0.2s cubic-bezier(.4,0,.2,1), font-size 0s;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--background);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  min-height: 100svh;
+  background: var(--background);
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  position: fixed;
+  inset: 0;
+  z-index: 466355;
+}
+.container {
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.header {
+  width: 100%;
+  text-align: center;
+}
+.header img {
+  max-width: 110px;
+  width: 38%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  display: block;
+  margin: 0 auto 1rem auto;
+}
+/* Bingo Card Table */
+.bingo-card-wrapper {
+  width: auto;
+  height: 60vh;
+  height: 60svh;
+  aspect-ratio: 1 / 1.2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.bingo-card {
+  width: 100%;
+  height: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.bingo-card th {
+  border: none;
+  width: 20%;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 5vh;
+  font-size: 5svh;
+  font-weight: 900; /* Bolder */
+  color: var(--primary-color);
+  background: var(--surface); /* Slightly darker for distinction */
+  text-shadow: 0 2px 8px #0003;
+  font-family: 'Inter', sans-serif;
+}
+.bingo-card tr.celebrate th {
+  animation: celebrate-bingo 1s infinite linear;
+}
+@keyframes celebrate-bingo {
+  0% { background: var(--surface); color: var(--primary-color); }
+  25% { background: var(--error-color); color: var(--text-primary); }
+  50% { background: var(--warning-color); color: var(--text-primary); }
+  75% { background: var(--primary-color); color: var(--text-primary); }
+  100% { background: var(--surface); color: var(--primary-color); }
+}
+.bingo-card td {
+  /*border: 1.5px solid var(--border);*/
+  box-shadow: 0 0 0 1px var(--border) inset;
+  padding: 1px;
+  width: 20%;
+  max-height: 80px;
+  min-height: 48px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 5vh;
+  font-size: 5svh;
+  font-weight: 700;
+  color: var(--primary-color);
+  background: var(--text-primary);
+  cursor: pointer;
+  transition: var(--transition);
+  user-select: none;
+}
+.bingo-card tbody tr:last-child td:first-child {
+  border-bottom-left-radius: var(--radius, 24px);
+}
+.bingo-card tbody tr:last-child td:last-child {
+  border-bottom-right-radius: var(--radius, 24px);
+}
+.bingo-card td.free-space {
+  background: var(--primary-color);
+  color: var(--text-primary);
+  font-size: 3vh;
+  font-size: 3svh;
+  pointer-events: none;
+  touch-action: none;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-indent: 0.1em;
+}
+.bingo-card td.marked {
+  background: var(--primary-color);
+  color: var(--text-primary);
+  transition: var(--transition);
+}
+.bingo-card td:hover {
+  box-shadow: 0 0 0 2px var(--primary-hover) inset;
+}
+/* Buttons */
+.button-container {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  width: 100%;
+}
+.button-container button {
+  flex: 1 1 auto;
+  padding: 0.7rem 1.4rem;
+  font-size: 1rem;
+  font-family: inherit;
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+/* Error and Warning Hover Styles */
+@media(hover: hover) and (pointer: fine) {
+  .button-container button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+  }
+  .error-hover:hover {
+    background: var(--error-hover);
+  }
+  .warning-hover:hover {
+    background: var(--warning-hover);
+  }
+}
+.button-container button:active {
+  outline: 3px solid var(--primary-color);
+  outline-offset: 2px;
+}
+/* Popup and Overlay */
+.bingo-popup {
+  --translate: translate(-50%, -50%);
+  --transition-duration: 0.5s;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: var(--translate) scale(0);
+  opacity: 0;
+  letter-spacing: 0.1em;
+  text-indent: 0.1em;
+  pointer-events: none;
+  background: var(--surface);
+  color: var(--primary-color);
+  padding: 5vh 6vh;
+  font-size: 6vh;
+  font-weight: bold;
+  border: 4px solid var(--primary-color);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  display: block;
+  transition: transform var(--transition-duration) cubic-bezier(.4,0,.2,1), opacity var(--transition-duration) cubic-bezier(.4,0,.2,1);
+}
+.bingo-popup.show {
+  transform: var(--translate) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+  animation: celebrate 2s infinite;
+  animation-delay: var(--transition-duration);
+}
+.hint {
+  font-size: 2.2vh;
+  opacity: 0;
+  color: var(--text-primary);
+  text-shadow: 0 0 black;
+  text-align: center;
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.5rem 1rem;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  transition: opacity 0.3s;
+}
+.hint.show {
+  opacity: 1;
+}
+@keyframes celebrate {
+  0% { transform: var(--translate) scale(1);}
+  50% { transform: var(--translate) scale(1.08);}
+  100% { transform: var(--translate) scale(1);}
+}
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+  display: block;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(.4,0,.2,1);
+}
+.overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+/* Responsive Design */
+@media (max-width: 52vh) {
+  .bingo-card-wrapper {
+    width: 95vw;
+    height: auto;
+  }
+  .bingo-card th {
+    font-size: 10vw;
+  }
+  .bingo-card td {
+    font-size: 10vw;
+  }
+  .bingo-card td.free-space {
+    font-size: 6vw;
+  }
+  .bingo-popup {
+    padding: 10vw 8vw;
+    font-size: 12vw;
+  }
+  .button-container {
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+}
+.confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: -1;
+}
