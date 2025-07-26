@@ -1,11 +1,16 @@
 import { createSignal, onMount, createEffect } from 'solid-js';
+import { useIsRouting, useLocation } from "@solidjs/router";
 
 import styles from './layout.module.css';
 
 const accessLogoSrc = '/logo/access.png';
 
 export function Header() {
-  const [activeRoute, setActiveRoute] = createSignal('/');
+  const isRouting = useIsRouting();
+
+  const location = useLocation();
+  const isActive = (route: string) => location.pathname === route;
+
   const [sliderStyle, setSliderStyle] = createSignal('');
   const [isAnimating, setIsAnimating] = createSignal(false);
   const [isLowQuality, setIsLowQuality] = createSignal(false);
@@ -14,8 +19,7 @@ export function Header() {
   let navList: HTMLElement | undefined;
   let navRef: HTMLUListElement | undefined;
   let navMoreRef: HTMLSpanElement | undefined;
-
-  const isActive = (route: string) => activeRoute() === route;
+  let slider: HTMLDivElement | undefined;
 
   let debugPen: HTMLDivElement | undefined;
   let feImage: SVGFEImageElement | undefined;
@@ -98,10 +102,10 @@ export function Header() {
   }
 
 
-  const updateSliderPosition = () => {
+  const updateSliderPosition = (route: string = '') => {
     if (!navRef) return;
 
-    const activeLink = navRef.querySelector(`a[href="${activeRoute()}"]`);
+    const activeLink = navRef.querySelector(`a[href="${route || window.location.pathname}"]`);
     if (activeLink) {
       const parentLi = activeLink.parentElement as HTMLElement;
       if (parentLi && navRef) {
@@ -116,12 +120,15 @@ export function Header() {
     }
   };
 
+  // Update slider position when active route changes
   const handleNavClick = (route: string) => {
-    setActiveRoute(route);
+    if (!slider) return;
+
+    setTimeout(() => updateSliderPosition(route), 0);
+
     setIsAnimating(true);
 
     // Get animation duration from CSS
-    const slider = navRef!.querySelector(`.${styles.activeSlider}`) as HTMLElement;
     const computedStyle = getComputedStyle(slider);
     const animationDuration = computedStyle.animationDuration;
 
@@ -179,8 +186,10 @@ export function Header() {
 
   onMount(() => {
     updateLowQuality();
+    updateSliderPosition();
+    const updateSliderPositionRef = () => updateSliderPosition();
     window.addEventListener('resize', updateLowQuality);
-    window.addEventListener('resize', updateSliderPosition);
+    window.addEventListener('resize', updateSliderPositionRef);
 
     if (navList) {
       config.width = navList.getBoundingClientRect().width;
@@ -200,25 +209,11 @@ export function Header() {
       }
     }
 
-    setActiveRoute(window.location.pathname);
-
-    // Listen for browser back/forward navigation
-    const handlePopState = () => {
-      setActiveRoute(window.location.pathname);
-    };
-    window.addEventListener('popstate', handlePopState);
     // Cleanup event listener
     return () => {
-      window.removeEventListener('popstate', handlePopState);
       window.removeEventListener('resize', updateLowQuality);
-      window.removeEventListener('resize', updateSliderPosition);
+      window.removeEventListener('resize', updateSliderPositionRef);
     };
-  });
-
-  createEffect(() => {
-    // Update slider position when active route changes
-    activeRoute();
-    setTimeout(updateSliderPosition, 0);
   });
 
   // Show and focus nav menu on .navMore click
@@ -241,6 +236,7 @@ export function Header() {
   return (
     <>
       <header class={styles.header}>
+        <div class={`${styles.loadingBar} ${isRouting() ? styles.animating : ''}`} />
         <a href="/" class={styles.wordmark}>
           <img src={accessLogoSrc} alt="ACCESS Logo" />
           <span>ACCESS</span>
@@ -271,7 +267,7 @@ export function Header() {
             classList={{ [styles.open]: isNavOpen() }}
             onBlur={handleNavBlur}
           >
-            <div class={`${styles.activeSlider} ${isAnimating() ? styles.animating : ''}`} style={sliderStyle()}></div>
+            <div ref={slider} class={`${styles.activeSlider} ${isAnimating() ? styles.animating : ''}`} style={sliderStyle()}></div>
             {navLink('/', 'Home')}
             {navLink('/teaser', 'Teaser')}
             {navLink('/about', 'About')}

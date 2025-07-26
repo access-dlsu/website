@@ -98,6 +98,25 @@ svg.filter {
   inset: 0;
 }
 
+.loadingBar {
+  z-index: 2147483647;
+  position: fixed;
+  inset: 0;
+  bottom: auto;
+  height: 4px;
+  background-color: #19e05f;
+  display: none;
+}
+.loadingBar.animating {
+  display: initial;
+  animation: loadingBar 3s infinite;
+}
+@keyframes loadingBar {
+  from { opacity: 0; }
+  50% { opacity: 1; }
+  to { opacity: 0; }
+}
+
 .navList {
   position: relative;
   /*outline: 1.5px solid rgba(255, 255, 255, 0.2);*/
