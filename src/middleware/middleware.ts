@@ -12,7 +12,7 @@ export default createMiddleware({
     const { pathname } = new URL(event.request.url);
     // Extract the shortened path from /[url]
     const match = pathname.split('/', 2)[1];
-    const entry = shortenedUrls.find((s) => s.path === match);
+    const entry = shortenedUrls.find((s) => s.path.toLowerCase() === match.toLowerCase());
     if (entry) {
       console.log("Found TinyURL link: " + match)
       return redirect(entry.url, 301);
