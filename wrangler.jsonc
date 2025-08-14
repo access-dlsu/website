@@ -1,0 +1,19 @@
+{
+  "name": "infinity",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-08-14",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "site": {
+    "bucket": ".open-next/assets"
+  },
+  "build": {
+    "command": "node wrangler-fix.cjs && opennextjs-cloudflare build"
+  },
+  "observability": {
+    "logs": {
+      "enabled": true
+    }
+  }
+}
