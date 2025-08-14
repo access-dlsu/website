@@ -1,40 +1,36 @@
-import { Component } from 'solid-js';
-
-import styles from './index.module.css';
+import styles from './page.module.css';
 
 const accessWordmarkSrc = '/logo/access_wordmark.png';
 
-const Home: Component = () => {
+export default function Home() {
   return (
     <>
-      <div class={styles.intro}>
-        <img src={accessWordmarkSrc} alt="The Association of Computer Engineering Students" />
+      <div className={styles.intro}> <img src={accessWordmarkSrc} alt="The Association of Computer Engineering Students" />
         <p>ACCESS is a professional organization of Computer Engineering students who strive to be Lasallian achievers. This organization offers academic and career-related activities in order for students to develop their skills and hone their abilities in engineering.</p>
-        <ul class="flex">
+        <ul className="flex">
           <li><a href="/about">About Us</a></li>
           <li><a href="/about">Mission</a></li>
           <li><a href="/about">Vision</a></li>
         </ul>
       </div>
 
-      <div class={styles.announcementBoard}>
+      <div className={styles.announcementBoard}>
       <h2>📢 Announcements</h2>
-      <div class={styles.announcementList}>
+      <div className={styles.announcementList}>
         {announcements.map((a) => (
-          <div class={styles.announcement}>
+          <div className={styles.announcement} key={a.title + a.date}>
             {a.image && (
-              <img src={a.image} alt={a.title} class={styles.announcementImage} />
+              <img src={a.image} alt={a.title} className={styles.announcementImage} />
             )}
             <h3>{a.title}</h3>
             <p>{a.description}</p>
-            <span class={styles.date}>{a.date}</span>
+            <span className={styles.date}>{a.date}</span>
           </div>
         ))}
       </div>
     </div>
     </>
   );
-  
 }
 
 // This is a sample data for announcements.
@@ -53,4 +49,3 @@ const announcements = [
     image: null, // ✅ no image
   },
 ];
-export default Home;

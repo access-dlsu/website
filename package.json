@@ -1,29 +1,28 @@
 {
   "name": "accessdlsu-infinity",
-  "version": "0.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "description": "The official website of ACCESS DLSU.",
+  "license": "AGPL-3.0-or-later",
   "type": "module",
   "scripts": {
-    "dev": "vinxi dev",
+    "dev": "next dev --turbopack",
     "prebuild": "node wrangler-fix.cjs",
-    "build": "npm run prebuild && vinxi build",
-    "start": "vinxi start",
-    "version": "vinxi version"
-  },
-  "license": "AGPL-3.0-or-later",
-  "devDependencies": {
-    "vite": "^6.0.0",
-    "vite-plugin-solid": "^2.11.6",
-    "wrangler": "<3.109.0"
+    "build": "npm run prebuild && next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "@solidjs/meta": "^0.29.4",
-    "@solidjs/router": "^0.15.3",
-    "@solidjs/start": "^1.1.0",
-    "solid-js": "^1.9.5",
-    "vinxi": "^0.5.7",
-    "@tailwindcss/vite": "^4.1.7",
-    "tailwindcss": "^4.1.7",
-    "lorem-ipsum": "^2.0.8"
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "next": "15.4.6"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@tailwindcss/postcss": "^4",
+    "tailwindcss": "^4",
+    "wrangler": "^4"
   }
 }

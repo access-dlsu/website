@@ -12,7 +12,7 @@ function getBranch() {
   try {
     return execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
   } catch (e) {
-    return 'unknown';
+    return null;
   }
 }
 
@@ -23,7 +23,7 @@ function updateWranglerName() {
   }
   const branch = getBranch();
   const wrangler = JSON.parse(fs.readFileSync(wranglerPath, 'utf8'));
-  if (branch !== 'main') {
+  if (branch && branch !== 'main') {
     wrangler.name = `infinity-${branch}`;
     console.log(`Updated wrangler.json name to infinity-${branch}`);
   }

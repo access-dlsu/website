@@ -1,8 +1,8 @@
 <h1 align="center">ACCESS Project Infinity</h1>
 
-## 📅 Release Date
+## 📢 Announcements
 
-The first version of the website is scheduled for release on **July 14, 2025 (Monday)**.
+View announcements at our [Facebook](https://fb.com/AccessDLSU) page!
 
 ## 🤝 Contributing
 
@@ -14,7 +14,7 @@ We welcome contributions! Please feel free to:
 
 See **[CONTRIBUTING.md](CONTRIBUTING.md)** for guidelines.
 
-## 📊 Project Timeline
+<!--## 📊 Project Timeline
 ```mermaid
 gantt
     title Development Timeline
@@ -38,36 +38,33 @@ gantt
     User Acceptance Testing         :2025-07-06, 2d
     Final Testing                   :2025-07-08, 1d
     Deployment (Release!)           :2025-07-09, 1d
-```
+```-->
 
 ## 🛠️ Tech Stack
 
 ### Frontend
 | Technology | Description |
 |------------|-------------|
-| [Solid.js](https://www.solidjs.com/) | Declarative, efficient, and flexible JavaScript library for building user interfaces |
-| [Vite](https://vitejs.dev/) | Next Generation Frontend Tooling |
-| [solid-start](https://start.solidjs.com/) | SPA-like routing with no page reloads |
+| [React](https://react.dev/) | Declarative and flexible JavaScript library for building user interfaces |
+| [Next.js](https://nextjs.org/) | React framework for server-side rendering and static site generation |
 | [Tailwind CSS](https://tailwindcss.com/) | Utility-first CSS framework for rapid UI development |
-| [shadcn-solid](https://shadcn-solid.vercel.app/) | Re-usable components built with Radix UI and Tailwind CSS |
+| [shadcn/ui](https://ui.shadcn.com/) | Re-usable components built with Radix UI and Tailwind CSS |
 
 ### Backend
 | Technology | Description |
 |------------|-------------|
 | SQL Database | For structured data storage |
 | CDN | For image/media storage |
-| Authentication | Hybrid approach (Traditional login + DLSU Gmail) |
-| [Firebase](https://firebase.google.com/) | Google account authentication and backend services |
+| [Firebase](https://firebase.google.com/) | Google account **authentication** and backend services |
 
 ### Hosting
 | Technology | Description |
 |------------|-------------|
-| [Cloudflare Pages](https://pages.cloudflare.com/) | Free tier with private repo support, fast builds, and DDoS protection |
+| [Cloudflare Workers](https://workers.cloudflare.com/) | DDoS protection, fast builds, and private repo support |
 
 ### Development
 | Technology | Description |
 |------------|-------------|
-| [Vitest](https://vitest.dev/) | Vite-native testing framework |
 | [TypeScript](https://www.typescriptlang.org/) | For type safety and better developer experience |
 | [ESLint](https://eslint.org/) | Code linting |
 | [Prettier](https://prettier.io/) | Code formatting |

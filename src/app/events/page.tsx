@@ -11,20 +11,20 @@ export default function Events() {
 
   return (
     <>
-      <div class={styles.events}>
+      <div className={styles.events}>
         <h2>FLAGSHIP EVENTS</h2>
-        <div class={styles.flagshipEvents}>
+        <div className={styles.flagshipEvents}>
           {eventData.flagship.map((event, eventIndex) => (
             <div>
-              <div class={styles.number}>
+              <div className={styles.number}>
                 <p>{String(eventIndex + 1).padStart(2, '0')}</p>
               </div>
-              <div class={styles.details}>
+              <div className={styles.details}>
                 <h3>{event.name.toUpperCase()}</h3>
                 <p>{event.description}</p>
                 <a href={event.url}>SEE MORE</a>
               </div>
-              <div class={styles.highlights}>
+              <div className={styles.highlights}>
                 <ul>
                   {event.highlights.map((highlight) => (
                     <li>{highlight}</li>
@@ -32,7 +32,7 @@ export default function Events() {
                 </ul>
               </div>
               {event.photoUrl && (
-                <div class={styles.image}>
+                <div className={styles.image}>
                   <img src={event.photoUrl}/>
                 </div>
               )}
@@ -40,7 +40,7 @@ export default function Events() {
           ))}
         </div>
         <h2>OTHER EVENTS</h2>
-        <div class={styles.otherEvents}>
+        <div className={styles.otherEvents}>
           {eventData.other.map((event) => (
             <a href={event.url} title={event.name}>
               <img src={event.photoUrl}/>
@@ -48,13 +48,13 @@ export default function Events() {
           ))}
         </div>
         <h2>TERM 3 CALENDAR</h2>
-        <div class={styles.calendar}>
+        <div className={styles.calendar}>
           {Object.entries(calendarByMonth).map(([monthYear, events]) => (
             <>
               <h5>{monthYear}</h5>
-              <div class={styles.calendarMonth}>
+              <div className={styles.calendarMonth}>
                 {events.map(ev => (
-                  <div class={styles.calendarItem}>
+                  <div className={styles.calendarItem}>
                     <h3>{ev.date.toLocaleDateString(undefined, { day: 'numeric' }).padStart(2, '0')}</h3>
                     <h6>{ev.date.toLocaleDateString(undefined, { weekday: 'narrow' })}</h6>
                     <p>{ev.name}</p>

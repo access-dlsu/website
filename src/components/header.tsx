@@ -1,32 +1,35 @@
-import { createSignal, onMount, createEffect } from 'solid-js';
-import { useIsRouting, useLocation } from "@solidjs/router";
+'use client';
 
-import styles from './layout.module.css';
+import styles from '@/app/layout.module.css';
+import { usePathname } from "next/navigation";
+import React, { useState, useRef, useEffect } from "react";
+import Link from 'next/link';
+import { Poppins } from 'next/font/google';
 
 const accessLogoSrc = '/logo/access.png';
 
+const poppins = Poppins({ subsets: ['latin'], weight: ['400', '700'] });
+
 export function Header() {
-  const isRouting = useIsRouting();
+  const pathname = usePathname();
+  const isActive = (route: string) => pathname === route;
 
-  const location = useLocation();
-  const isActive = (route: string) => location.pathname === route;
-
-  const [sliderStyle, setSliderStyle] = createSignal('');
-  const [isAnimating, setIsAnimating] = createSignal(false);
-  const [isLowQuality, setIsLowQuality] = createSignal(false);
-  const [isNavOpen, setIsNavOpen] = createSignal(false);
+  const [sliderStyle, setSliderStyle] = useState<React.CSSProperties>({});
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [isLowQuality, setIsLowQuality] = useState(false);
+  const [isNavOpen, setIsNavOpen] = useState(false);
   let animatingTimeout: ReturnType<typeof setTimeout>;
-  let navList: HTMLElement | undefined;
-  let navRef: HTMLUListElement | undefined;
-  let navMoreRef: HTMLSpanElement | undefined;
-  let slider: HTMLDivElement | undefined;
+  let navList = useRef<HTMLElement>(null);
+  let navRef = useRef<HTMLUListElement>(null);
+  let navMoreRef = useRef<HTMLSpanElement>(null);
+  let slider = useRef<HTMLDivElement>(null);
 
-  let debugPen: HTMLDivElement | undefined;
-  let feImage: SVGFEImageElement | undefined;
-  let redChannel: SVGFEDisplacementMapElement | undefined;
-  let greenChannel: SVGFEDisplacementMapElement | undefined;
-  let blueChannel: SVGFEDisplacementMapElement | undefined;
-  let feGaussianBlur: SVGFEGaussianBlurElement | undefined;
+  let debugPen = useRef<HTMLDivElement>(null);
+  let feImage = useRef<SVGFEImageElement>(null);
+  let redChannel = useRef<SVGFEDisplacementMapElement>(null);
+  let greenChannel = useRef<SVGFEDisplacementMapElement>(null);
+  let blueChannel = useRef<SVGFEDisplacementMapElement>(null);
+  let feGaussianBlur = useRef<SVGFEGaussianBlurElement>(null);
 
   let config = {
     icons: false,
@@ -51,7 +54,7 @@ export function Header() {
   const buildDisplacementImage = () => {
     const border = Math.min(config.width, config.height) * (config.border * 0.5);
     const kids = `
-      <svg class="displacement-image" viewBox="0 0 ${config.width} ${config.height
+      <svg className="displacement-image" viewBox="0 0 ${config.width} ${config.height
       }" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="red" x1="100%" y1="0%" x2="0%" y2="0%">
@@ -78,25 +81,25 @@ export function Header() {
       }" rx="${config.radius}" fill="hsl(0 0% ${config.lightness}% / ${config.alpha
       }" style="filter:blur(${config.blur}px)" />
       </svg>
-      <div class="label">
+      <div className="label">
         <span>displacement image</span>
       </div>
     `;
 
     if (debugPen) {
-      debugPen.innerHTML = kids;
+      debugPen.current!.innerHTML = kids;
     }
 
-    const svgEl = debugPen?.querySelector('.displacement-image') as SVGSVGElement;
+    const svgEl = debugPen.current?.querySelector('.displacement-image') as SVGSVGElement;
     if (svgEl) {
       const serialized = new XMLSerializer().serializeToString(svgEl);
       const encoded = encodeURIComponent(serialized);
 
-      feImage?.setAttribute('href', `data:image/svg+xml,${encoded}`);
+      feImage.current?.setAttribute('href', `data:image/svg+xml,${encoded}`);
 
       [redChannel, greenChannel, blueChannel].forEach(ch => {
-        ch?.setAttribute('xChannelSelector', config.x);
-        ch?.setAttribute('yChannelSelector', config.y);
+        ch.current?.setAttribute('xChannelSelector', config.x);
+        ch.current?.setAttribute('yChannelSelector', config.y);
       });
     }
   }
@@ -105,7 +108,7 @@ export function Header() {
   const updateSliderPosition = (route: string = '') => {
     if (!navRef) return;
 
-    const activeLink = navRef.querySelector(`a[href="${route || window.location.pathname}"]`);
+    const activeLink = navRef.current?.querySelector(`a[href="${route || window.location.pathname}"]`);
     if (activeLink) {
       const parentLi = activeLink.parentElement as HTMLElement;
       if (parentLi && navRef) {
@@ -115,27 +118,29 @@ export function Header() {
         const width = parentLi.offsetWidth;
         const height = parentLi.offsetHeight;
 
-        setSliderStyle(`left: ${left}px; top: ${top}px; width: ${width}px; height: ${height}px`);
+        setSliderStyle({ left: left, top: top, width: width, height: height, position: 'absolute' });
       }
     }
   };
 
   // Update slider position when active route changes
   const handleNavClick = (route: string) => {
-    if (!slider) return;
+    if (!slider.current) return;
 
     setTimeout(() => updateSliderPosition(route), 0);
-
     setIsAnimating(true);
+  };
+  useEffect(() => {
+    if (!slider.current) return;
 
     // Get animation duration from CSS
-    const computedStyle = getComputedStyle(slider);
+    const computedStyle = getComputedStyle(slider.current!);
     const animationDuration = computedStyle.animationDuration;
 
     // Convert CSS duration (e.g., "0.3s") to milliseconds
     const durationMs = parseFloat(animationDuration) * 1000;
 
-    if (isAnimating()) {
+    if (isAnimating) {
       clearTimeout(animatingTimeout);
       setIsAnimating(false);
       requestAnimationFrame(() => setIsAnimating(true));
@@ -144,14 +149,17 @@ export function Header() {
     animatingTimeout = setTimeout(() => {
       setIsAnimating(false);
       // Call handleNavBlur to close nav menu if open
-      handleNavBlur({ relatedTarget: null } as FocusEvent);
+      handleNavBlur();
     }, durationMs);
-  };
+  }, [isAnimating])
 
   // Track last pointer type to prevent double execution
   let lastPointerType: 'touch' | 'mouse' | null = null;
 
-  const handleNavPointer = (route: string, e: Event) => {
+  const handleNavPointer = (
+    route: string,
+    e: React.MouseEvent<HTMLAnchorElement> | React.TouchEvent<HTMLAnchorElement>
+  ) => {
     if (e.type === 'touchstart') {
       lastPointerType = 'touch';
     } else if (e.type === 'click') {
@@ -166,14 +174,14 @@ export function Header() {
 
   const navLink = (route: string, title: string) => {
     return (
-      <li class={isActive(route) ? styles.active : ''}>
-        <a
+      <li className={isActive(route) ? styles.active : ''}>
+        <Link
           href={route}
           onTouchStart={e => handleNavPointer(route, e)}
           onClick={e => handleNavPointer(route, e)}
         >
           {title}
-        </a>
+        </Link>
       </li>
     );
   }
@@ -184,7 +192,7 @@ export function Header() {
     setIsLowQuality(!document.startViewTransition || window.innerWidth < 64 * 16);
   };
 
-  onMount(() => {
+  useEffect(() => {
     updateLowQuality();
     updateSliderPosition();
     const updateSliderPositionRef = () => updateSliderPosition();
@@ -192,19 +200,19 @@ export function Header() {
     window.addEventListener('resize', updateSliderPositionRef);
 
     if (navList) {
-      config.width = navList.getBoundingClientRect().width;
-      config.height = navList.getBoundingClientRect().height;
+      config.width = navList.current!.getBoundingClientRect().width;
+      config.height = navList.current!.getBoundingClientRect().height;
 
       if (document.startViewTransition) {
         document.startViewTransition(() => {
           buildDisplacementImage();
           [redChannel, greenChannel, blueChannel].forEach(ch => {
-            ch?.setAttribute('scale', String(config.scale));
+            ch.current?.setAttribute('scale', String(config.scale));
           });
-          redChannel?.setAttribute('scale', String(config.scale + config.r));
-          greenChannel?.setAttribute('scale', String(config.scale + config.g));
-          blueChannel?.setAttribute('scale', String(config.scale + config.b));
-          feGaussianBlur?.setAttribute('stdDeviation', String(config.displace));
+          redChannel.current?.setAttribute('scale', String(config.scale + config.r));
+          greenChannel.current?.setAttribute('scale', String(config.scale + config.g));
+          blueChannel.current?.setAttribute('scale', String(config.scale + config.b));
+          feGaussianBlur.current?.setAttribute('stdDeviation', String(config.displace));
         });
       }
     }
@@ -214,60 +222,63 @@ export function Header() {
       window.removeEventListener('resize', updateLowQuality);
       window.removeEventListener('resize', updateSliderPositionRef);
     };
-  });
+  }, []);
 
   // Show and focus nav menu on .navMore click
-  const handleNavMoreClick = (e: MouseEvent | TouchEvent) => {
+  const handleNavMoreClick = (
+    e: React.MouseEvent<HTMLSpanElement> | React.TouchEvent<HTMLSpanElement>
+  ) => {
     if (e.type === "touchstart") {
       e.stopPropagation();
     }
     setIsNavOpen(true);
-    navRef?.focus();
+    navRef.current?.focus();
     updateSliderPosition();
   };
 
   // Hide nav menu when focus is lost
-  const handleNavBlur = (e: FocusEvent) => {
-    if (!navRef?.contains(e.relatedTarget as Node)) {
+  const handleNavBlur = (e?: React.FocusEvent) => {
+    if (!navRef.current) return;
+    const relatedTarget = e?.relatedTarget as Node | null;
+    if (!relatedTarget || !navRef.current.contains(relatedTarget)) {
       setIsNavOpen(false);
     }
   };
 
   return (
     <>
-      <header class={styles.header}>
-        <div class={`${styles.loadingBar} ${isRouting() ? styles.animating : ''}`} />
-        <a href="/" class={styles.wordmark}>
+      <header className={styles.header}>
+        <Link href="/" className={styles.wordmark}>
           <img src={accessLogoSrc} alt="ACCESS Logo" />
-          <span>ACCESS</span>
-        </a>
+          <span className={poppins.className}>ACCESS</span>
+        </Link>
         <nav
-          classList={{
-            [styles.navList]: true,
-            [styles.lowQuality]: isLowQuality(),
-            [styles.animating]: isAnimating()
-          }}
+          className={[
+            styles.navList,
+            isLowQuality ? styles.lowQuality : '',
+            isAnimating ? styles.animating : ''
+          ].filter(Boolean).join(' ')}
           ref={navList}
         >
           <span
-            class={styles.navMore}
+            className={styles.navMore}
             ref={navMoreRef}
             onClick={handleNavMoreClick}
             onTouchStart={handleNavMoreClick}
             tabIndex={0}
             role="button"
             aria-haspopup="true"
-            //aria-expanded={isNavOpen()}
+            //aria-expanded={isNavOpen}
           >
-            <i class="fas fa-ellipsis-vertical"></i>
+            <i className="fas fa-ellipsis-vertical"></i>
           </span>
           <ul
             ref={navRef}
             tabIndex={-1}
-            classList={{ [styles.open]: isNavOpen() }}
+            className={[ isNavOpen ? styles.open : '' ].filter(Boolean).join(' ')}
             onBlur={handleNavBlur}
           >
-            <div ref={slider} class={`${styles.activeSlider} ${isAnimating() ? styles.animating : ''}`} style={sliderStyle()}></div>
+            <div ref={slider} className={`${styles.activeSlider} ${isAnimating ? styles.animating : ''}`} style={sliderStyle}></div>
             {navLink('/', 'Home')}
             {navLink('/teaser', 'Teaser')}
             {navLink('/about', 'About')}
@@ -275,7 +286,7 @@ export function Header() {
             {navLink('/academics', 'Academics')}
             {navLink('/members-hub', 'Members Hub')}
           </ul>
-          <svg class={styles.filter} xmlns="http://www.w3.org/2000/svg">
+          <svg className={styles.filter} xmlns="http://www.w3.org/2000/svg">
             <defs>
               {/* https://github.com/archisvaze/liquid-glass/ */}
               <filter id="glass-distortion" x="0%" y="0%" width="100%" height="100%">
@@ -285,7 +296,7 @@ export function Header() {
                   yChannelSelector="G" />
               </filter>
               {/* https://codepen.io/jh3y/pen/EajLxJV */}
-              <filter id="lg-filter" color-interpolation-filters="sRGB">
+              <filter id="lg-filter" colorInterpolationFilters="sRGB">
                 <feImage
                   ref={feImage}
                   x="0"
@@ -355,28 +366,8 @@ export function Header() {
             </defs>
           </svg>
         </nav>
-        <div ref={debugPen} style="display: none"></div>
+        <div ref={debugPen} style={{ display: 'none' }}></div>
       </header>
     </>
   );
 };
-
-export function Footer() {
-  return (
-    <>
-      <footer class={styles.footer}>
-        <p class={styles.footerText}>
-          <img src={accessLogoSrc} alt="ACCESS Logo" />
-          <span class="max-lg:hidden">© 2025 by The Association of Computer Engineering Students</span>
-          <span class="lg:hidden">© ACCESS 2025</span>
-        </p>
-        <nav class={styles.footerLinks}>
-          <a href="https://www.facebook.com/AccessDLSU/"><i class="fab fa-facebook-f"></i></a>
-          <a href="https://www.instagram.com/dlsu_access/"><i class="fab fa-instagram"></i></a>
-          <a href="https://github.com/ACCESS-DLSU"><i class="fab fa-github"></i></a>
-          <a href="https://www.linkedin.com/company/accessdlsu/"><i class="fab fa-linkedin-in"></i></a>
-        </nav>
-      </footer>
-    </>
-  )
-}
