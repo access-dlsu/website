@@ -1,5 +1,6 @@
-import React from 'react';
-import { headers } from 'next/headers';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 
 import styles from './events.module.css';
 
@@ -22,32 +23,59 @@ interface Calendar {
   date: Date
 }
 
-export default async function Events() {
-  const headersList = await headers();
-  const host = headersList.get('host');
-  const protocol = host?.includes('localhost') ? 'http' : 'https';
-  const apiUrl = `${protocol}://${host}/api`;
-  
-  // Fetch data from API endpoints
-  const eventRes = await fetch(`${apiUrl}/events`, { cache: 'no-store' });
-  const eventData: { flagship: FlagshipEvents[], other: OtherEvents[] } = await eventRes.json();
+export default function Events() {
+  const [eventData, setEventData] = useState<{ flagship: FlagshipEvents[], other: OtherEvents[] }>({ flagship: [], other: [] });
+  const [calendarByMonth, setCalendarByMonth] = useState<{ [key: string]: Calendar[] }>({});
+  const [loading, setLoading] = useState(true);
+  const [errored, setErrored] = useState(false);
 
-  const calendarRes = await fetch(`${apiUrl}/calendar`, { cache: 'no-store' });
-  const rawCalendarData = await calendarRes.json();
+  useEffect(() => {
+    async function getData() {
+      try {
+        const [eventRes, calendarRes] = await Promise.all([
+          fetch('/api/events', { cache: 'no-store' }),
+          fetch('/api/calendar', { cache: 'no-store' })
+        ]);
 
-  // Convert date strings from API to Date objects
-  const calendarData: Calendar[] = rawCalendarData.map((event: any) => ({
-    ...event,
-    date: new Date(event.date),
-  }));
+        if (!eventRes.ok || !calendarRes.ok) {
+          throw new Error('Failed to fetch data');
+        }
 
-  // Group calendarData by month and year
-  const calendarByMonth: { [key: string]: Calendar[] } = {};
-  calendarData.forEach(event => {
-    const monthYear = event.date.toLocaleString('default', { month: 'long', year: 'numeric' });
-    if (!calendarByMonth[monthYear]) calendarByMonth[monthYear] = [];
-    calendarByMonth[monthYear].push(event);
-  });
+        const eventDataJson = await eventRes.json();
+        setEventData(eventDataJson);
+
+        const rawCalendarData = await calendarRes.json();
+        const calendarData: Calendar[] = rawCalendarData.map((event: any) => ({
+          ...event,
+          date: new Date(event.date),
+        }));
+
+        const groupedCalendar: { [key: string]: Calendar[] } = {};
+        calendarData.forEach(event => {
+          const monthYear = event.date.toLocaleString('default', { month: 'long', year: 'numeric' });
+          if (!groupedCalendar[monthYear]) groupedCalendar[monthYear] = [];
+          groupedCalendar[monthYear].push(event);
+        });
+        setCalendarByMonth(groupedCalendar);
+
+      } catch (error) {
+        console.error(error);
+        setErrored(true);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    getData();
+  }, []);
+
+  if (loading) {
+    return <div className={styles.events}><h2>Loading events...</h2></div>;
+  }
+
+  if (errored) {
+    return <div className={styles.events}><h2>Failed to load events</h2></div>;
+  }
 
   return (
     <>
