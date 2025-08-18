@@ -510,8 +510,8 @@ export default function DPBlast() {
               </div>
               <div className={styles.canvasContainer}>
                 <div className={styles.canvasWrapper}>
-                  <canvas id="profileCanvas" ref={canvasRef} onMouseDown={handleMouseDown} onTouchStart={handleTouchStart}></canvas>
-                  <img id="tempOverlayOnCanvas" alt="" ref={tempOverlayOnCanvasRef} style={{ pointerEvents: 'none' }} />
+                  <canvas className={styles.profileCanvas} ref={canvasRef} onMouseDown={handleMouseDown} onTouchStart={handleTouchStart}></canvas>
+                  <img className={styles.tempOverlayOnCanvas} alt="" ref={tempOverlayOnCanvasRef} style={{ pointerEvents: 'none' }} />
                   <div className={styles.canvasOverlay} id="canvasOverlay" style={{ display: uploadedImage ? 'none' : 'flex' }}>
                     <div className={styles.overlayContent}>
                       <i className="fas fa-image"></i>
@@ -571,7 +571,7 @@ export default function DPBlast() {
               <h2>Caption</h2>
             </div>
             <div className={styles.captionSection}>
-              <textarea id="caption" placeholder="Your caption will appear here..." rows={8} value={caption} onChange={(e) => setCaption(e.target.value)}></textarea>
+              <textarea className={styles.caption} placeholder="Your caption will appear here..." rows={8} value={caption} onChange={(e) => setCaption(e.target.value)}></textarea>
               <div className={styles.captionActions}>
                 <button id="resetButton" className={styles.btnSecondary} onClick={() => {
                   setCaption(originalCaption);
