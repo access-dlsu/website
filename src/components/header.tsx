@@ -280,7 +280,7 @@ export function Header() {
           >
             <div ref={slider} className={`${styles.activeSlider} ${isAnimating ? styles.animating : ''}`} style={sliderStyle}></div>
             {navLink('/', 'Home')}
-            {navLink('/teaser', 'Teaser')}
+            {/*{navLink('/teaser', 'Teaser')}*/}
             {navLink('/about', 'About')}
             {navLink('/events', 'Events')}
             {navLink('/academics', 'Academics')}

@@ -2,6 +2,26 @@
 
 @import "tailwindcss";
 
+:root {
+  --primary-color: #5e9432; /* Your new green */
+  --primary-hover: #4a7628; /* Darker shade of your green */
+  --secondary-color: #334155; /* Dark Gray for secondary buttons */
+  --success-color: #5e9432;
+  --error-color: #ef4444;
+  --warning-color: #f59e0b;
+  --background: #0a0a0a; /* Black background */
+  --surface: #18181b; /* Card background, slightly lighter black */
+  --text-primary: #f1f5f9; /* White/very light gray */
+  --text-secondary: #a1a1aa; /* Light gray */
+  --border: #27272a; /* Dark border */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.2);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.2);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  --radius: 12px;
+  --radius-lg: 16px;
+  --transition: all 0.2s cubic-bezier(.4,0,.2,1);
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
