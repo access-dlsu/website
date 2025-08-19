@@ -23,7 +23,7 @@ export default function Home() {
       setLoading(false);
     }
 
-    getAnnouncements();
+    //getAnnouncements();
   }, []); // The empty dependency array ensures this effect runs only once on mount
 
   return (
@@ -37,7 +37,7 @@ export default function Home() {
         </ul>
       </div>
 
-      <div className={styles.announcementBoard}>
+      <div className={styles.announcementBoard} style={{ display: 'none' }}>
         <h2>📢 Announcements</h2>
         <div className={styles.announcementList}>
           {loading ? (

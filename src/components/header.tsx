@@ -19,99 +19,78 @@ export function Header() {
   const [isLowQuality, setIsLowQuality] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
   let animatingTimeout: ReturnType<typeof setTimeout>;
-  let navList = useRef<HTMLElement>(null);
-  let navRef = useRef<HTMLUListElement>(null);
-  let navMoreRef = useRef<HTMLSpanElement>(null);
-  let slider = useRef<HTMLDivElement>(null);
+  let navRef = useRef<HTMLElement>(null);
+  let navList = useRef<HTMLUListElement>(null);
+  let navMore = useRef<HTMLSpanElement>(null);
+  let navSlider = useRef<HTMLDivElement>(null);
 
-  let debugPen = useRef<HTMLDivElement>(null);
+  let lgFilterHelper = useRef<HTMLDivElement>(null);
   let feImage = useRef<SVGFEImageElement>(null);
   let redChannel = useRef<SVGFEDisplacementMapElement>(null);
   let greenChannel = useRef<SVGFEDisplacementMapElement>(null);
   let blueChannel = useRef<SVGFEDisplacementMapElement>(null);
   let feGaussianBlur = useRef<SVGFEGaussianBlurElement>(null);
 
-  let config = {
-    icons: false,
-    scale: -180,
-    border: 0.07,
-    lightness: 50,
-    blend: 'difference',
-    x: 'R',
-    y: 'B',
-    alpha: 0.93,
-    blur: 11,
-    r: 0,
-    g: 10,
-    b: 20,
+  let lgConfig = {
+    icons: false, scale: -180, border: 0.07, lightness: 50, blend: 'difference',
+    x: 'R', y: 'B', alpha: 0.93, blur: 11, r: 0, g: 10, b: 20,
     // these are the ones that usually change
-    width: 200,
-    height: 80,
-    displace: 0,
-    frost: 0,
-    radius: 28
+    width: 200, height: 80, displace: 0, frost: 0, radius: 28
   };
-  const buildDisplacementImage = () => {
-    const border = Math.min(config.width, config.height) * (config.border * 0.5);
-    const kids = `
-      <svg className="displacement-image" viewBox="0 0 ${config.width} ${config.height
-      }" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="red" x1="100%" y1="0%" x2="0%" y2="0%">
-            <stop offset="0%" stop-color="#0000"/>
-            <stop offset="100%" stop-color="red"/>
-          </linearGradient>
-          <linearGradient id="blue" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="#0000"/>
-            <stop offset="100%" stop-color="blue"/>
-          </linearGradient>
-        </defs>
-        <!-- backdrop -->
-        <rect x="0" y="0" width="${config.width}" height="${config.height
-      }" fill="black"></rect>
-        <!-- red linear -->
-        <rect x="0" y="0" width="${config.width}" height="${config.height}" rx="${config.radius
-      }" fill="url(#red)" />
-        <!-- blue linear -->
-        <rect x="0" y="0" width="${config.width}" height="${config.height}" rx="${config.radius
-      }" fill="url(#blue)" style="mix-blend-mode: ${config.blend}" />
-        <!-- block out distortion -->
-        <rect x="${border}" y="${Math.min(config.width, config.height) * (config.border * 0.5)
-      }" width="${config.width - border * 2}" height="${config.height - border * 2
-      }" rx="${config.radius}" fill="hsl(0 0% ${config.lightness}% / ${config.alpha
-      }" style="filter:blur(${config.blur}px)" />
-      </svg>
-      <div className="label">
-        <span>displacement image</span>
-      </div>
-    `;
+  const buildLgDisplacementImage = () => {
+    const border = Math.min(lgConfig.width, lgConfig.height) * (lgConfig.border * 0.5);
 
-    if (debugPen) {
-      debugPen.current!.innerHTML = kids;
-    }
-
-    const svgEl = debugPen.current?.querySelector('.displacement-image') as SVGSVGElement;
-    if (svgEl) {
-      const serialized = new XMLSerializer().serializeToString(svgEl);
+    if (lgFilterHelper.current && feImage.current) {
+      lgFilterHelper.current.innerHTML = `
+        <svg id="displacement-image" viewBox="0 0 ${lgConfig.width} ${lgConfig.height
+        }" xmlns="http://www.w3.org/2000/svg" style="display:none">
+          <defs>
+            <linearGradient id="red" x1="100%" y1="0%" x2="0%" y2="0%">
+              <stop offset="0%" stop-color="#0000"/>
+              <stop offset="100%" stop-color="red"/>
+            </linearGradient>
+            <linearGradient id="blue" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#0000"/>
+              <stop offset="100%" stop-color="blue"/>
+            </linearGradient>
+          </defs>
+          <!-- backdrop -->
+          <rect x="0" y="0" width="${lgConfig.width}" height="${lgConfig.height
+        }" fill="black"></rect>
+          <!-- red linear -->
+          <rect x="0" y="0" width="${lgConfig.width}" height="${lgConfig.height}" rx="${lgConfig.radius
+        }" fill="url(#red)" />
+          <!-- blue linear -->
+          <rect x="0" y="0" width="${lgConfig.width}" height="${lgConfig.height}" rx="${lgConfig.radius
+        }" fill="url(#blue)" style="mix-blend-mode: ${lgConfig.blend}" />
+          <!-- block out distortion -->
+          <rect x="${border}" y="${Math.min(lgConfig.width, lgConfig.height) * (lgConfig.border * 0.5)
+        }" width="${lgConfig.width - border * 2}" height="${lgConfig.height - border * 2
+        }" rx="${lgConfig.radius}" fill="hsl(0 0% ${lgConfig.lightness}% / ${lgConfig.alpha
+        }" style="filter:blur(${lgConfig.blur}px)" />
+        </svg>
+      `;
+      const svgEl = lgFilterHelper.current.querySelector('#displacement-image') as SVGSVGElement;
+      const serialized = new XMLSerializer().serializeToString(svgEl!);
       const encoded = encodeURIComponent(serialized);
 
-      feImage.current?.setAttribute('href', `data:image/svg+xml,${encoded}`);
+      feImage.current.setAttribute('href', `data:image/svg+xml,${encoded}`);
 
       [redChannel, greenChannel, blueChannel].forEach(ch => {
-        ch.current?.setAttribute('xChannelSelector', config.x);
-        ch.current?.setAttribute('yChannelSelector', config.y);
+        ch.current?.setAttribute('xChannelSelector', lgConfig.x);
+        ch.current?.setAttribute('yChannelSelector', lgConfig.y);
       });
     }
   }
 
 
   const updateSliderPosition = (route: string = '') => {
-    if (!navRef) return;
+    if (!navList.current) return;
 
-    const activeLink = navRef.current?.querySelector(`a[href="${route || window.location.pathname}"]`);
+    const activeLink = navList.current.querySelector(`a[href="${route || window.location.pathname}"]`);
     if (activeLink) {
       const parentLi = activeLink.parentElement as HTMLElement;
-      if (parentLi && navRef) {
+      if (parentLi) {
         // Use offset properties to ignore transforms like scale()
         const left = parentLi.offsetLeft;
         const top = parentLi.offsetTop;
@@ -120,21 +99,23 @@ export function Header() {
 
         setSliderStyle({ left: left, top: top, width: width, height: height, position: 'absolute' });
       }
+    } else {
+      setSliderStyle({ display: 'none' });
     }
   };
 
   // Update slider position when active route changes
   const handleNavClick = (route: string) => {
-    if (!slider.current) return;
+    if (!navSlider.current) return;
 
     setTimeout(() => updateSliderPosition(route), 0);
     setIsAnimating(true);
   };
   useEffect(() => {
-    if (!slider.current) return;
+    if (!navSlider.current) return;
 
     // Get animation duration from CSS
-    const computedStyle = getComputedStyle(slider.current!);
+    const computedStyle = getComputedStyle(navSlider.current);
     const animationDuration = computedStyle.animationDuration;
 
     // Convert CSS duration (e.g., "0.3s") to milliseconds
@@ -199,20 +180,20 @@ export function Header() {
     window.addEventListener('resize', updateLowQuality);
     window.addEventListener('resize', updateSliderPositionRef);
 
-    if (navList) {
-      config.width = navList.current!.getBoundingClientRect().width;
-      config.height = navList.current!.getBoundingClientRect().height;
+    if (navRef.current) {
+      lgConfig.width = navRef.current.getBoundingClientRect().width;
+      lgConfig.height = navRef.current.getBoundingClientRect().height;
 
       if (document.startViewTransition) {
         document.startViewTransition(() => {
-          buildDisplacementImage();
+          buildLgDisplacementImage();
           [redChannel, greenChannel, blueChannel].forEach(ch => {
-            ch.current?.setAttribute('scale', String(config.scale));
+            ch.current?.setAttribute('scale', String(lgConfig.scale));
           });
-          redChannel.current?.setAttribute('scale', String(config.scale + config.r));
-          greenChannel.current?.setAttribute('scale', String(config.scale + config.g));
-          blueChannel.current?.setAttribute('scale', String(config.scale + config.b));
-          feGaussianBlur.current?.setAttribute('stdDeviation', String(config.displace));
+          redChannel.current?.setAttribute('scale', String(lgConfig.scale + lgConfig.r));
+          greenChannel.current?.setAttribute('scale', String(lgConfig.scale + lgConfig.g));
+          blueChannel.current?.setAttribute('scale', String(lgConfig.scale + lgConfig.b));
+          feGaussianBlur.current?.setAttribute('stdDeviation', String(lgConfig.displace));
         });
       }
     }
@@ -232,15 +213,15 @@ export function Header() {
       e.stopPropagation();
     }
     setIsNavOpen(true);
-    navRef.current?.focus();
+    navList.current?.focus();
     updateSliderPosition();
   };
 
   // Hide nav menu when focus is lost
   const handleNavBlur = (e?: React.FocusEvent) => {
-    if (!navRef.current) return;
+    if (!navList.current) return;
     const relatedTarget = e?.relatedTarget as Node | null;
-    if (!relatedTarget || !navRef.current.contains(relatedTarget)) {
+    if (!relatedTarget || !navList.current.contains(relatedTarget)) {
       setIsNavOpen(false);
     }
   };
@@ -258,11 +239,11 @@ export function Header() {
             isLowQuality ? styles.lowQuality : '',
             isAnimating ? styles.animating : ''
           ].filter(Boolean).join(' ')}
-          ref={navList}
+          ref={navRef}
         >
           <span
             className={styles.navMore}
-            ref={navMoreRef}
+            ref={navMore}
             onClick={handleNavMoreClick}
             onTouchStart={handleNavMoreClick}
             tabIndex={0}
@@ -273,12 +254,12 @@ export function Header() {
             <i className="fas fa-ellipsis-vertical"></i>
           </span>
           <ul
-            ref={navRef}
+            ref={navList}
             tabIndex={-1}
             className={[ isNavOpen ? styles.open : '' ].filter(Boolean).join(' ')}
             onBlur={handleNavBlur}
           >
-            <div ref={slider} className={`${styles.activeSlider} ${isAnimating ? styles.animating : ''}`} style={sliderStyle}></div>
+            <div ref={navSlider} className={`${styles.activeSlider} ${isAnimating ? styles.animating : ''}`} style={sliderStyle}></div>
             {navLink('/', 'Home')}
             {/*{navLink('/teaser', 'Teaser')}*/}
             {navLink('/about', 'About')}
@@ -365,8 +346,8 @@ export function Header() {
               </filter>
             </defs>
           </svg>
+          <div ref={lgFilterHelper}></div>
         </nav>
-        <div ref={debugPen} style={{ display: 'none' }}></div>
       </header>
     </>
   );
