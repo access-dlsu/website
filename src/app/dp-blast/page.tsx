@@ -102,6 +102,7 @@ export default function DPBlast() {
     else if (alt.includes('LEAP2025')) captionFile = 'caption4.txt';
     else if (alt.includes('Full Throttle')) captionFile = 'caption5.txt';
     else if (alt.includes('BYTE')) captionFile = 'caption6.txt';
+    else if (alt.includes('Frosh Welcoming')) captionFile = 'caption7.txt';
 
     fetch(`/dp-blast/captions/${captionFile}`)
       .then(response => response.text())
@@ -356,10 +357,11 @@ export default function DPBlast() {
       getSrc: (sub: string) => `dp-blast/images/frame5/${sub}.png`
     },
     {
-      id: 'frame6', category: 'new', label: 'BYTE: Beyond Your Technical Expertise 2025',
+      id: 'frame6', category: 'old', label: 'BYTE: Beyond Your Technical Expertise 2025',
       options: ['dp', 'internals', 'externals', 'operations'],
       getSrc: (sub: string) => `dp-blast/images/frame6/${sub}.png`
     },
+    { id: 'frame7', category: 'new', label: 'Frosh Welcoming 2025', src: 'dp-blast/images/frame7.png' },
   ];
 
   useEffect(() => {
