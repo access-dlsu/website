@@ -18,6 +18,7 @@ export function Header() {
   const [isAnimating, setIsAnimating] = useState(false);
   const [isLowQuality, setIsLowQuality] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
   let animatingTimeout: ReturnType<typeof setTimeout>;
   let navRef = useRef<HTMLElement>(null);
   let navList = useRef<HTMLUListElement>(null);
@@ -129,8 +130,7 @@ export function Header() {
 
     animatingTimeout = setTimeout(() => {
       setIsAnimating(false);
-      // Call handleNavBlur to close nav menu if open
-      handleNavBlur();
+      setIsNavOpen(false);
     }, durationMs);
   }, [isAnimating])
 
@@ -174,6 +174,8 @@ export function Header() {
   };
 
   useEffect(() => {
+    setHasMounted(true);
+
     updateLowQuality();
     updateSliderPosition();
     const updateSliderPositionRef = () => updateSliderPosition();
@@ -212,18 +214,9 @@ export function Header() {
     if (e.type === "touchstart") {
       e.stopPropagation();
     }
-    setIsNavOpen(true);
+    setIsNavOpen(prev => !prev);
     navList.current?.focus();
     updateSliderPosition();
-  };
-
-  // Hide nav menu when focus is lost
-  const handleNavBlur = (e?: React.FocusEvent) => {
-    if (!navList.current) return;
-    const relatedTarget = e?.relatedTarget as Node | null;
-    if (!relatedTarget || !navList.current.contains(relatedTarget)) {
-      setIsNavOpen(false);
-    }
   };
 
   return (
@@ -244,12 +237,14 @@ export function Header() {
           <span
             className={styles.navMore}
             ref={navMore}
-            onClick={handleNavMoreClick}
+            //onClick={handleNavMoreClick}
             onTouchStart={handleNavMoreClick}
             tabIndex={0}
             role="button"
             aria-haspopup="true"
-            //aria-expanded={isNavOpen}
+            {...(hasMounted && typeof window !== "undefined"
+              ? { 'aria-expanded': isNavOpen }
+              : {})}
           >
             <i className="fas fa-ellipsis-vertical"></i>
           </span>
@@ -257,7 +252,6 @@ export function Header() {
             ref={navList}
             tabIndex={-1}
             className={[ isNavOpen ? styles.open : '' ].filter(Boolean).join(' ')}
-            onBlur={handleNavBlur}
           >
             <div ref={navSlider} className={`${styles.activeSlider} ${isAnimating ? styles.animating : ''}`} style={sliderStyle}></div>
             {navLink('/', 'Home')}

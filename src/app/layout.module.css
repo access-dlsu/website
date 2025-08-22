@@ -80,6 +80,7 @@ svg.filter {
   border-radius: 28px;
   /*box-shadow: 0px 6px 24px rgba(0, 0, 0, 0.2);*/
   --lg-ease: 0.3s ease;
+  --lg-tap: 0.4s cubic-bezier(0.18, 0.89, 0.32, 1);
   --lg-bounce: 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.08);
 }
 /* Version 1 */
@@ -100,15 +101,6 @@ svg.filter {
   backdrop-filter: brightness(65%) url(#lg-filter);
   box-shadow: 0 0 2px 1px light-dark( color-mix(in oklch, canvasText, #0000 85%), color-mix(in oklch, canvasText, #0000 65%)) inset, 0 0 10px 4px light-dark( color-mix(in oklch, canvasText, #0000 90%), color-mix(in oklch, canvasText, #0000 85%)) inset, 0px 4px 16px rgba(17, 17, 26, 0.05), 0px 8px 24px rgba(17, 17, 26, 0.05), 0px 16px 56px rgba(17, 17, 26, 0.05), 0px 4px 16px rgba(17, 17, 26, 0.05) inset, 0px 8px 24px rgba(17, 17, 26, 0.05) inset, 0px 16px 56px rgba(17, 17, 26, 0.05) inset;
 }
-.navList.animating ul {
-  animation: navClick var(--lg-bounce);
-}
-@keyframes navClick {
-  50% {
-    background-color: rgba(63, 63, 63, 0.3);
-    transform: scale(1.02);
-  }
-}
 
 .navList i {
   --fa-display: none;
@@ -126,6 +118,7 @@ svg.filter {
     position: relative;
     border-radius: 28px;
     cursor: pointer;
+    transition: transform var(--lg-tap);
   }
   .navList .navMore::before {
     content: '';
@@ -135,6 +128,18 @@ svg.filter {
     border-radius: 28px;
     box-shadow: inset 0 0 3px -1px white;
     background-color: rgba(63, 63, 63, 0.2);
+    transition: background-color var(--lg-tap);
+  }
+  .navList .navMore:active {
+    transform: scale(1.2);
+  }
+  .navList .navMore:active::before {
+    background-color: rgba(192, 192, 192, 0.2);
+  }
+  .navList .navMore[aria-expanded=true]::after {
+    content: '';
+    position: fixed;
+    inset: -100vmax;
   }
 }
 
@@ -164,6 +169,15 @@ svg.filter {
   }
   .navList ul.open {
     transform: translate(0, 0) scale(1);
+  }
+}
+.navList.animating ul {
+  animation: navClick var(--lg-bounce);
+}
+@keyframes navClick {
+  50% {
+    background-color: rgba(63, 63, 63, 0.3);
+    transform: scale(1.02);
   }
 }
 
