@@ -44,7 +44,9 @@
   font-size: 2rem;
 }
 .wordmark img {
-  width: 60px;
+  width: 54px;
+  height: 54px;
+  filter: brightness(0) invert(1);
 }
 
 svg.filter {
@@ -224,7 +226,9 @@ svg.filter {
   opacity: 0.5;
 }
 .footerText img {
-  width: 60px;
+  width: 54px;
+  height: 54px;
+  filter: brightness(0) invert(1);
 }
 .footerLinks {
   display: flex;

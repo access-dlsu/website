@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import styles from './page.module.css';
 
-const accessWordmarkSrc = '/logo/access_wordmark.png';
+const accessWordmarkSrc = '/img/access_wordmark.webp';
 
 export default function Home() {
   const [announcements, setAnnouncements] = useState([]);
@@ -28,7 +28,7 @@ export default function Home() {
 
   return (
     <>
-      <div className={styles.intro}> <img src={accessWordmarkSrc} alt="The Association of Computer Engineering Students" />
+      <div className={styles.intro}> <img src={accessWordmarkSrc} alt="The Association of Computer Engineering Students" fetchPriority="high" />
         <p>ACCESS is a professional organization of Computer Engineering students who strive to be Lasallian achievers. This organization offers academic and career-related activities in order for students to develop their skills and hone their abilities in engineering.</p>
         <ul className="flex">
           <li><a href="/about">About Us</a></li>

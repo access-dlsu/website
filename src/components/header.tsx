@@ -6,9 +6,9 @@ import React, { useState, useRef, useEffect } from "react";
 import Link from 'next/link';
 import { Poppins } from 'next/font/google';
 
-const accessLogoSrc = '/logo/access.png';
+const accessLogoSrc = '/img/access.svg';
 
-const poppins = Poppins({ subsets: ['latin'], weight: ['400', '700'] });
+const poppins = Poppins({ subsets: ['latin'], weight: ['400', '700'], display: 'swap' });
 
 export function Header() {
   const pathname = usePathname();

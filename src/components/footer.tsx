@@ -2,7 +2,7 @@
 
 import styles from '@/app/layout.module.css';
 
-const accessLogoSrc = '/logo/access.png';
+const accessLogoSrc = '/img/access.svg';
 
 export function Footer() {
   return (

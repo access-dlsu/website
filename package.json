@@ -25,5 +25,8 @@
     "comment-json": "^4",
     "tailwindcss": "^4",
     "wrangler": "^4"
-  }
+  },
+  "browserslist": [
+    "defaults"
+  ]
 }
