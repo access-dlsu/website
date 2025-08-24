@@ -537,7 +537,7 @@ export default function DPBlast() {
                 </div>
                 <div className={styles.frameSelectionTips}>
                   <div className={styles.tipItem}>
-                    <i className="fas fa-mouse"></i>
+                    <i className="fas fa-arrows-alt"></i>
                     <span>Drag to move image</span>
                   </div>
                   <div className={styles.tipItem}>

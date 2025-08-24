@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
+
 import styles from './page.module.css';
 
 const accessWordmarkSrc = '/img/access_wordmark.webp';
@@ -31,9 +33,9 @@ export default function Home() {
       <div className={styles.intro}> <img src={accessWordmarkSrc} alt="The Association of Computer Engineering Students" fetchPriority="high" />
         <p>ACCESS is a professional organization of Computer Engineering students who strive to be Lasallian achievers. This organization offers academic and career-related activities in order for students to develop their skills and hone their abilities in engineering.</p>
         <ul className="flex">
-          <li><a href="/about">About Us</a></li>
-          <li><a href="/about">Mission</a></li>
-          <li><a href="/about">Vision</a></li>
+          <li><Link href="/about">About Us</Link></li>
+          <li><Link href="/about">Mission</Link></li>
+          <li><Link href="/about">Vision</Link></li>
         </ul>
       </div>
 

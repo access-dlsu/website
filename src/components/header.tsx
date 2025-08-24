@@ -228,7 +228,7 @@ export function Header() {
         </Link>
         <nav
           className={[
-            styles.navList,
+            styles.nav,
             isLowQuality ? styles.lowQuality : '',
             isAnimating ? styles.animating : ''
           ].filter(Boolean).join(' ')}
@@ -241,6 +241,7 @@ export function Header() {
             onTouchStart={handleNavMoreClick}
             tabIndex={0}
             role="button"
+            aria-label="Toggle navigation menu"
             aria-haspopup="true"
             {...(hasMounted && typeof window !== "undefined"
               ? { 'aria-expanded': isNavOpen }
@@ -248,99 +249,105 @@ export function Header() {
           >
             <i className="fas fa-ellipsis-vertical"></i>
           </span>
-          <ul
-            ref={navList}
-            tabIndex={-1}
-            className={[ isNavOpen ? styles.open : '' ].filter(Boolean).join(' ')}
+          <div
+            className={[
+              styles.navList,
+              isNavOpen ? styles.open : ''
+            ].filter(Boolean).join(' ')}
           >
+            <ul
+              ref={navList}
+              tabIndex={-1}
+            >
+              {navLink('/', 'Home')}
+              {/*{navLink('/teaser', 'Teaser')}*/}
+              {navLink('/about', 'About')}
+              {navLink('/events', 'Events')}
+              {navLink('/academics', 'Academics')}
+              {navLink('/members-hub', 'Members Hub')}
+            </ul>
             <div ref={navSlider} className={`${styles.activeSlider} ${isAnimating ? styles.animating : ''}`} style={sliderStyle}></div>
-            {navLink('/', 'Home')}
-            {/*{navLink('/teaser', 'Teaser')}*/}
-            {navLink('/about', 'About')}
-            {navLink('/events', 'Events')}
-            {navLink('/academics', 'Academics')}
-            {navLink('/members-hub', 'Members Hub')}
-          </ul>
-          <svg className={styles.filter} xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              {/* https://github.com/archisvaze/liquid-glass/ */}
-              <filter id="glass-distortion" x="0%" y="0%" width="100%" height="100%">
-                <feTurbulence type="fractalNoise" baseFrequency="0.008 0.008" numOctaves="2" seed="92" result="noise" />
-                <feGaussianBlur in="noise" stdDeviation="2" result="blurred" />
-                <feDisplacementMap in="SourceGraphic" in2="blurred" scale="77" xChannelSelector="R"
-                  yChannelSelector="G" />
-              </filter>
-              {/* https://codepen.io/jh3y/pen/EajLxJV */}
-              <filter id="lg-filter" colorInterpolationFilters="sRGB">
-                <feImage
-                  ref={feImage}
-                  x="0"
-                  y="0"
-                  width="100%"
-                  height="100%"
-                  result="map"
-                ></feImage>
-                <feDisplacementMap
-                  ref={redChannel}
-                  in="SourceGraphic"
-                  in2="map"
-                  id="redchannel"
-                  xChannelSelector="R"
-                  yChannelSelector="G"
-                  result="dispRed"
-                />
-                <feColorMatrix
-                  in="dispRed"
-                  type="matrix"
-                  values="1 0 0 0 0
-                          0 0 0 0 0
-                          0 0 0 0 0
-                          0 0 0 1 0"
-                  result="red"
-                />
-                <feDisplacementMap
-                  ref={greenChannel}
-                  in="SourceGraphic"
-                  in2="map"
-                  id="greenchannel"
-                  xChannelSelector="R"
-                  yChannelSelector="G"
-                  result="dispGreen"
-                />
-                <feColorMatrix
-                  in="dispGreen"
-                  type="matrix"
-                  values="0 0 0 0 0
-                          0 1 0 0 0
-                          0 0 0 0 0
-                          0 0 0 1 0"
-                  result="green"
-                />
-                <feDisplacementMap
-                  ref={blueChannel}
-                  in="SourceGraphic"
-                  in2="map"
-                  id="bluechannel"
-                  xChannelSelector="R"
-                  yChannelSelector="G"
-                  result="dispBlue"
-                />
-                <feColorMatrix
-                  in="dispBlue"
-                  type="matrix"
-                  values="0 0 0 0 0
-                          0 0 0 0 0
-                          0 0 1 0 0
-                          0 0 0 1 0"
-                  result="blue"
-                />
-                <feBlend in="red" in2="green" mode="screen" result="rg" />
-                <feBlend in="rg" in2="blue" mode="screen" result="output" />
-                <feGaussianBlur ref={feGaussianBlur} in="output" stdDeviation="0.7" />
-              </filter>
-            </defs>
-          </svg>
-          <div ref={lgFilterHelper}></div>
+            <svg className={styles.filter} xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                {/* https://github.com/archisvaze/liquid-glass/ */}
+                <filter id="glass-distortion" x="0%" y="0%" width="100%" height="100%">
+                  <feTurbulence type="fractalNoise" baseFrequency="0.008 0.008" numOctaves="2" seed="92" result="noise" />
+                  <feGaussianBlur in="noise" stdDeviation="2" result="blurred" />
+                  <feDisplacementMap in="SourceGraphic" in2="blurred" scale="77" xChannelSelector="R"
+                    yChannelSelector="G" />
+                </filter>
+                {/* https://codepen.io/jh3y/pen/EajLxJV */}
+                <filter id="lg-filter" colorInterpolationFilters="sRGB">
+                  <feImage
+                    ref={feImage}
+                    x="0"
+                    y="0"
+                    width="100%"
+                    height="100%"
+                    result="map"
+                  ></feImage>
+                  <feDisplacementMap
+                    ref={redChannel}
+                    in="SourceGraphic"
+                    in2="map"
+                    id="redchannel"
+                    xChannelSelector="R"
+                    yChannelSelector="G"
+                    result="dispRed"
+                  />
+                  <feColorMatrix
+                    in="dispRed"
+                    type="matrix"
+                    values="1 0 0 0 0
+                            0 0 0 0 0
+                            0 0 0 0 0
+                            0 0 0 1 0"
+                    result="red"
+                  />
+                  <feDisplacementMap
+                    ref={greenChannel}
+                    in="SourceGraphic"
+                    in2="map"
+                    id="greenchannel"
+                    xChannelSelector="R"
+                    yChannelSelector="G"
+                    result="dispGreen"
+                  />
+                  <feColorMatrix
+                    in="dispGreen"
+                    type="matrix"
+                    values="0 0 0 0 0
+                            0 1 0 0 0
+                            0 0 0 0 0
+                            0 0 0 1 0"
+                    result="green"
+                  />
+                  <feDisplacementMap
+                    ref={blueChannel}
+                    in="SourceGraphic"
+                    in2="map"
+                    id="bluechannel"
+                    xChannelSelector="R"
+                    yChannelSelector="G"
+                    result="dispBlue"
+                  />
+                  <feColorMatrix
+                    in="dispBlue"
+                    type="matrix"
+                    values="0 0 0 0 0
+                            0 0 0 0 0
+                            0 0 1 0 0
+                            0 0 0 1 0"
+                    result="blue"
+                  />
+                  <feBlend in="red" in2="green" mode="screen" result="rg" />
+                  <feBlend in="rg" in2="blue" mode="screen" result="output" />
+                  <feGaussianBlur ref={feGaussianBlur} in="output" stdDeviation="0.7" />
+                </filter>
+              </defs>
+            </svg>
+            <div ref={lgFilterHelper}></div>
+          </div>
         </nav>
       </header>
     </>
