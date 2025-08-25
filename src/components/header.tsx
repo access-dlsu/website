@@ -167,10 +167,10 @@ export function Header() {
     );
   }
 
-  // Helper to update lowQuality class based on screen width
   const updateLowQuality = () => {
     // 64rem = 1024px (assuming 1rem = 16px)
-    setIsLowQuality(!document.startViewTransition || window.innerWidth < 64 * 16);
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    setIsLowQuality(!document.startViewTransition || window.innerWidth < 64 * 16 || isSafari);
   };
 
   useEffect(() => {
