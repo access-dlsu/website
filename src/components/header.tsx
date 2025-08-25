@@ -22,7 +22,7 @@ export function Header() {
   let animatingTimeout: ReturnType<typeof setTimeout>;
   let navRef = useRef<HTMLElement>(null);
   let navList = useRef<HTMLUListElement>(null);
-  let navMore = useRef<HTMLSpanElement>(null);
+  let navMore = useRef<HTMLButtonElement>(null);
   let navSlider = useRef<HTMLDivElement>(null);
 
   let lgFilterHelper = useRef<HTMLDivElement>(null);
@@ -88,7 +88,7 @@ export function Header() {
   const updateSliderPosition = (route: string = '') => {
     if (!navList.current) return;
 
-    const activeLink = navList.current.querySelector(`a[href="${route || window.location.pathname}"]`);
+    const activeLink = navList.current.querySelector(`a[href="${route || pathname}"]`);
     if (activeLink) {
       const parentLi = activeLink.parentElement as HTMLElement;
       if (parentLi) {
@@ -133,6 +133,10 @@ export function Header() {
       setIsNavOpen(false);
     }, durationMs);
   }, [isAnimating])
+
+  useEffect(() => {
+    updateSliderPosition(pathname);
+  }, [pathname]);
 
   // Track last pointer type to prevent double execution
   let lastPointerType: 'touch' | 'mouse' | null = null;
@@ -234,13 +238,13 @@ export function Header() {
           ].filter(Boolean).join(' ')}
           ref={navRef}
         >
-          <span
+          <button
             className={styles.navMore}
             ref={navMore}
-            //onClick={handleNavMoreClick}
+            onMouseDown={handleNavMoreClick}
             onTouchStart={handleNavMoreClick}
             tabIndex={0}
-            role="button"
+            type="button"
             aria-label="Toggle navigation menu"
             aria-haspopup="true"
             {...(hasMounted && typeof window !== "undefined"
@@ -248,14 +252,14 @@ export function Header() {
               : {})}
           >
             <i className="fas fa-ellipsis-vertical"></i>
-          </span>
+          </button>
           <div
             className={[
               styles.navList,
               isNavOpen ? styles.open : ''
             ].filter(Boolean).join(' ')}
           >
-            <ul
+            <menu
               ref={navList}
               tabIndex={-1}
             >
@@ -265,7 +269,7 @@ export function Header() {
               {navLink('/events', 'Events')}
               {navLink('/academics', 'Academics')}
               {navLink('/members-hub', 'Members Hub')}
-            </ul>
+            </menu>
             <div ref={navSlider} className={`${styles.activeSlider} ${isAnimating ? styles.animating : ''}`} style={sliderStyle}></div>
             <svg className={styles.filter} xmlns="http://www.w3.org/2000/svg">
               <defs>

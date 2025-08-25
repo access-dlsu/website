@@ -142,7 +142,7 @@ svg.filter {
   }
 }
 
-.navList ul {
+.navList menu {
   display: flex;
 }
 .navList {
@@ -173,7 +173,7 @@ svg.filter {
   .navList.open {
     transform: translate(0, 0) scale(1);
   }
-  .navList ul {
+  .navList menu {
     flex-direction: column;
   }
 }
@@ -187,11 +187,11 @@ svg.filter {
   }
 }
 
-.navList ul li.active {
+.navList menu li.active {
   color: #19e05f;
   transition: color var(--lg-ease);
 }
-.navList ul li a {
+.navList menu li a {
   display: block;
   padding: 10px 20px;
 }

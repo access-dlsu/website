@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import React from "react";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { LoadingBar } from '@/components/loading-bar';
+import styles from "./layout.module.css";
 
 import "./globals.css";
 
@@ -45,6 +47,7 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <LoadingBar />
         <Header />
         <main>
           {children}
