@@ -7,7 +7,24 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "ACCESS DLSU",
-  description: "The official website of ACCESS DLSU.",
+  description: "The official website of ACCESS DLSU, the professional organization for Computer Engineering students.",
+  authors: [{ name: "ACCESS DLSU", url: "https://fb.com/AccessDLSU" }],
+  keywords: ["ACCESS", "DLSU", "De La Salle University", "Computer Engineering"],
+  openGraph: {
+    title: "ACCESS DLSU",
+    description: "The official website of ACCESS DLSU, the professional organization for Computer Engineering students.",
+    images: [{
+      url: "https://accessdlsu.com/logo/access_wordmark.png",
+    }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@access_cares",
+    creator: "@access_cares",
+    title: "ACCESS DLSU",
+    description: "The official website of ACCESS DLSU, the professional organization for Computer Engineering students.",
+    images: ["https://accessdlsu.com/logo/access_wordmark.png"],
+  },
 };
 export const viewport: Viewport = {
   themeColor: "#26602f",
