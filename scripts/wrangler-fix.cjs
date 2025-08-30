@@ -4,7 +4,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 const commentJson = require('comment-json');
 
-const wranglerPath = path.join(__dirname, 'wrangler.jsonc');
+const wranglerPath = 'wrangler.jsonc';
 
 // Exit if not running in a CI/CD or serverless environment
 if (

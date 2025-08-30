@@ -12,6 +12,9 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
+  "build": {
+    "command": "node scripts/generate-sitemap.mjs"
+  },
   "observability": {
     "logs": {
       "enabled": true
