@@ -20,7 +20,6 @@ export function Header() {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
   let animatingTimeout: ReturnType<typeof setTimeout>;
-  let navRef = useRef<HTMLElement>(null);
   let navList = useRef<HTMLUListElement>(null);
   let navMore = useRef<HTMLButtonElement>(null);
   let navSlider = useRef<HTMLDivElement>(null);
@@ -186,9 +185,9 @@ export function Header() {
     window.addEventListener('resize', updateLowQuality);
     window.addEventListener('resize', updateSliderPositionRef);
 
-    if (navRef.current) {
-      lgConfig.width = navRef.current.getBoundingClientRect().width;
-      lgConfig.height = navRef.current.getBoundingClientRect().height;
+    if (navList.current) {
+      lgConfig.width = navList.current.getBoundingClientRect().width;
+      lgConfig.height = navList.current.getBoundingClientRect().height;
 
       if (document.startViewTransition) {
         document.startViewTransition(() => {
@@ -236,7 +235,6 @@ export function Header() {
             isLowQuality ? styles.lowQuality : '',
             isAnimating ? styles.animating : ''
           ].filter(Boolean).join(' ')}
-          ref={navRef}
         >
           <button
             className={styles.navMore}
