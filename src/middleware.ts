@@ -14,11 +14,32 @@ export function middleware(request: NextRequest) {
     console.log(`Found TinyURL link: ${match}`);
     return NextResponse.redirect(entry.url, 301);
   }
+
+  // Check if the pathname is not already in lowercase.
+  if (pathname !== pathname.toLowerCase()) {
+    // Create a new URL object with the lowercase pathname.
+    const newUrl = new URL(request.url);
+    newUrl.pathname = pathname.toLowerCase();
+
+    // Perform a 308 permanent redirect to the lowercase URL.
+    return NextResponse.redirect(newUrl, 308);
+  }
+
   // Continue to next middleware or route
   return NextResponse.next();
 }
 
-// Optionally, configure matcher to only run on certain paths
-// export const config = {
-//   matcher: '/:path*',
-// };
+// Optional: Configure the middleware to run on all paths
+// except for specific ones like API routes or static files.
+export const config = {
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+  ],
+};
