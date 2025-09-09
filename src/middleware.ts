@@ -12,7 +12,13 @@ export function middleware(request: NextRequest) {
   const entry = shortenedUrls.find((s) => s.path.toLowerCase() === match.toLowerCase());
   if (entry) {
     console.log(`Found TinyURL link: ${match}`);
-    return NextResponse.redirect(entry.url, 301);
+    let redirectUrl = entry.url;
+    // If the URL is relative, convert it to absolute using the request's origin
+    if (redirectUrl.startsWith('/')) {
+      const origin = request.nextUrl.origin;
+      redirectUrl = origin + redirectUrl;
+    }
+    return NextResponse.redirect(redirectUrl, 301);
   }
 
   // Check if the pathname is not already in lowercase.
