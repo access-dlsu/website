@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useNotification } from "@/components/notification";
 import styles from './dp-blast.module.css';
 
 export default function DPBlast() {
@@ -13,7 +14,6 @@ export default function DPBlast() {
   const [caption, setCaption] = useState('');
   const [originalCaption, setOriginalCaption] = useState('');
   const [frameSubOptions, setFrameSubOptions] = useState<Record<string, string>>({});
-  const [notification, setNotification] = useState<{ message: string; type: 'success' | 'error' | 'info'; key: number } | null>(null);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const tempOverlayOnCanvasRef = useRef<HTMLImageElement>(null);
@@ -29,18 +29,9 @@ export default function DPBlast() {
   const minZoom = 0.25;
   const maxZoom = 2.25;
 
-  const showNotification = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
-    setNotification({ message, type, key: Date.now() });
-  };
 
-  useEffect(() => {
-    if (notification) {
-      const timer = setTimeout(() => {
-        setNotification(null);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [notification]);
+  const { showNotification } = useNotification();
+
 
   const updateCanvas = () => {
     const canvas = canvasRef.current;
@@ -378,12 +369,7 @@ export default function DPBlast() {
 
   return (
     <div className={styles.container}>
-      {notification && (
-        <div key={notification.key} className={`${styles.notification} ${styles[notification.type]} ${styles.show}`}>
-          <i className={`fas fa-${notification.type === 'success' ? 'check-circle' : notification.type === 'error' ? 'exclamation-circle' : 'info-circle'}`}></i>
-          <span>{notification.message}</span>
-        </div>
-      )}
+  {/* Notification handled globally */}
       {/* Header */}
       <div className={styles.header}>
         <div className={styles.logo}>

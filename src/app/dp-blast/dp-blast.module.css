@@ -692,59 +692,6 @@
   transform: translateY(-1px);
 }
 
-/* Notifications */
-.notification {
-  position: fixed;
-  top: 2rem;
-  right: 2rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1rem 1.5rem;
-  box-shadow: var(--shadow-lg);
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  z-index: 1000;
-  transform: translateX(100%);
-  opacity: 0;
-  transition: var(--transition);
-  max-width: 300px;
-}
-
-.notification.show {
-  transform: translateX(0);
-  opacity: 1;
-}
-
-.notificationSuccess {
-  border-left: 4px solid var(--success-color);
-}
-
-.notificationError {
-  border-left: 4px solid var(--error-color);
-}
-
-.notificationInfo {
-  border-left: 4px solid var(--warning-color);
-}
-
-.notification i {
-  font-size: 1.2rem;
-}
-
-.notificationSuccess i {
-  color: var(--success-color);
-}
-
-.notificationError i {
-  color: var(--error-color);
-}
-
-.notificationInfo i {
-  color: var(--warning-color);
-}
-
 /* Responsive Design */
 @media (max-width: 1024px) {
   .twoColumnLayout {
@@ -811,13 +758,6 @@
 
   .captionActions {
     flex-direction: column;
-  }
-
-  .notification {
-    top: 1rem;
-    right: 1rem;
-    left: 1rem;
-    max-width: none;
   }
 }
 

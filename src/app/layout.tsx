@@ -3,7 +3,7 @@ import React from "react";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { LoadingBar } from '@/components/loading-bar';
-import styles from "./layout.module.css";
+import { NotificationProvider } from "@/components/notification";
 
 import "./globals.css";
 
@@ -49,9 +49,11 @@ export default function RootLayout({
       <body>
         <LoadingBar />
         <Header />
-        <main>
-          {children}
-        </main>
+        <NotificationProvider>
+          <main>
+            {children}
+          </main>
+        </NotificationProvider>
         <Footer />
       </body>
     </html>

@@ -247,3 +247,58 @@ svg.filter {
   opacity: 1;
   color: #19e05f;
 }
+
+/* Notifications */
+.notification {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.5rem;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  z-index: 1000;
+  transform: translateX(100%);
+  opacity: 0;
+  transition: var(--transition);
+  max-width: 300px;
+}
+.notification.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+@media (max-width: 768px) {
+  .notification {
+    top: 1rem;
+    right: 1rem;
+    left: 1rem;
+    max-width: none;
+  }
+}
+
+.notification.success {
+  border-left: 4px solid var(--success-color);
+}
+.notification.error {
+  border-left: 4px solid var(--error-color);
+}
+.notification.info {
+  border-left: 4px solid var(--warning-color);
+}
+
+.notification i {
+  font-size: 1.2rem;
+}
+.notification.success i {
+  color: var(--success-color);
+}
+.notification.error i {
+  color: var(--error-color);
+}
+.notification.info i {
+  color: var(--warning-color);
+}
