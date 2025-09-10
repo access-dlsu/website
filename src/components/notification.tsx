@@ -40,6 +40,9 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
   const [notification, setNotification] = useState<Notification>(null);
 
   const showNotification = useCallback((message: string, type: NotificationType = 'info') => {
+    if (type == 'error') {
+      console.error(message);
+    }
     setNotification({ message, type, key: Date.now() });
     setTimeout(() => setNotification(null), 3000);
   }, []);
