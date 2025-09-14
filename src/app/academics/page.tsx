@@ -3,8 +3,6 @@
 import styles from './academics.module.css';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getFirebaseAuth, getGoogleProvider } from '@/firebaseClient';
-import { signInWithPopup, onAuthStateChanged } from 'firebase/auth';
 import { useNotification } from "@/components/notification";
 
 export default function Events() {
@@ -22,13 +20,10 @@ export default function Events() {
       })
       .catch(() => {
         setAuthenticated(false);
+      })
+      .finally(() => {
+        setAuthLoaded(true);
       });
-    // Firebase auth loading check
-    const auth = getFirebaseAuth();
-    const unsubscribe = onAuthStateChanged(auth, () => {
-      setAuthLoaded(true);
-    });
-    return () => unsubscribe();
   }, []);
 
   const handleSignIn = async () => {
@@ -37,39 +32,7 @@ export default function Events() {
       router.push(href);
       return;
     }
-
-    try {
-      const auth = getFirebaseAuth();
-      const provider = getGoogleProvider();
-      const result = await signInWithPopup(auth, provider);
-      if (result.user) {
-        const idToken = await result.user.getIdToken();
-        // Send token to backend to create session and set cookie
-        const response = await fetch('/api/auth/signin', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ idToken }),
-        });
-        const data = await response.json();
-        if (response.ok && data.success) {
-          router.push(href);
-        } else {
-          const error = data.error || 'Authentication failed';
-          showNotification(error, 'error');
-        }
-      }
-    } catch (error) {
-      const err = error as any;
-      if (err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') {
-        return;
-      }
-      if (err.code === 'auth/popup-blocked') {
-        showNotification('Popup was blocked by browser. Please enable popups for this website and try again.', 'error');
-        return;
-      }
-      const errMsg = err.message || 'Sign in failed';
-      showNotification(errMsg, 'error');
-    }
+    window.location.href = `/api/auth/signin?redirect=${encodeURIComponent(href)}`;
   };
 
   return (
@@ -83,7 +46,7 @@ export default function Events() {
               <p>ACCESS offers Computer Engineering students with digestible review materials tailored to their current CpE courses, enhancing their preparation for quizzes and exams.</p>
               <button onClick={handleSignIn} disabled={!authLoaded}>
                 {authLoaded
-                  ? authenticated ? 'GO' : (<><img src='img/google.svg' /> SIGN IN WITH DLSU</>)
+                  ? authenticated ? 'GO' : (<><img src='/img/google.svg' /> SIGN IN WITH DLSU</>)
                   : 'LOADING...'
                 }
               </button>
