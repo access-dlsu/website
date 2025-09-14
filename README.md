@@ -53,9 +53,8 @@ gantt
 ### Backend
 | Technology | Description |
 |------------|-------------|
-| SQL Database | For structured data storage |
-| CDN | For image/media storage |
-| [Firebase](https://firebase.google.com/) | Google account **authentication** and backend services |
+| [Cloudflare R2](https://www.cloudflare.com/developer-platform/products/r2/) | For media/data storage |
+| [worker-auth-providers](https://github.com/subhendukundu/worker-auth-providers) | Account **authentication** |
 
 ### Hosting
 | Technology | Description |
