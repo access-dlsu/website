@@ -1,9 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import React from "react";
+import React, { Suspense } from "react";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { LoadingBar } from '@/components/loading-bar';
 import { NotificationProvider } from "@/components/notification";
+import { ErrorHandler } from "@/components/error-handler";
 
 import "./globals.css";
 
@@ -50,6 +51,9 @@ export default function RootLayout({
         <LoadingBar />
         <Header />
         <NotificationProvider>
+          <Suspense>
+            <ErrorHandler />
+          </Suspense>
           <main>
             {children}
           </main>

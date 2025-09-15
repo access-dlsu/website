@@ -11,7 +11,6 @@ export async function GET(request: NextRequest) {
       throw new Error("Missing Google OAuth credentials");
     }
 
-    // @ts-ignore
     const { user: providerUser, tokens } = await google.users({
       options: {
         clientSecret: clientSecret,
@@ -37,13 +36,13 @@ export async function GET(request: NextRequest) {
     });
 
     // Redirect to a logged-in page
-    const redirectUrlValue = cookieStore.get('redirectUrl')?.value || '/members-hub';
+    const redirectUrlValue = cookieStore.get('redirectUrl')?.value || '/';
     const redirectUrl = new URL(redirectUrlValue, request.url).toString();
     cookieStore.delete('redirectUrl');
     return NextResponse.redirect(redirectUrl);
 
-  } catch (error: any) {
-    console.log(error.message);
+  } catch (error) {
+    console.error(error);
     return NextResponse.redirect(`${new URL(request.url).origin}/?error=Authentication%20failed`);
   }
 }

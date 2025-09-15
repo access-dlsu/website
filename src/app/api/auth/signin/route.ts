@@ -33,8 +33,8 @@ export async function GET(req: NextRequest) {
     googleLoginUrl += '&hd=dlsu.edu.ph';
 
     return NextResponse.redirect(googleLoginUrl);
-  } catch (error: any) {
-    console.log(error.message);
+  } catch (error) {
+    console.error(error);
     return NextResponse.json({ error: 'Unable to get login URL' }, { status: 500 });
   }
 }

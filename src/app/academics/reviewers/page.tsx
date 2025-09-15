@@ -1,15 +1,29 @@
-import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
 
 import styles from './reviewers.module.css';
 
-export default async function Reviewers() {
-  // Get cookies from the request
-  const cookieStore = await cookies();
-  const sessionToken = cookieStore.get('session_token')?.value;
+async function getHost() {
+  const headersList = await headers();
+  const host = headersList.get('host');
+  const protocol = headersList.get('x-forwarded-proto') || 'http';
+  return `${protocol}://${host}`;
+}
 
-  if (!sessionToken) {
-    redirect('/academics');
+export default async function Reviewers() {
+  const host = await getHost();
+  const res = await fetch(`${host}/api/auth/check`, {
+    cache: 'no-store',
+    headers: {
+      cookie: (await headers()).get('cookie') || '',
+    },
+  });
+  const data = await res.json();
+
+  if (!data.authenticated) {
+    const redirectUrl = new URL('/academics', host);
+    redirectUrl.searchParams.set('error', 'You must be signed in to view this page.');
+    redirect(redirectUrl.toString());
   }
 
   return (

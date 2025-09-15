@@ -1,9 +1,10 @@
 'use client';
 
-import styles from './academics.module.css';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useNotification } from "@/components/notification";
+
+import styles from './academics.module.css';
 
 export default function Events() {
   const router = useRouter();
@@ -18,22 +19,30 @@ export default function Events() {
       .then(data => {
         setAuthenticated(!!data.authenticated);
       })
-      .catch(() => {
+      .catch(err => {
         setAuthenticated(false);
+        showNotification(err, 'error');
       })
       .finally(() => {
         setAuthLoaded(true);
       });
   }, []);
 
-  const handleSignIn = async () => {
-    const href = '/academics/reviewers';
+  const handleSignIn = async (href: string = '') => {
+    const redirectUrl = `/academics/${href}`;
     if (authenticated) {
-      router.push(href);
+      router.push(redirectUrl);
       return;
     }
-    window.location.href = `/api/auth/signin?redirect=${encodeURIComponent(href)}`;
+    router.push(`/api/auth/signin?redirect=${encodeURIComponent(redirectUrl)}`);
   };
+
+  const signInReviewers = () => handleSignIn('reviewers');
+  const signInTutorials = () => handleSignIn('tutorials');
+  
+  const signInBtn = authLoaded
+                  ? authenticated ? 'GO' : (<><img src='/img/google.svg' /> SIGN IN WITH DLSU</>)
+                  : 'LOADING...';
 
   return (
     <>
@@ -44,12 +53,7 @@ export default function Events() {
             <div className={styles.service}>
               <h3>Reviewers</h3>
               <p>ACCESS offers Computer Engineering students with digestible review materials tailored to their current CpE courses, enhancing their preparation for quizzes and exams.</p>
-              <button onClick={handleSignIn} disabled={!authLoaded}>
-                {authLoaded
-                  ? authenticated ? 'GO' : (<><img src='/img/google.svg' /> SIGN IN WITH DLSU</>)
-                  : 'LOADING...'
-                }
-              </button>
+              <button onClick={signInReviewers} disabled={!authLoaded}>{signInBtn}</button>
             </div>
             <div className={styles.service}>
               <h3>Tutorials</h3>
