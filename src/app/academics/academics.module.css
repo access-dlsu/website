@@ -1,11 +1,17 @@
 .academics {
   padding: 0 5%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.academics > p {
+  text-align: center;
 }
 .academics h2 {
   font-size: 2.5rem;
   font-weight: 700;
-  text-align: center;
   margin-top: 2.25rem;
+  margin-bottom: 0.5rem;
 }
 @media (width < 80rem) {
   .academics {

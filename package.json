@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@types/jsonwebtoken": "^9.0.10",
+    "googleapis": "^160",
     "jsonwebtoken": "^9.0.2",
     "next": "^15",
     "react": "^19",
