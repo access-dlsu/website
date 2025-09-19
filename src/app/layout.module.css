@@ -129,10 +129,10 @@ svg.filter {
     background-color: rgba(63, 63, 63, 0.2);
     transition: background-color var(--lg-tap);
   }
-  .navMore:active {
+  .navMore:active, .nav.animating .navMore {
     transform: scale(1.2);
   }
-  .navMore:active::before {
+  .navMore:active::before, .nav.animating .navMore::before {
     background-color: rgba(192, 192, 192, 0.2);
   }
   .navMore[aria-expanded=true]::after {
@@ -168,7 +168,7 @@ svg.filter {
     width: 10rem;
     box-shadow: 0px 6px 24px rgba(0, 0, 0, 0.2);
     transition: transform var(--lg-bounce);
-    transform: translate(50%, -50%) scale(0);
+    transform: translate(35%, -50%) scale(0);
   }
   .navList.open {
     transform: translate(0, 0) scale(1);

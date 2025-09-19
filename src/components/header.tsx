@@ -239,8 +239,7 @@ export function Header() {
           <button
             className={styles.navMore}
             ref={navMore}
-            onMouseDown={handleNavMoreClick}
-            onTouchStart={handleNavMoreClick}
+            onClick={handleNavMoreClick}
             tabIndex={0}
             type="button"
             aria-label="Toggle navigation menu"
