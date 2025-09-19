@@ -6,6 +6,7 @@ export async function GET() {
     const files = await listDriveFiles();
     return NextResponse.json({ files });
   } catch (error) {
+    console.error(error);
     return NextResponse.json({ files: [], error: 'Failed to fetch files.' }, { status: 500 });
   }
 }
