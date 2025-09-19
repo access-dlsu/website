@@ -63,6 +63,9 @@
   margin-bottom: 1rem;
   font-weight: 500;
 }
+.service form {
+  width: 100%;
+}
 .service button {
   box-sizing: border-box;
   display: flex;
