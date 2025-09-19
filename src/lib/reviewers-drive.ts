@@ -24,5 +24,5 @@ export async function listDriveFiles() {
     includeItemsFromAllDrives: true
   });
 
-  return res.data.files;
+  return res.data;
 }
