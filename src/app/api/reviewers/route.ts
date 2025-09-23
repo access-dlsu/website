@@ -1,7 +1,13 @@
 import { NextResponse } from 'next/server';
+import { checkAuthFromCookies } from '@/lib/auth';
 import { listDriveFiles } from '@/lib/reviewers-drive';
 
 export async function GET() {
+  const auth = await checkAuthFromCookies();
+  if (!auth.authenticated) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const data = await listDriveFiles();
     if (data && data.error) {

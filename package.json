@@ -12,10 +12,11 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@types/jsonwebtoken": "^9.0.10",
+    "@types/jsonwebtoken": "^9",
     "googleapis": "^160",
-    "jsonwebtoken": "^9.0.2",
+    "jsonwebtoken": "^9",
     "next": "^15",
+    "pdf-lib": "^1.17",
     "react": "^19",
     "react-dom": "^19",
     "worker-auth-providers": "^0.0.14-beta.10"

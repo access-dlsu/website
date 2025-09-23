@@ -1,9 +1,8 @@
 @reference "tailwindcss";
 
 .notFound {
-  height: calc(100vh - 15rem);
-  padding-left: 7.5%;
-  padding-top: 7%;
+  height: calc(100vh - 30rem);
+  padding: 7%;
 }
 
 .courses {

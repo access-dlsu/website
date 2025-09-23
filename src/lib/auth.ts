@@ -7,6 +7,10 @@ export async function checkAuthFromCookies() {
     if (!sessionToken) {
       return { authenticated: false };
     }
+    const user = JSON.parse(sessionToken);
+    if (!user.id || user.hd !== 'dlsu.edu.ph') {
+      return { authenticated: false };
+    }
     // Add token validation here if needed
     return { authenticated: true };
   } catch (error) {

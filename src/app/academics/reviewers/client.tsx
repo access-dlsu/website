@@ -1,11 +1,16 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useNotification } from "@/components/notification";
 
 import aStyles from '../academics.module.css';
 import styles from './reviewers.module.css';
 
 export default function Reviewers() {
+  const router = useRouter();
+  const { showNotification } = useNotification();
+
   const [files, setFiles] = useState<any[] | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -28,16 +33,17 @@ export default function Reviewers() {
   function organizeFiles(files: any[]) {
     const organized: any = {};
     files.forEach(file => {
-      const filename = file.originalName || file.name;
-      const match = filename.match(/^([A-Z]+)_([0-9-T]+)_(QUIZ|FINALS|Quiz|Finals|quiz|finals)-(\d+[A-Z]*)\.pdf$/i);
-      if (match) {
+      const id = file.id;
+      const name = file.name;
+      const match = name.match(/^([A-Z]+)_([0-9-T]+)_(QUIZ|FINALS|Quiz|Finals|quiz|finals)-(\d+[A-Z]*)\.pdf$/i);
+      if (file.mimeType === 'application/pdf' && match) {
         const [, subject, term, type, number] = match;
         if (!organized[subject]) organized[subject] = {};
         if (!organized[subject][term]) organized[subject][term] = { quizzes: [], finals: [] };
         const fileInfo = {
-          filename,
           number,
-          webViewLink: file.webViewLink,
+          id,
+          name,
         };
         if (type.toUpperCase() === 'QUIZ') organized[subject][term].quizzes.push(fileInfo);
         else if (type.toUpperCase() === 'FINALS') organized[subject][term].finals.push(fileInfo);
@@ -73,7 +79,7 @@ export default function Reviewers() {
     if (Object.keys(organized).length === 0) {
       return (
         <div className={`${styles.notFound} flex items-center`}>
-          <span>No files found or unable to fetch files.</span>
+          <h1 className="text-5xl font-bold">No files found or unable to fetch files.</h1>
         </div>
       );
     }
@@ -112,15 +118,13 @@ export default function Reviewers() {
                         {/*<h4 className={styles.category}>Quizzes</h4>*/}
                         <div className={styles.files}>
                           {quizzes.map((quiz: any) => (
-                            <a
+                            <button
                               key={quiz.number}
-                              href={quiz.webViewLink}
-                              target="_blank"
-                              rel="noopener noreferrer"
+                              onClick={() => initiateDownload(`/api/reviewers/download?id=${encodeURIComponent(quiz.id)}`)}
                               className={styles.file}
                             >
                               Quiz {quiz.number}
-                            </a>
+                            </button>
                           ))}
                         </div>
                       </div>
@@ -130,15 +134,13 @@ export default function Reviewers() {
                         {/*<h4 className={styles.category}>Finals</h4>*/}
                         <div className={styles.files}>
                           {finals.map((final: any) => (
-                            <a
+                            <button
                               key={final.number}
-                              href={final.webViewLink}
-                              target="_blank"
-                              rel="noopener noreferrer"
+                              onClick={() => initiateDownload(`/api/reviewers/download?id=${encodeURIComponent(final.id)}`)}
                               className={styles.file}
                             >
                               Finals
-                            </a>
+                            </button>
                           ))}
                         </div>
                       </div>
@@ -151,6 +153,11 @@ export default function Reviewers() {
         })}
       </div>
     );
+  }
+
+  function initiateDownload(url: string) {
+    router.push(url);
+    showNotification('Processing download... This may take up to 15 seconds', 'info');
   }
 
   return (

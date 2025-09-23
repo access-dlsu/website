@@ -65,16 +65,23 @@ async function getGoogleAccessToken() {
   return data.access_token;
 }
 
-export async function listDriveFiles() {
+export async function listDriveFiles(isAdmin = false) {
   const accessToken = await getGoogleAccessToken();
   const folderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
   const q = encodeURIComponent(`'${folderId}' in parents and trashed = false`);
-  const fields = encodeURIComponent('files(id,name,size,mimeType,modifiedTime,webViewLink,webContentLink,lastModifyingUser)');
-  const url = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=${fields}&orderBy=modifiedTime desc&supportsAllDrives=true&includeItemsFromAllDrives=true`;
+  const fields = encodeURIComponent(`files(id,name,mimeType${isAdmin ? ',webContentLink,webViewLink,size,modifiedTime,lastModifyingUser' : ''})`);
+  const url = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=${fields}&orderBy=modifiedTime%20desc&supportsAllDrives=true&includeItemsFromAllDrives=true`;
   const res = await fetch(url, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
   });
-  return await res.json();
+  const data = await res.json();
+  if (Array.isArray(data.files)) {
+    data.files = data.files.map((file: { id: string; }) => ({
+      ...file,
+      id: typeof file.id === 'string' ? btoa(file.id) : file.id,
+    }));
+  }
+  return data;
 }
