@@ -1,24 +1,52 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 import { PDFDocument, rgb, StandardFonts, RotationTypes } from 'pdf-lib';
 
+// Simple in-memory cache for rate limiting (per user)
+const rateLimitCache: Record<string, number> = {}; // id -> timestamp (ms)
+const gDriveCache: Record<string, { filename: string, buffer: Buffer<ArrayBuffer>, timestamp: number }> = {};
+
 export async function GET(request: NextRequest) {
+  const cookieStore = await cookies();
+
   // Get user info from session_token cookie
   let userInfo;
   try {
-    // Use next/headers cookies API
-    const { cookies } = await import('next/headers');
-    const cookieStore = await cookies();
     const sessionToken = cookieStore.get('session_token')?.value;
     if (!sessionToken) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     const user = JSON.parse(sessionToken);
     userInfo = {
+      id: user.id || '0',
       name: user.name || 'Unknown User',
       email: user.email || 'unknown@email.com'
     };
   } catch (err) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  // Rate limit: Only allow download after 15 mins
+  const now = Date.now();
+  let lastDownloadCache = rateLimitCache[userInfo.id] || 0;
+
+  // Get last download time from cookie
+  const cookieKey = `reviewers_${userInfo.id}`;
+  let lastDownloadCookie = 0;
+  const lastDownloadCookieValue = cookieStore.get(cookieKey)?.value;
+  if (lastDownloadCookieValue) {
+    lastDownloadCookie = parseInt(lastDownloadCookieValue, 10) || 0;
+  }
+
+  // Use the higher value (most recent)
+  const lastDownload = Math.max(lastDownloadCache, lastDownloadCookie);
+
+  if (lastDownload && now - lastDownload < 15 * 60 * 1000) {
+    const waitMinutes = Math.ceil((15 * 60 * 1000 - (now - lastDownload)) / 60000);
+    return NextResponse.json(
+      { error: `Rate limit: Please wait ${waitMinutes} more minute(s) before downloading again.` },
+      { status: 429 }
+    );
   }
 
   const { searchParams } = new URL(request.url);
@@ -31,27 +59,41 @@ export async function GET(request: NextRequest) {
   const webContentLink = `https://drive.google.com/uc?id=${idDecrypted}&export=download`;
   console.log(`Fetching file ID ${idDecrypted}`);
 
-  const res = await fetch(webContentLink);
-  if (!res.ok) {
-    console.error('Error downloading from Google Drive:', await res.text());
-    return NextResponse.json({ error: 'Error downloading from Google Drive' }, { status: 500 });
-  }
-  const originalPDF = Buffer.from(await res.arrayBuffer());
+  let originalPDF, filename;
+  const cachedFile = gDriveCache[idDecrypted];
+  if (cachedFile && now - cachedFile.timestamp < 60 * 60 * 1000) {
+    console.log('Using file in cache');
+    originalPDF = cachedFile.buffer;
+    filename = cachedFile.filename;
+  } else {
+    const res = await fetch(webContentLink);
+    if (!res.ok) {
+      console.error('Error downloading from Google Drive:', await res.text());
+      return NextResponse.json({ error: 'Error downloading from Google Drive' }, { status: 500 });
+    }
+    originalPDF = Buffer.from(await res.arrayBuffer());
 
-  // Get filename from Content-Disposition header if present
-  let filename = `ACCESS_Reviewer_${id}_${downloadDate.toLocaleString('sv')}.pdf`;
-  const contentDisposition = res.headers.get('Content-Disposition');
-  if (contentDisposition) {
-    const match = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
-    if (match && match[1]) {
-      filename = match[1].replace(/['"]/g, '').trim();
+    // Get filename from Content-Disposition header if present
+    filename = `ACCESS_Reviewer_${id}_${downloadDate.toLocaleString('sv')}.pdf`;
+    const contentDisposition = res.headers.get('Content-Disposition');
+    if (contentDisposition) {
+      const match = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+      if (match && match[1]) {
+        filename = match[1].replace(/['"]/g, '').trim();
+      }
+    }
+
+    gDriveCache[idDecrypted] = {
+      filename,
+      buffer: originalPDF,
+      timestamp: now
     }
   }
 
   console.log('Adding watermark to PDF')
   const watermarkedPDF = await addWatermark(originalPDF, userInfo, downloadDate);
 
-  return new NextResponse(watermarkedPDF, {
+  const response = new NextResponse(watermarkedPDF, {
     status: 200,
     headers: {
       'Content-Type': 'application/pdf',
@@ -62,6 +104,19 @@ export async function GET(request: NextRequest) {
       'Expires': '0'
     }
   });
+
+  // After successful watermarking, update cache and cookie
+  rateLimitCache[userInfo.id] = now;
+
+  // Set cookie for last download timestamp (expires in 16 mins)
+  response.cookies.set(cookieKey, now.toString(), {
+    maxAge: 16 * 60, // seconds
+    httpOnly: true,
+    sameSite: 'strict',
+    path: '/'
+  });
+
+  return response;
 }
 
 /**
@@ -72,7 +127,7 @@ export async function GET(request: NextRequest) {
  * @param {string} userInfo.email - User's email address
  * @returns {Promise<Buffer>} - Watermarked PDF buffer
  */
-async function addWatermark(pdfBuffer: Buffer, userInfo: { name: string, email: string }, downloadDate: Date) {
+async function addWatermark(pdfBuffer: Buffer, userInfo: { id: string, name: string, email: string }, downloadDate: Date) {
   try {
     // Load the PDF
     const pdfDoc = await PDFDocument.load(pdfBuffer);

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useNotification } from "@/components/notification";
 
@@ -13,6 +13,7 @@ export default function Reviewers() {
 
   const [files, setFiles] = useState<any[] | null>(null);
   const [loading, setLoading] = useState(true);
+  const downloadRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
     (async () => {
@@ -156,8 +157,36 @@ export default function Reviewers() {
   }
 
   function initiateDownload(url: string) {
-    router.push(url);
-    showNotification('Processing download... This may take up to 15 seconds', 'info');
+    showNotification('Processing download... Please don\'t refresh the page', 'info');
+    fetch(url)
+      .then(async res => {
+        if (!res.ok) {
+          const data = await res.json();
+          throw new Error(data.error || data);
+        }
+        let filename = 'ACCESS_Reviewer.pdf';
+        const contentDisposition = res.headers.get('Content-Disposition');
+        if (contentDisposition) {
+          const match = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+          if (match && match[1]) {
+            filename = match[1].replace(/['"]/g, '').trim();
+          }
+        }
+        return { filename, blob: await res.blob() };
+      })
+      .then(data => {
+        const blobUrl = URL.createObjectURL(data.blob);
+        if (downloadRef.current) {
+          downloadRef.current.href = blobUrl;
+          downloadRef.current.download = data.filename;
+          downloadRef.current.click();
+          URL.revokeObjectURL(blobUrl);
+        }
+        showNotification('Download started', 'success');
+      })
+      .catch(error => {
+        showNotification(error.message || error, 'error');
+      });
   }
 
   return (
@@ -169,6 +198,7 @@ export default function Reviewers() {
       ) : files ? (
         renderOrganizedFiles(organizeFiles(files))
       ) : null}
+      <a ref={downloadRef} style={{ display: 'none' }} />
     </div>
   );
 }
