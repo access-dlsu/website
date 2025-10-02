@@ -14,8 +14,7 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(black, rgba(0, 0, 0, 0.5) 70%, transparent);
-  /* https://developer.chrome.com/docs/css-ui/scroll-driven-animations */
+  background: green; 
   animation-name: headerGradient;
   animation-duration: auto;
   animation-timing-function: linear;
