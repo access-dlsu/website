@@ -2,6 +2,7 @@
 
 import Header from "./header";
 import { Footer } from "./footer";
+import ScrollToTopButton from "./scroll-to-top-button";
 import { ReactNode } from 'react';
 
 interface PageLayoutProps {
@@ -14,6 +15,7 @@ export default function PageLayout({ children }: PageLayoutProps) {
       <Header />
       {children}
       <Footer />
+      <ScrollToTopButton />
     </>
   );
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { CalendarDays, BookOpen, Users, Trophy, ArrowRight, Network, Award } from "lucide-react";
 
