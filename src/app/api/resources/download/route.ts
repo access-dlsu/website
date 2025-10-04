@@ -104,7 +104,7 @@ export async function GET(request: NextRequest) {
       name: userData.name || 'Unknown User',
       email: userData.email || 'unknown@email.com'
     };
-  } catch (err) {
+  } catch {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -201,7 +201,10 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  const response = new NextResponse(finalFile, {
+  // Convert Buffer to Uint8Array for NextResponse compatibility
+  const responseBody = new Uint8Array(finalFile);
+
+  const response = new NextResponse(responseBody, {
     headers: {
       'Content-Type': isPDF ? 'application/pdf' : 'application/octet-stream',
       'Content-Disposition': `attachment; filename="${filename}"`,
