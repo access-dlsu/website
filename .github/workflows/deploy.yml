@@ -21,7 +21,7 @@ jobs:
         run: npm ci
 
       - name: Build with OpenNext
-        run: npx @opennextjs/cloudflare
+        run: npx @opennextjs/cloudflare build
 
       - name: Deploy to Staging
         if: github.ref == 'refs/heads/test'
