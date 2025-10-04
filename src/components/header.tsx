@@ -113,7 +113,6 @@ function HeaderContent({ authError, setAuthError }: { authError: string | null; 
   };
 
   const toggleDropdown = (dropdownName: string) => {
-    console.log('Toggling dropdown:', dropdownName, 'Current:', activeDropdown);
     if (activeDropdown === dropdownName) {
       // Closing dropdown
       setActiveDropdown(null);

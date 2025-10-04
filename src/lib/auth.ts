@@ -25,12 +25,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       // Only allow DLSU email addresses
       const isAllowed = user.email?.endsWith("@dlsu.edu.ph") || false;
       
-      if (!isAllowed) {
-        console.log(`Sign-in blocked: ${user.email} is not a DLSU email`);
-      } else {
-        console.log(`Sign-in allowed: ${user.email}`);
-      }
-      
       return isAllowed;
     },
     authorized({ auth, request: { nextUrl } }) {
