@@ -123,7 +123,7 @@ export default function AcademicsPage() {
                 <div key={index} className="glass-card p-6 rounded-xl hover:bg-white/10 transition-all">
                   <div className="flex justify-between items-start mb-4">
                     <div>
-                      <span className="text-green-400 font-mono text-sm" style={{ fontFamily: 'var(--font-geist-mono)' }}>
+                      <span className="text-green-400 font-mono text-sm" style={{ fontFamily: 'var(--font-manrope)' }}>
                         {course.code}
                       </span>
                       <h3 className="text-xl font-bold text-white mt-1" style={{ fontFamily: 'var(--font-poppins)' }}>

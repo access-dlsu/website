@@ -7,18 +7,17 @@ This is the official website for ACCESS (Association of Computer Engineering Stu
 
 ### App Router Structure
 - Uses Next.js App Router with `src/app/` directory structure
-- Single-page layout defined in `src/app/layout.tsx` with multiple Google Fonts (Geist, Poppins, Manrope)
+- Single-page layout defined in `src/app/layout.tsx` with multiple Google Fonts (Poppins, Manrope)
 - Main page is `src/app/page.tsx` - currently displays navigation with placeholder links
 
 ### Font System
 The project uses a sophisticated multi-font setup:
 ```tsx
 // Font variables are exposed via CSS custom properties
---font-geist-sans, --font-geist-mono, --font-poppins, --font-manrope
+--font-poppins, --font-manrope
 ```
 - **Poppins**: Used for brand text (ACCESS logo) - weight 700
 - **Manrope**: Used for UI elements like login pill - weights 400,500,600,700
-- **Geist**: Primary body fonts (sans/mono variants)
 
 ### Custom CSS Architecture
 `globals.css` contains extensive custom styling that overrides TailwindCSS:

@@ -35,10 +35,6 @@ The project uses a multi-font system via Google Fonts:
    - Used for: UI elements, navigation, buttons
    - Variable: `--font-manrope`
 
-3. **Geist Sans & Mono**
-   - Used for: Body text and code
-   - Variables: `--font-geist-sans`, `--font-geist-mono`
-
 ### Visual Effects
 
 #### Glass Morphism
