@@ -3,7 +3,7 @@
  * https://developers.cloudflare.com/workers/wrangler/configuration/
  */
 {
-  "name": "website",
+  "name": "old-website",
   "main": ".open-next/worker.js",
   "compatibility_date": "2025-09-01",
   "compatibility_flags": [
