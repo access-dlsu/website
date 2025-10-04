@@ -1,0 +1,4 @@
+Sitemap: https://accessdlsu.com/sitemap.xml
+
+User-Agent: *
+Allow: /
