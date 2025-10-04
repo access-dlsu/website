@@ -6,8 +6,6 @@
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-manrope);
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
@@ -17,6 +15,23 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+}
+
+/* Hero Button Styles */
+.hero-button-primary {
+  font-family: var(--font-manrope);
+  backdrop-filter: blur(40px) saturate(180%) brightness(1.1);
+  background: linear-gradient(135deg, rgba(94, 148, 50, 0.7) 0%, rgba(76, 118, 40, 0.8) 100%);
+  border: 1.5px solid rgba(94, 148, 50, 0.5);
+  box-shadow: 0 4px 16px rgba(94, 148, 50, 0.3), 0 1px 4px rgba(0, 0, 0, 0.2), inset 0 1px rgba(255, 255, 255, 0.2), inset 0 -1px rgba(0, 0, 0, 0.2);
+}
+
+.hero-button-secondary {
+  font-family: var(--font-manrope);
+  backdrop-filter: blur(40px) saturate(180%) brightness(1.1);
+  background: rgba(28, 28, 28, 0.35);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3), 0 1px 4px rgba(0, 0, 0, 0.2), inset 0 1px rgba(255, 255, 255, 0.1);
 }
 
 body {
@@ -510,52 +525,6 @@ body {
 
 /* Brand text style for ACCESS label */
 .brand-text {
-  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  --color-gray-200: oklch(92.8% .006 264.531);
-  --spacing: 0.25rem;
-  --text-5xl: 3rem;
-  --text-5xl--line-height: 1;
-  --font-weight-bold: 700;
-  --default-transition-duration: 0.15s;
-  --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  --default-font-family: var(--font-sans);
-  --default-mono-font-family: var(--font-mono);
-  -webkit-text-size-adjust: 100%;
-  tab-size: 4;
-  line-height: 1.5;
-  font-feature-settings: var(--default-font-feature-settings, normal);
-  font-variation-settings: var(--default-font-variation-settings, normal);
-  -webkit-tap-highlight-color: transparent;
-  --primary-color: #4e8d1f;
-  --primary-hover: #3d7018;
-  --secondary-color: #334155;
-  --success-color: #4e8d1f;
-  --error-color: #ef4444;
-  --warning-color: #f59e0b;
-  --background: #0a0a0a;
-  --surface: #18181b;
-  --text-primary: #f1f5f9;
-  --text-secondary: #a1a1aa;
-  --border: #27272a;
-  --shadow-sm: 0 1px 2px 0 #0003;
-  --shadow-md: 0 4px 6px -1px #0000004d, 0 2px 4px -2px #0003;
-  --shadow-lg: 0 10px 15px -3px #0006, 0 4px 6px -4px #0000004d;
-  --radius: 12px;
-  --radius-lg: 16px;
-  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  --fa-style-family-brands: "Font Awesome 6 Brands";
-  --fa-font-brands: normal 400 1em/1 "Font Awesome 6 Brands";
-  --fa-font-regular: normal 400 1em/1 "Font Awesome 6 Free";
-  --fa-style-family-classic: "Font Awesome 6 Free";
-  --fa-font-solid: normal 900 1em/1 "Font Awesome 6 Free";
-  --tfc-dark-mode-text-primary: #e4e4e7;
-  --tfc-dark-mode-text-secondary: #71717a;
-  --tfc-dark-mode-bg-primary: #27272a;
-  --tfc-dark-mode-bg-primary-2: #3f3f46;
-  --tfc-dark-mode-bg-secondary: #52525b;
-  --tfc-sidebar-width: 288px;
-  -webkit-font-smoothing: antialiased;
   color: inherit;
   font-weight: 700;
   font-size: 2rem;
@@ -738,7 +707,7 @@ body {
   border-color: rgba(94, 148, 50, 0.8);
   transform: scale(1.05);
   box-shadow: 
-    0 8px 24px rgba(94, 148, 50, 0.4),
+    0 8px 24px rgba(94, 148, 50, 0.5),
     0 2px 8px rgba(0, 0, 0, 0.3),
     0 0 0 2px rgba(94, 148, 50, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.2),
@@ -831,8 +800,6 @@ body {
     0 2px 8px rgba(0, 0, 0, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.2),
     inset 0 -1px 0 rgba(0, 0, 0, 0.3);
-  
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 /* Login container and expandable box */
@@ -911,7 +878,7 @@ body {
   width: 360px; /* expand to box width */
   height: 400px; /* increased height to accommodate all content */
   border-radius: 24px;
-  background: rgba(28, 28, 28, 0.45); /* Slightly more opaque on hover */
+  background: rgba(28, 28, 0.45); /* Slightly more opaque on hover */
   box-shadow: 
     0 12px 50px rgba(0, 0, 0, 0.6),
     0 4px 16px rgba(0, 0, 0, 0.4),
@@ -1142,28 +1109,6 @@ body {
 }
 
 .profile-email {
-  font-size: 0.875rem;
-  color: #a1a1aa;
-  font-family: var(--font-manrope), Manrope, sans-serif;
-}
-
-.user-info {
-  margin: 1rem 0;
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.user-name {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #ffffff;
-  margin-bottom: 0.25rem;
-  font-family: var(--font-manrope), Manrope, sans-serif;
-}
-
-.user-email {
   font-size: 0.875rem;
   color: #a1a1aa;
   font-family: var(--font-manrope), Manrope, sans-serif;
@@ -1728,29 +1673,40 @@ body {
   border-color: rgba(255, 255, 255, 0.15);
 }
 
+/* Enhanced 3D glass card for hero features */
+.glass-card-3d {
+  background: linear-gradient(
+    135deg,
+    rgba(32, 32, 32, 0.75) 0%,
+    rgba(42, 42, 42, 0.65) 100%
+  );
+  backdrop-filter: blur(40px) saturate(180%) brightness(1.1);
+  -webkit-backdrop-filter: blur(40px) saturate(180%) brightness(1.1);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 -1px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateZ(0);
+}
+
+.glass-card-3d:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(42, 42, 42, 0.85) 0%,
+    rgba(52, 52, 52, 0.75) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 
+    0 12px 48px rgba(0, 0, 0, 0.4),
+    0 4px 16px rgba(0, 0, 0, 0.3),
+    inset 0 1px rgba(255, 255, 255, 0.15),
+    inset 0 -1px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px) scale(1.02);
+}
+
 /* Custom green color overrides for brand color #4e8d1f */
 .text-green-400 {
   color: #4e8d1f !important;
-}
-
-.bg-green-500 {
-  background-color: #4e8d1f !important;
-}
-
-.bg-green-600,
-.hover\:bg-green-600:hover {
-  background-color: #3d7018 !important;
-}
-
-.hover\:shadow-green-500\/50:hover {
-  box-shadow: 0 10px 15px -3px rgba(78, 141, 31, 0.5), 0 4px 6px -4px rgba(78, 141, 31, 0.5) !important;
-}
-
-.bg-green-500\/20 {
-  background-color: rgba(78, 141, 31, 0.2) !important;
-}
-
-.bg-green-500\/30,
-.hover\:bg-green-500\/30:hover {
-  background-color: rgba(78, 141, 31, 0.3) !important;
 }

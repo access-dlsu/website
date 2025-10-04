@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { Facebook, Instagram, Github, Linkedin } from 'lucide-react';
 
 const accessLogoSrc = '/logo/access.svg';
 
@@ -41,16 +42,16 @@ export function Footer() {
       </p>
       <nav className="footer-links">
         <a href="https://www.facebook.com/AccessDLSU/" aria-label="ACCESS DLSU on Facebook" target="_blank" rel="noopener noreferrer">
-          <i className="fab fa-facebook-f"></i>
+          <Facebook className="w-5 h-5" />
         </a>
         <a href="https://www.instagram.com/dlsu_access/" aria-label="ACCESS DLSU on Instagram" target="_blank" rel="noopener noreferrer">
-          <i className="fab fa-instagram"></i>
+          <Instagram className="w-5 h-5" />
         </a>
         <a href="https://github.com/ACCESS-DLSU" aria-label="ACCESS DLSU on GitHub" target="_blank" rel="noopener noreferrer">
-          <i className="fab fa-github"></i>
+          <Github className="w-5 h-5" />
         </a>
         <a href="https://www.linkedin.com/company/accessdlsu/" aria-label="ACCESS DLSU on LinkedIn" target="_blank" rel="noopener noreferrer">
-          <i className="fab fa-linkedin-in"></i>
+          <Linkedin className="w-5 h-5" />
         </a>
       </nav>
     </footer>

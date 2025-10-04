@@ -143,7 +143,7 @@ function HeaderContent({ authError, setAuthError }: { authError: string | null; 
 
       <Link href="/" aria-label="Home" className={`fixed top-4 logo-offset header-element ${isVisible && !isCompressed ? 'header-visible' : 'header-hidden'}`}>
         <span className="flex items-center gap-2">
-          <Image src="/logo/access.svg" alt="Access" width={48} height={48} priority className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]" />
+          <Image src="/logo/access.svg" alt="ACCESS DLSU Logo" width={48} height={48} priority className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]" />
           <span className="brand-text text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">ACCESS</span>
         </span>
       </Link>
@@ -171,7 +171,7 @@ function HeaderContent({ authError, setAuthError }: { authError: string | null; 
                 <span>Home</span>
               </span>
             </Link>
-            <Link className={`navbar-item ${isFocusMode ? 'navbar-item-hidden' : ''}`} href="/about">
+            <Link className={`navbar-item ${isFocusMode ? 'navbar-item-hidden' : ''}`} href="/about-us">
               <span className="inline-flex items-center gap-1.5">
                 <Info className="w-4 h-4" aria-hidden />
                 <span>About Us</span>
