@@ -1,28 +1,20 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, Suspense } from 'react';
 import Link from "next/link";
 import Image from "next/image";
 import { Home as HomeIcon, Info, CalendarDays, GraduationCap, Users, Lock, Menu, BookOpen, UserCircle, Trophy, Bot, FileText, Plus, ChevronDown, Clock, History, Wrench, Award, Library, Video, FolderOpen, HeartHandshake, UserCheck, Network, Gift, LogOut, AlertCircle } from "lucide-react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 
-export default function Header() {
-  const { data: session, status } = useSession();
+// Separate component for search params handling
+function AuthErrorHandler({ onAuthError }: { onAuthError: (error: string | null) => void }) {
   const searchParams = useSearchParams();
-  const [isVisible, setIsVisible] = useState(true);
-  const [isCompressed, setIsCompressed] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [isFocusMode, setIsFocusMode] = useState(false);
-  const [authError, setAuthError] = useState<string | null>(null);
 
-  // Check for authentication errors
   useEffect(() => {
     const error = searchParams?.get('error');
     if (error === 'AccessDenied') {
-      setAuthError('Only DLSU email addresses (@dlsu.edu.ph) are allowed to sign in.');
+      onAuthError('Only DLSU email addresses (@dlsu.edu.ph) are allowed to sign in.');
       
       // Clear the error from URL
       if (typeof window !== 'undefined') {
@@ -32,10 +24,22 @@ export default function Header() {
       }
       
       // Clear error message after 5 seconds
-      const timer = setTimeout(() => setAuthError(null), 5000);
+      const timer = setTimeout(() => onAuthError(null), 5000);
       return () => clearTimeout(timer);
     }
-  }, [searchParams]);
+  }, [searchParams, onAuthError]);
+
+  return null;
+}
+
+function HeaderContent({ authError, setAuthError }: { authError: string | null; setAuthError: (error: string | null) => void }) {
+  const { data: session, status } = useSession();
+  const [isVisible, setIsVisible] = useState(true);
+  const [isCompressed, setIsCompressed] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [isFocusMode, setIsFocusMode] = useState(false);
 
   // Memoize boolean to keep dependency array stable
   const hasActiveDropdown = useMemo(() => activeDropdown !== null, [activeDropdown]);
@@ -455,6 +459,19 @@ export default function Header() {
           </div>
         </div>
       </div>
+    </>
+  );
+}
+
+export default function Header() {
+  const [authError, setAuthError] = useState<string | null>(null);
+  
+  return (
+    <>
+      <Suspense fallback={null}>
+        <AuthErrorHandler onAuthError={setAuthError} />
+      </Suspense>
+      <HeaderContent authError={authError} setAuthError={setAuthError} />
     </>
   );
 }
