@@ -2,6 +2,11 @@ import { NextResponse } from 'next/server';
 
 // Helper to get Google Access Token
 async function getGoogleAccessToken() {
+  // Validate required environment variables
+  if (!process.env.GOOGLE_DRIVE_CLIENT_EMAIL || !process.env.GOOGLE_DRIVE_PRIVATE_KEY) {
+    throw new Error('Missing required Google Drive credentials');
+  }
+
   const header = {
     alg: 'RS256',
     typ: 'JWT',

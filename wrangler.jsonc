@@ -20,5 +20,8 @@
     "logs": {
       "enabled": true
     }
+  },
+  "vars": {
+    "NEXTAUTH_URL": "https://accessdlsu.com"
   }
 }
