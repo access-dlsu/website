@@ -34,6 +34,9 @@ ${allUrls
   .join('\n')}
 </urlset>`;
 
+  // Ensure the directory exists
+  await fs.mkdir('.open-next/assets', { recursive: true });
+  
   // Write the file
   await fs.writeFile('.open-next/assets/sitemap.xml', sitemapContent);
   console.log('✅ Sitemap generated successfully');
