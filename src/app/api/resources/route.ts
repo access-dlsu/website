@@ -33,16 +33,36 @@ async function getGoogleAccessToken() {
 
   // Import private key
   function str2ab(str: string) {
-    const bstr = atob(str.replace(/-----[^-]+-----/g, '').replace(/\s+/g, ''));
-    const buf = new ArrayBuffer(bstr.length);
-    const view = new Uint8Array(buf);
-    for (let i = 0; i < bstr.length; i++) view[i] = bstr.charCodeAt(i);
-    return buf;
+    // Normalize the private key: 
+    // 1. Remove surrounding quotes if present
+    // 2. Replace literal \n with actual newlines
+    let normalizedKey = str.trim();
+    if ((normalizedKey.startsWith('"') && normalizedKey.endsWith('"')) || 
+        (normalizedKey.startsWith("'") && normalizedKey.endsWith("'"))) {
+      normalizedKey = normalizedKey.slice(1, -1);
+    }
+    normalizedKey = normalizedKey.replace(/\\n/g, '\n');
+    
+    // Extract the base64 content (remove headers, footers, and whitespace)
+    const base64Content = normalizedKey
+      .replace(/-----BEGIN PRIVATE KEY-----/g, '')
+      .replace(/-----END PRIVATE KEY-----/g, '')
+      .replace(/\s+/g, '');
+    
+    try {
+      const bstr = atob(base64Content);
+      const buf = new ArrayBuffer(bstr.length);
+      const view = new Uint8Array(buf);
+      for (let i = 0; i < bstr.length; i++) view[i] = bstr.charCodeAt(i);
+      return buf;
+    } catch (error) {
+      throw new Error(`Invalid private key format: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   }
 
   const key = await crypto.subtle.importKey(
     'pkcs8',
-    str2ab(process.env.GOOGLE_DRIVE_PRIVATE_KEY!.replace(/\\n/g, '\n')),
+    str2ab(process.env.GOOGLE_DRIVE_PRIVATE_KEY!),
     {
       name: 'RSASSA-PKCS1-v1_5',
       hash: 'SHA-256',
@@ -80,6 +100,22 @@ async function getGoogleAccessToken() {
 
 export async function GET() {
   try {
+    // Validate environment variables first
+    const requiredEnvVars = [
+      'GOOGLE_DRIVE_CLIENT_EMAIL',
+      'GOOGLE_DRIVE_PRIVATE_KEY',
+      'GOOGLE_DRIVE_FOLDER_ID'
+    ];
+    
+    const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
+    if (missingVars.length > 0) {
+      console.error('Missing environment variables:', missingVars);
+      return NextResponse.json(
+        { error: `Missing required configuration: ${missingVars.join(', ')}`, files: [] },
+        { status: 500 }
+      );
+    }
+
     const accessToken = await getGoogleAccessToken();
     const folderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
     
