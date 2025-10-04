@@ -24,11 +24,22 @@
   "vars": {
     "NEXTAUTH_URL": "https://accessdlsu.com"
   },
+  "routes": [
+    {
+      "pattern": "accessdlsu.com",
+      "custom_domain": true
+    }
+  ],
   "env": {
     "staging": {
-      "name": "website-staging",
+      "routes": [
+        {
+          "pattern": "staging.accessdlsu.com/*",
+          "zone_name": "accessdlsu.com"
+        }
+      ],
       "vars": {
-        "NEXTAUTH_URL": "https://website-staging.access-973.workers.dev"
+        "NEXTAUTH_URL": "https://staging.accessdlsu.com"
       }
     }
   }
