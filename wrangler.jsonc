@@ -23,5 +23,13 @@
   },
   "vars": {
     "NEXTAUTH_URL": "https://accessdlsu.com"
+  },
+  "env": {
+    "staging": {
+      "name": "website-staging",
+      "vars": {
+        "NEXTAUTH_URL": "https://staging.accessdlsu.com"
+      }
+    }
   }
 }
