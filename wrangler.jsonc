@@ -28,7 +28,7 @@
     "staging": {
       "name": "website-staging",
       "vars": {
-        "NEXTAUTH_URL": "https://staging.accessdlsu.com"
+        "NEXTAUTH_URL": "https://website-staging.access-973.workers.dev"
       }
     }
   }
