@@ -36,33 +36,23 @@ async function getGoogleAccessToken() {
   // Import private key
   function str2ab(str: string) {
     try {
-      console.log('Raw private key length:', str.length);
-      console.log('First 100 chars (escaped):', JSON.stringify(str.substring(0, 100)));
-      console.log('Contains backslash-n sequence:', str.includes('\\n'));
-      console.log('Contains actual newlines:', str.includes('\n'));
-
-      // Handle both JSON-escaped and plain PEM formats
+      // Handle JSON-escaped format and remove surrounding quotes
       let processedKey = str;
-      if (str.includes('\\n')) {
-        // JSON-escaped format (local development) - convert \n to actual newlines
-        processedKey = str.replace(/\\n/g, '\n');
-        console.log('Converted from JSON-escaped format');
-      } else {
-        console.log('Using plain format (already has newlines)');
+
+      // Remove surrounding quotes if present (Cloudflare JSON string format)
+      if (processedKey.startsWith('"') && processedKey.endsWith('"')) {
+        processedKey = processedKey.slice(1, -1);
+      }
+
+      // Convert JSON-escaped newlines to actual newlines
+      if (processedKey.includes('\\n')) {
+        processedKey = processedKey.replace(/\\n/g, '\n');
       }
 
       // Split by newlines and filter out header/footer lines
       const lines = processedKey.split('\n');
-      console.log('Lines after split:', lines.length);
-      console.log('Sample lines:', JSON.stringify(lines.slice(0, 3)));
-
       const base64Lines = lines.filter(line => !line.startsWith('-----'));
-      console.log('Base64 lines count:', base64Lines.length);
-
       const cleaned = base64Lines.join('').trim();
-      console.log('Cleaned base64 length:', cleaned.length);
-      console.log('Cleaned base64 starts with:', cleaned.substring(0, 50));
-      console.log('Cleaned base64 ends with:', cleaned.substring(cleaned.length - 50));
 
       const bstr = atob(cleaned);
       const buf = new ArrayBuffer(bstr.length);
@@ -71,7 +61,6 @@ async function getGoogleAccessToken() {
       return buf;
     } catch (error) {
       console.error('Invalid private key format:', error);
-      console.error('Failed key details - raw length:', str.length, 'processed lines:', str.split('\n').length);
       throw new Error('Invalid Google Drive private key configuration');
     }
   }
