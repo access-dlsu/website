@@ -35,11 +35,16 @@ async function getGoogleAccessToken() {
 
   // Import private key
   function str2ab(str: string) {
-    const bstr = atob(str.replace(/-----[^-]+-----/g, '').replace(/\s+/g, ''));
-    const buf = new ArrayBuffer(bstr.length);
-    const view = new Uint8Array(buf);
-    for (let i = 0; i < bstr.length; i++) view[i] = bstr.charCodeAt(i);
-    return buf;
+    try {
+      const bstr = atob(str.replace(/-----[^-]+-----/g, '').replace(/\s+/g, ''));
+      const buf = new ArrayBuffer(bstr.length);
+      const view = new Uint8Array(buf);
+      for (let i = 0; i < bstr.length; i++) view[i] = bstr.charCodeAt(i);
+      return buf;
+    } catch (error) {
+      console.error('Invalid private key format:', error);
+      throw new Error('Invalid Google Drive private key configuration');
+    }
   }
 
   const key = await crypto.subtle.importKey(
@@ -90,14 +95,14 @@ export async function GET(request: NextRequest) {
     if (!sessionToken) {
       return NextResponse.json({ error: 'Unauthorized (Please sign in)' }, { status: 401 });
     }
-    
+
     // For NextAuth, we need to get the session differently
     // This is a simplified version - you might need to decode the session properly
     const user = cookieStore.get('user_info')?.value;
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized (User info not found)' }, { status: 401 });
     }
-    
+
     const userData = JSON.parse(user);
     userInfo = {
       id: userData.email?.replace(/[^a-zA-Z0-9]/g, '_') || '0',
@@ -141,11 +146,17 @@ export async function GET(request: NextRequest) {
   const downloadDate = new Date();
 
   // Decode the file ID
-  const fileId = atob(encodedFileId);
-  
+  let fileId;
+  try {
+    fileId = atob(encodedFileId);
+  } catch (error) {
+    console.error('Invalid base64 fileId:', encodedFileId, error);
+    return NextResponse.json({ error: 'Invalid file ID format' }, { status: 400 });
+  }
+
   let originalPDF, filename;
   const cachedFile = gDriveCache[fileId];
-  
+
   if (cachedFile && now - cachedFile.timestamp < 60 * 60 * 1000) {
     console.log('Using file in cache');
     originalPDF = cachedFile.buffer;
@@ -167,7 +178,7 @@ export async function GET(request: NextRequest) {
 
     // Get the file content
     originalPDF = Buffer.from(await res.arrayBuffer());
-    
+
     // Get file metadata to get the filename
     const metadataUrl = `https://www.googleapis.com/drive/v3/files/${fileId}?fields=name,mimeType&supportsAllDrives=true`;
     const metadataRes = await fetch(metadataUrl, {
@@ -175,7 +186,7 @@ export async function GET(request: NextRequest) {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    
+
     const metadata = await metadataRes.json();
     filename = metadata.name || `ACCESS_Resource_${encodedFileId}_${downloadDate.toLocaleString('sv')}.pdf`;
 
