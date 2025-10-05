@@ -36,20 +36,34 @@ async function getGoogleAccessToken() {
   // Import private key
   function str2ab(str: string) {
     try {
-      const bstr = atob(str.replace(/-----[^-]+-----/g, '').replace(/\s+/g, ''));
+      // Handle both JSON-escaped and plain PEM formats
+      let processedKey = str;
+      if (str.includes('\\n')) {
+        // JSON-escaped format (local development)
+        processedKey = str.replace(/\\n/g, '\n');
+      }
+      // If no \n sequences, assume it's already properly formatted
+
+      // Split by newlines and filter out header/footer lines
+      const lines = processedKey.split('\n');
+      const base64Lines = lines.filter(line => !line.startsWith('-----'));
+      const cleaned = base64Lines.join('').trim();
+
+      const bstr = atob(cleaned);
       const buf = new ArrayBuffer(bstr.length);
       const view = new Uint8Array(buf);
       for (let i = 0; i < bstr.length; i++) view[i] = bstr.charCodeAt(i);
       return buf;
     } catch (error) {
       console.error('Invalid private key format:', error);
+      console.error('Failed to decode cleaned key, length:', str.split('\n').filter(line => !line.startsWith('-----')).join('').trim().length);
       throw new Error('Invalid Google Drive private key configuration');
     }
   }
 
   const key = await crypto.subtle.importKey(
     'pkcs8',
-    str2ab(process.env.GOOGLE_DRIVE_PRIVATE_KEY!.replace(/\\n/g, '\n')),
+    str2ab(process.env.GOOGLE_DRIVE_PRIVATE_KEY!),
     {
       name: 'RSASSA-PKCS1-v1_5',
       hash: 'SHA-256',
