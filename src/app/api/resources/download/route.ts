@@ -4,7 +4,8 @@ import { cookies } from 'next/headers';
 import { PDFDocument, rgb, StandardFonts, RotationTypes } from 'pdf-lib';
 
 // Simple in-memory cache for rate limiting (per user)
-const rateLimitCache: Record<string, number> = {}; // id -> timestamp (ms)
+const downloadCountCache: Record<string, number> = {}; // id -> download count
+const rateLimitTriggeredCache: Record<string, number> = {}; // id -> timestamp when rate limit was triggered
 const gDriveCache: Record<string, { filename: string, buffer: Buffer, timestamp: number }> = {};
 
 // Helper to get Google Access Token (same as in route.ts)
@@ -98,8 +99,18 @@ async function getGoogleAccessToken() {
     body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}`,
   });
 
+  if (!res.ok) {
+    const errorText = await res.text();
+    console.error('Google OAuth error:', res.status, res.statusText);
+    console.error('Error response:', errorText);
+    throw new Error(`Google OAuth failed: ${res.status} ${res.statusText}`);
+  }
+
   const data = await res.json();
-  if (!data.access_token) throw new Error('Failed to get Google access token');
+  if (!data.access_token) {
+    console.error('No access token in response:', data);
+    throw new Error('Failed to get Google access token');
+  }
   return data.access_token;
 }
 
@@ -131,23 +142,35 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  // Rate limit: Only allow download after 15 mins
+  // Rate limit: Allow unlimited downloads until 30, then 1 hour cooldown
   const now = Date.now();
-  const lastDownloadCache = rateLimitCache[userInfo.id] || 0;
+  const userId = userInfo.id;
 
-  // Get last download time from cookie
-  const cookieKey = `resources_${userInfo.id}`;
-  let lastDownloadCookie = 0;
-  const lastDownloadCookieValue = cookieStore.get(cookieKey)?.value;
-  if (lastDownloadCookieValue) {
-    lastDownloadCookie = parseInt(lastDownloadCookieValue, 10) || 0;
+  // Get current download count from cache
+  let downloadCount = downloadCountCache[userId] || 0;
+
+  // Get rate limit trigger timestamp from cache
+  const rateLimitTriggered = rateLimitTriggeredCache[userId] || 0;
+
+  // Check if user is currently rate limited
+  if (rateLimitTriggered && now - rateLimitTriggered < 60 * 60 * 1000) { // 1 hour cooldown
+    const waitMinutes = Math.ceil((60 * 60 * 1000 - (now - rateLimitTriggered)) / 60000);
+    return NextResponse.json(
+      { error: `Rate limit: You have downloaded 30 resources. Please wait ${waitMinutes} more minute(s) before downloading again.` },
+      { status: 429 }
+    );
   }
 
-  // Use the higher value (most recent)
-  const lastDownload = Math.max(lastDownloadCache, lastDownloadCookie);
+  // If cooldown has passed, reset the count and trigger timestamp
+  if (rateLimitTriggered && now - rateLimitTriggered >= 60 * 60 * 1000) {
+    downloadCount = 0;
+    delete rateLimitTriggeredCache[userId];
+  }
 
-  if (lastDownload && now - lastDownload < 15 * 60 * 1000) {
-    const waitMinutes = Math.ceil((15 * 60 * 1000 - (now - lastDownload)) / 60000);
+  // Check if this download would trigger rate limiting
+  if (downloadCount >= 30) {
+    rateLimitTriggeredCache[userId] = now;
+    const waitMinutes = 60; // 1 hour
     return NextResponse.json(
       { error: `Rate limit: Please wait ${waitMinutes} more minute(s) before downloading again.` },
       { status: 429 }
@@ -244,16 +267,8 @@ export async function GET(request: NextRequest) {
     },
   });
 
-  // After successful download, update cache and cookie
-  rateLimitCache[userInfo.id] = now;
-
-  // Set cookie for last download timestamp (expires in 16 mins)
-  response.cookies.set(cookieKey, now.toString(), {
-    maxAge: 16 * 60, // seconds
-    httpOnly: true,
-    sameSite: 'strict',
-    path: '/'
-  });
+  // After successful download, update download count
+  downloadCountCache[userId] = downloadCount + 1;
 
   // Store user info in cookie for future requests
   response.cookies.set('user_info', JSON.stringify(userInfo), {
