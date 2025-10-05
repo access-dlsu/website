@@ -22,12 +22,14 @@
     }
   },
   "vars": {
-    "NEXTAUTH_URL": "https://accessdlsu.com"
+    "AUTH_URL": "https://accessdlsu.com",
+    "AUTH_TRUST_HOST": "true"
   },
   "env": {
     "staging": {
       "vars": {
-        "NEXTAUTH_URL": "https://staging.accessdlsu.com"
+        "AUTH_URL": "https://staging.accessdlsu.com",
+        "AUTH_TRUST_HOST": "true"
       }
     }
   }
