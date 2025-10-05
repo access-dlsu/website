@@ -36,18 +36,33 @@ async function getGoogleAccessToken() {
   // Import private key
   function str2ab(str: string) {
     try {
+      console.log('Raw private key length:', str.length);
+      console.log('First 100 chars:', str.substring(0, 100));
+      console.log('Contains \\\\n:', str.includes('\\\\n'));
+      console.log('Contains \\n (literal):', str.includes('\\n'));
+      console.log('Contains actual newlines:', str.includes('\n'));
+
       // Handle both JSON-escaped and plain PEM formats
       let processedKey = str;
       if (str.includes('\\n')) {
         // JSON-escaped format (local development)
         processedKey = str.replace(/\\n/g, '\n');
+        console.log('Converted from JSON-escaped format');
+      } else {
+        console.log('Using plain format');
       }
-      // If no \n sequences, assume it's already properly formatted
 
       // Split by newlines and filter out header/footer lines
       const lines = processedKey.split('\n');
+      console.log('Lines after split:', lines.length);
+      console.log('First few lines:', lines.slice(0, 3));
+
       const base64Lines = lines.filter(line => !line.startsWith('-----'));
+      console.log('Base64 lines count:', base64Lines.length);
+
       const cleaned = base64Lines.join('').trim();
+      console.log('Cleaned length:', cleaned.length);
+      console.log('Cleaned starts with:', cleaned.substring(0, 50));
 
       const bstr = atob(cleaned);
       const buf = new ArrayBuffer(bstr.length);
