@@ -6,10 +6,13 @@ interface CloudflareEnv {
   // - Durable Object: DurableObjectNamespace
   // - D1: D1Database
   // - R2: R2Bucket
-  
+
   // Assets binding (automatically configured by wrangler)
   ASSETS: Fetcher;
-  
+
+  // D1 Database
+  DB: D1Database;
+
   // Add your environment variables here
   // AUTH_SECRET?: string;
   // AUTH_GOOGLE_ID?: string;

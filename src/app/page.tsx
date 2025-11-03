@@ -19,7 +19,7 @@ export default function Home() {
             <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]" style={{ fontFamily: 'var(--font-manrope)' }}>
               Empowering the next generation of computer engineers at De La Salle University through innovation, collaboration, and excellence.
             </p>
-            
+
             <div className="flex gap-4 justify-center flex-wrap">
               <Link href="/about-us" className="px-8 py-4 text-white rounded-full transition-all font-semibold text-lg hover:scale-105 hero-button-primary">
                 Learn More About ACCESS
@@ -37,7 +37,7 @@ export default function Home() {
             <h2 className="text-4xl md:text-5xl font-bold text-white text-center mb-16" style={{ fontFamily: 'var(--font-poppins)' }}>
               What We Offer
             </h2>
-            
+
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               <Link href="/events" className="glass-card-3d p-8 rounded-2xl transition-all group">
                 <CalendarDays className="w-12 h-12 text-green-400 mb-4 group-hover:scale-110 transition-transform" />
@@ -100,7 +100,7 @@ export default function Home() {
             <h2 className="text-4xl md:text-5xl font-bold text-white text-center mb-16" style={{ fontFamily: 'var(--font-poppins)' }}>
               Our Impact
             </h2>
-            
+
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               <div className="glass-card-3d p-8 rounded-2xl transition-all group text-center">
                 <Users className="w-12 h-12 text-green-400 mb-4 group-hover:scale-110 transition-transform mx-auto" />
@@ -114,7 +114,7 @@ export default function Home() {
                   Dedicated students driving innovation and excellence in computer engineering.
                 </p>
               </div>
-              
+
               <div className="glass-card-3d p-8 rounded-2xl transition-all group text-center">
                 <CalendarDays className="w-12 h-12 text-green-400 mb-4 group-hover:scale-110 transition-transform mx-auto" />
                 <div className="text-5xl font-bold text-green-400 mb-3" style={{ fontFamily: 'var(--font-poppins)' }}>
@@ -127,7 +127,7 @@ export default function Home() {
                   Workshops, competitions, and networking opportunities throughout the academic year.
                 </p>
               </div>
-              
+
               <div className="glass-card-3d p-8 rounded-2xl transition-all group text-center">
                 <Network className="w-12 h-12 text-green-400 mb-4 group-hover:scale-110 transition-transform mx-auto" />
                 <div className="text-5xl font-bold text-green-400 mb-3" style={{ fontFamily: 'var(--font-poppins)' }}>
@@ -140,7 +140,7 @@ export default function Home() {
                   Strong connections with successful graduates in industry and academia.
                 </p>
               </div>
-              
+
               <div className="glass-card-3d p-8 rounded-2xl transition-all group text-center">
                 <Award className="w-12 h-12 text-green-400 mb-4 group-hover:scale-110 transition-transform mx-auto" />
                 <div className="text-5xl font-bold text-green-400 mb-3" style={{ fontFamily: 'var(--font-poppins)' }}>

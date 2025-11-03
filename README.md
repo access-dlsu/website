@@ -1,9 +1,5 @@
 <h1 align="center">ACCESS Project Infinity</h1>
 
-## 📢 Announcements
-
-View announcements at our [Facebook](https://fb.com/AccessDLSU) page!
-
 ## 🤝 Contributing
 
 We welcome contributions! Please feel free to:
@@ -13,32 +9,6 @@ We welcome contributions! Please feel free to:
 4. Submit pull requests
 
 See **[CONTRIBUTING.md](CONTRIBUTING.md)** for guidelines.
-
-<!--## 📊 Project Timeline
-```mermaid
-gantt
-    title Development Timeline
-    dateFormat  YYYY-MM-DD
-    axisFormat %b %d
-
-    section Frontend
-    Core Components                 :2025-06-10, 4d
-    Main Features Implementation    :2025-06-14, 6d
-    Authentication System           :2025-06-20, 5d
-    Responsive Design               :2025-06-25, 4d
-
-    section Backend
-    Database Design                 :2025-06-10, 4d
-    API Development                 :2025-06-14, 10d
-    Integration Testing             :2025-06-24, 6d
-
-    section Testing & Deployment
-    Security Audit                  :2025-06-30, 3d
-    Performance Optimization        :2025-07-03, 3d
-    User Acceptance Testing         :2025-07-06, 2d
-    Final Testing                   :2025-07-08, 1d
-    Deployment (Release!)           :2025-07-09, 1d
-```-->
 
 ## 🛠️ Tech Stack
 
@@ -53,6 +23,7 @@ gantt
 ### Backend
 | Technology | Description |
 |------------|-------------|
+| [Cloudflare D1](https://www.cloudflare.com/developer-platform/products/d1/) | Serverless SQL database for officer authentication |
 | [Cloudflare R2](https://www.cloudflare.com/developer-platform/products/r2/) | For media/data storage |
 | [worker-auth-providers](https://github.com/subhendukundu/worker-auth-providers) | Account **authentication** |
 

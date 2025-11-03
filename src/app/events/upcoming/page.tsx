@@ -1,19 +1,21 @@
+"use client";
+
+import PageHeader from "@/components/ui/page-header";
+import Placeholder from "@/components/ui/placeholder";
+
 export default function UpcomingEventsPage() {
   return (
     <main className="pt-32 pb-20 px-6 max-w-7xl mx-auto">
-      <div className="text-center space-y-6">
-        <h1 className="text-5xl font-bold text-white" style={{ fontFamily: 'var(--font-poppins)' }}>
-          Upcoming Events
-        </h1>
-        <p className="text-xl text-gray-300 max-w-3xl mx-auto" style={{ fontFamily: 'var(--font-manrope)' }}>
-          Check out our upcoming workshops, seminars, and networking events.
-        </p>
-        <div className="glass-card p-12 rounded-2xl mt-12">
-          <p className="text-gray-400 text-lg" style={{ fontFamily: 'var(--font-manrope)' }}>
-            Content coming soon...
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="Upcoming Events"
+        description="Check out our upcoming workshops, seminars, and networking events."
+      >
+        <Placeholder
+          icon="CalendarDays"
+          title="Stay Tuned"
+          message="Our upcoming events calendar is being prepared. Check back soon for workshops, competitions, and networking opportunities."
+        />
+      </PageHeader>
     </main>
   );
 }
