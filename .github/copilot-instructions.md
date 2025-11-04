@@ -32,7 +32,7 @@ The project uses a sophisticated multi-font setup:
 # Development with Turbopack (faster builds)
 npm run dev
 # Production build with Turbopack
-npm run build  
+npm run build
 # Linting
 npm run lint
 ```
@@ -54,6 +54,53 @@ npm run lint
 - **Icon + Text Links**: Navigation uses `lucide-react` icons with text labels
 - **Accessibility**: Proper ARIA labels (`aria-label`, `aria-hidden`) on interactive elements
 - **Image Optimization**: Uses Next.js `Image` component with priority loading for logo
+
+### UI Primitives (`src/components/ui`)
+- Purpose: Small, reusable primitives and layout helpers (cards, page headers, placeholders) that implement the project's glass-morphism visual system.
+- Conventions:
+  - Keep components minimal and composable — prefer composition over large prop surfaces.
+  - Use Tailwind utility classes where practical and CSS custom properties (fonts, colors) for consistent theming.
+  - Follow the project's visual tokens (backdrop-filter, gradients, shadows) for any glass-style primitive.
+- TypeScript & React:
+  - Components should be client components (`"use client"`) when they contain interactivity.
+  - Use strict typing for props and prefer small, explicit interfaces. Export prop interfaces where reused.
+  - Favor stable refs and memoization for performance-sensitive UI primitives.
+- Accessibility:
+  - Ensure keyboard focusability and visible focus styles for interactive primitives.
+  - Use semantic HTML for structure (e.g., `header`, `main`, `button`, `nav`) and ARIA roles when necessary.
+  - Provide slots for labels, descriptions, and optional actions to avoid hardcoding text.
+
+#### Available UI Components
+
+**Layout Components:**
+- `Hero` - Full-screen hero section with title, subtitle, description, and action buttons
+- `PageHeader` - Standardized page header with title and optional description
+- `SectionHeader` - Section title component with consistent styling
+- `SectionContainer` - Container wrapper with consistent padding and max-width
+
+**Card Components:**
+- `Card` - Glass morphism card with optional href link support
+- `FeatureCard` - Feature card with icon, title, description, and link
+- `StatCard` - Statistics card with icon, value, title, and description
+
+**Form & Input Components:**
+- `SearchInput` - Search input field with icon and glass morphism styling
+- `FilterButton` - Filter button with active state styling
+- `FilterGroup` - Group of filter buttons with selection management
+
+**Feedback Components:**
+- `Notification` - Toast notification with types (info, success, error)
+- `useNotification` - Hook for managing notification state with auto-hide
+- `LoadingProgress` - Inline loading indicator with progress bar
+- `LoadingOverlay` - Full-screen loading overlay with animated progress
+- `EmptyState` - Empty state message component
+
+**Utility Components:**
+- `Button` - Button component with primary/secondary variants
+- `AuthWarning` - Authentication warning card with fade-out animation
+- `Placeholder` - Placeholder component for "coming soon" content
+
+- Rationale: Consolidating these guidelines in `copilot-instructions.md` helps AI-assisted edits and contributors create consistent, accessible, and composable UI building blocks without guessing project conventions.
 
 ### Brand Identity
 - **Organization**: ACCESS DLSU (Computer Engineering student organization)

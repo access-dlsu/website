@@ -157,6 +157,30 @@ website/
 - Visibility tied to header scroll state
 - Responsive layout for mobile/tablet
 
+### UI Components (`src/components/ui`)
+
+The `src/components/ui` folder contains small, reusable primitives and layout helpers that follow the project's glass-morphism and accessibility conventions. These are intentionally lightweight, framework-agnostic building blocks used across pages and larger components (e.g., `Header`, `Footer`, event cards).
+
+- `src/components/ui/card`
+  - Purpose: Reusable glass-styled card wrappers for content sections, media, and CTAs.
+  - Features: configurable elevation/shadow, optional header/footer slots, responsive padding, and built-in variants for "surface", "muted", and "accent".
+  - Usage: Wrap content where the glass morphism visual and subtle depth is required (e.g., event entries, profile snippets).
+
+- `src/components/ui/page-header`
+  - Purpose: Standardized page header/banner used at the top of content pages.
+  - Features: title and subtitle slots, optional breadcrumb or action slot (buttons/links), responsive layout, and built-in accessibility attributes.
+  - Usage: Place at the top of section or page templates to ensure consistent spacing, typography, and brand accent usage.
+
+- `src/components/ui/placeholder`
+  - Purpose: Lightweight placeholder skeletons and empty-state displays.
+  - Features: skeleton lines for loading states, centered empty-state card with icon/title/description, and action CTA slot.
+  - Usage: Use while fetching remote data or to show empty lists (e.g., no events, no search results).
+
+Implementation notes:
+- All UI primitives use the project's CSS variables (fonts, colors) and Tailwind utility classes where applicable to ensure consistent theming.
+- Components are small, well-typed TypeScript client components and prefer composition over large prop APIs.
+- Accessibility: keyboard focus styles, proper ARIA roles for interactive slots, and semantic HTML are enforced.
+
 ### Page Structure
 
 All pages follow a consistent template:
@@ -386,6 +410,6 @@ See `LICENSE` file for details.
 
 ---
 
-**Last Updated**: October 4, 2025  
-**Version**: 1.0.0  
+**Last Updated**: November 4, 2025
+**Version**: 1.0.1
 **Maintainer**: ACCESS DLSU Web Team
