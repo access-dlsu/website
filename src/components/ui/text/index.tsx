@@ -1,8 +1,9 @@
 "use client";
 
-import { TextProps } from "./types";
+import { ElementType } from "react";
+import { TextProps, TextVariant } from "./types";
 
-const variantStyles: Record<TextProps["variant"], string> = {
+const variantStyles: Record<TextVariant, string> = {
   h1: "text-5xl font-bold text-white",
   h2: "text-3xl font-bold text-white",
   h3: "text-xl font-semibold text-white",
@@ -14,7 +15,7 @@ const variantStyles: Record<TextProps["variant"], string> = {
   label: "text-sm text-gray-400",
 };
 
-const variantFonts: Record<TextProps["variant"], string> = {
+const variantFonts: Record<TextVariant, string> = {
   h1: "var(--font-poppins)",
   h2: "var(--font-poppins)",
   h3: "var(--font-poppins)",
@@ -26,7 +27,7 @@ const variantFonts: Record<TextProps["variant"], string> = {
   label: "var(--font-manrope)",
 };
 
-const defaultAs: Record<TextProps["variant"], TextProps["as"]> = {
+const defaultAs: Record<TextVariant, ElementType> = {
   h1: "h1",
   h2: "h2",
   h3: "h3",
@@ -44,7 +45,7 @@ export function Text({
   as,
   className = "",
 }: TextProps) {
-  const Component = as || defaultAs[variant];
+  const Component = (as || defaultAs[variant]) as ElementType;
   const style = { fontFamily: variantFonts[variant] };
 
   return (

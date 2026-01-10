@@ -4,12 +4,10 @@ import { useEffect, useState, useMemo, Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  Home as HomeIcon,
   Info,
   CalendarDays,
   GraduationCap,
   Users,
-  Lock,
   Menu,
   BookOpen,
   UserCircle,
@@ -17,7 +15,6 @@ import {
   Bot,
   FileText,
   Plus,
-  ChevronDown,
   History,
   Wrench,
   Award,
@@ -27,17 +24,96 @@ import {
   HeartHandshake,
   UserCheck,
   Network,
-  Gift,
   LogOut,
   AlertCircle,
-  Link as LinkIcon,
-  Database,
-  BarChart3,
+  Lock,
 } from "lucide-react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 
 // Separate component for search params handling
+import {
+  NavbarLink,
+  NavbarDropdownTrigger,
+  DropdownMenu,
+  type NavItem
+} from "@/components/ui/navbar";
+
+// Navigation Configuration
+const NAV_CONFIG: NavItem[] = [
+  {
+    id: "about",
+    label: "About Us",
+    href: "/about-us",
+    icon: Info,
+  },
+  {
+    id: "events",
+    label: "Events",
+    icon: CalendarDays,
+    isDropdown: true,
+    dropdownContent: [
+      {
+        title: "Browse Events",
+        items: [
+          { label: "Upcoming Events", href: "/events/upcoming", icon: CalendarDays },
+          { label: "Past Events", href: "/events/past", icon: History },
+        ],
+      },
+      {
+        title: "By Type",
+        items: [
+          { label: "Workshops", href: "/events/workshops", icon: Wrench },
+          { label: "Competitions", href: "/events/competitions", icon: Award },
+        ],
+      },
+    ],
+  },
+  {
+    id: "academics",
+    label: "Academics",
+    icon: GraduationCap,
+    isDropdown: true,
+    dropdownContent: [
+      {
+        title: "Learn",
+        items: [
+          { label: "Resources", href: "/academics/resources", icon: Library },
+          { label: "Tutorials", href: "/academics/tutorials", icon: Video },
+        ],
+      },
+      {
+        title: "Get Involved",
+        items: [
+          { label: "Project Gallery", href: "/academics/projects", icon: FolderOpen },
+          { label: "Mentorship", href: "/academics/mentorship", icon: HeartHandshake },
+        ],
+      },
+    ],
+  },
+  {
+    id: "members",
+    label: "Members",
+    icon: Users,
+    isDropdown: true,
+    dropdownContent: [
+      {
+        title: "Directory",
+        items: [
+          { label: "Members", href: "/members/directory", icon: UserCheck },
+          { label: "Officers", href: "/members/officers", icon: Users },
+        ],
+      },
+      {
+        title: "Community",
+        items: [
+          { label: "Alumni Network", href: "/members/alumni", icon: Network },
+        ],
+      },
+    ],
+  },
+];
+
 function AuthErrorHandler({
   onAuthError,
 }: {
@@ -68,13 +144,13 @@ function AuthErrorHandler({
   return null;
 }
 
-function HeaderContent({
+const HeaderContent = ({
   authError,
   setAuthError,
 }: {
   authError: string | null;
   setAuthError: (error: string | null) => void;
-}) {
+}) => {
   const { data: session, status } = useSession();
   const [isVisible, setIsVisible] = useState(true);
   const [isCompressed, setIsCompressed] = useState(false);
@@ -243,8 +319,6 @@ function HeaderContent({
         </div>
       )}
 
-
-
       {/* Header Wrapper to center Navbar and Pill together */}
       <div className={`header-wrapper ${isVisible ? "header-visible" : "header-hidden"}`}>
         <div className={`logo-container header-element ${isVisible && !isCompressed ? "header-visible" : "header-hidden"}`}>
@@ -286,116 +360,32 @@ function HeaderContent({
               <span className="navbar-label">Navigation Bar</span>
             </button>
 
-            {/* Navigation links - always present */}
+            {/* Navigation links - dynamically generated from config */}
             <nav className="navbar-links">
-              <Link
-                className={`navbar-item ${isFocusMode ? "navbar-item-hidden" : ""}`}
-                href="/"
-              >
-                <span className="inline-flex items-center gap-1.5">
-                  <HomeIcon className="w-4 h-4" aria-hidden />
-                  <span>Home</span>
-                </span>
-              </Link>
-              <Link
-                className={`navbar-item ${isFocusMode ? "navbar-item-hidden" : ""}`}
-                href="/about-us"
-              >
-                <span className="inline-flex items-center gap-1.5">
-                  <Info className="w-4 h-4" aria-hidden />
-                  <span>About Us</span>
-                </span>
-              </Link>
+              {NAV_CONFIG.map((item) => {
+                // Check officer requirements
+                if (item.requiresOfficer && (!isOfficer || !officerChecked)) return null;
 
-              {/* Events dropdown trigger */}
-              <div
-                className={`navbar-dropdown ${activeDropdown === "events" ? "navbar-dropdown-active" : ""} ${isFocusMode && activeDropdown !== "events" ? "navbar-item-hidden" : ""}`}
-              >
-                <button
-                  className="navbar-dropdown-trigger hover:underline"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleDropdown("events");
-                  }}
-                >
-                  <span className="inline-flex items-center gap-1.5">
-                    <CalendarDays className="w-4 h-4" aria-hidden />
-                    <span>Events</span>
-                    <ChevronDown
-                      className={`w-3 h-3 transition-transform ${activeDropdown === "events" ? "rotate-180" : ""}`}
-                      aria-hidden
+                if (item.isDropdown) {
+                  return (
+                    <NavbarDropdownTrigger
+                      key={item.id}
+                      item={item}
+                      isActive={activeDropdown === item.id}
+                      isFocusMode={isFocusMode}
+                      toggleDropdown={toggleDropdown}
                     />
-                  </span>
-                </button>
-              </div>
-
-              {/* Academics dropdown trigger */}
-              <div
-                className={`navbar-dropdown ${activeDropdown === "academics" ? "navbar-dropdown-active" : ""} ${isFocusMode && activeDropdown !== "academics" ? "navbar-item-hidden" : ""}`}
-              >
-                <button
-                  className="navbar-dropdown-trigger hover:underline"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleDropdown("academics");
-                  }}
-                >
-                  <span className="inline-flex items-center gap-1.5">
-                    <GraduationCap className="w-4 h-4" aria-hidden />
-                    <span>Academics</span>
-                    <ChevronDown
-                      className={`w-3 h-3 transition-transform ${activeDropdown === "academics" ? "rotate-180" : ""}`}
-                      aria-hidden
+                  );
+                } else {
+                  return (
+                    <NavbarLink
+                      key={item.id}
+                      item={item}
+                      isFocusMode={isFocusMode}
                     />
-                  </span>
-                </button>
-              </div>
-
-              {/* Members Hub dropdown trigger */}
-              <div
-                className={`navbar-dropdown ${activeDropdown === "members" ? "navbar-dropdown-active" : ""} ${isFocusMode && activeDropdown !== "members" ? "navbar-item-hidden" : ""}`}
-              >
-                <button
-                  className="navbar-dropdown-trigger hover:underline"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleDropdown("members");
-                  }}
-                >
-                  <span className="inline-flex items-center gap-1.5">
-                    <Users className="w-4 h-4" aria-hidden />
-                    <span>Members</span>
-                    <ChevronDown
-                      className={`w-3 h-3 transition-transform ${activeDropdown === "members" ? "rotate-180" : ""}`}
-                      aria-hidden
-                    />
-                  </span>
-                </button>
-              </div>
-
-              {/* Officers Hub dropdown trigger - only visible to officers */}
-              {isOfficer && officerChecked && (
-                <div
-                  className={`navbar-dropdown ${activeDropdown === "officers" ? "navbar-dropdown-active" : ""} ${isFocusMode && activeDropdown !== "officers" ? "navbar-item-hidden" : ""}`}
-                >
-                  <button
-                    className="navbar-dropdown-trigger hover:underline"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleDropdown("officers");
-                    }}
-                  >
-                    <span className="inline-flex items-center gap-1.5">
-                      <Lock className="w-4 h-4" aria-hidden />
-                      <span>Officers</span>
-                      <ChevronDown
-                        className={`w-3 h-3 transition-transform ${activeDropdown === "officers" ? "rotate-180" : ""}`}
-                        aria-hidden
-                      />
-                    </span>
-                  </button>
-                </div>
-              )}
+                  );
+                }
+              })}
             </nav>
           </div>
         </div>
@@ -559,195 +549,14 @@ function HeaderContent({
       </div>
 
       {/* Dropdown menus - rendered outside navbar for independent blur */}
-      {
-        activeDropdown === "events" && !isCompressed && (
-          <div className="dropdown-menu-container dropdown-expanded">
-            <div className="navbar-dropdown-menu">
-              <div className="dropdown-section">
-                <div className="dropdown-subcategory">Events Calendar</div>
-                <div className="dropdown-items-row">
-                  <Link href="/events/upcoming" className="navbar-dropdown-item">
-                    <CalendarDays className="w-4 h-4" aria-hidden />
-                    <span>Upcoming Events</span>
-                  </Link>
-                  <Link href="/events/past" className="navbar-dropdown-item">
-                    <History className="w-4 h-4" aria-hidden />
-                    <span>Past Events</span>
-                  </Link>
-                </div>
-              </div>
-
-              <div className="dropdown-section">
-                <div className="dropdown-subcategory">Event Types</div>
-                <div className="dropdown-items-row">
-                  <Link href="/events/workshops" className="navbar-dropdown-item">
-                    <Wrench className="w-4 h-4" aria-hidden />
-                    <span>Workshops</span>
-                  </Link>
-                  <Link
-                    href="/events/competitions"
-                    className="navbar-dropdown-item"
-                  >
-                    <Award className="w-4 h-4" aria-hidden />
-                    <span>Competitions</span>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        )
-      }
-
-      {
-        activeDropdown === "academics" && !isCompressed && (
-          <div className="dropdown-menu-container dropdown-expanded">
-            <div className="navbar-dropdown-menu">
-              <div className="dropdown-section">
-                <div className="dropdown-subcategory">Learning Materials</div>
-                <div className="dropdown-items-row">
-                  <Link
-                    href="/academics/resources"
-                    className="navbar-dropdown-item"
-                  >
-                    <Library className="w-4 h-4" aria-hidden />
-                    <span>Learning Resources</span>
-                  </Link>
-                  <Link
-                    href="/academics/tutorials"
-                    className="navbar-dropdown-item"
-                  >
-                    <Video className="w-4 h-4" aria-hidden />
-                    <span>Tutorials</span>
-                  </Link>
-                </div>
-              </div>
-
-              <div className="dropdown-section">
-                <div className="dropdown-subcategory">Student Work</div>
-                <div className="dropdown-items-row">
-                  <Link
-                    href="/academics/projects"
-                    className="navbar-dropdown-item"
-                  >
-                    <FolderOpen className="w-4 h-4" aria-hidden />
-                    <span>Project Gallery</span>
-                  </Link>
-                  <Link
-                    href="/academics/mentorship"
-                    className="navbar-dropdown-item"
-                  >
-                    <HeartHandshake className="w-4 h-4" aria-hidden />
-                    <span>Mentorship Program</span>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        )
-      }
-
-      {
-        activeDropdown === "members" && !isCompressed && (
-          <div className="dropdown-menu-container dropdown-expanded">
-            <div className="navbar-dropdown-menu">
-              <div className="dropdown-section">
-                <div className="dropdown-subcategory">Member Directory</div>
-                <div className="dropdown-items-row">
-                  <Link
-                    href="/members/directory"
-                    className="navbar-dropdown-item"
-                  >
-                    <UserCheck className="w-4 h-4" aria-hidden />
-                    <span>Member Directory</span>
-                  </Link>
-                  <Link href="/members/officers" className="navbar-dropdown-item">
-                    <Users className="w-4 h-4" aria-hidden />
-                    <span>Officers</span>
-                  </Link>
-                </div>
-              </div>
-
-              <div className="dropdown-section">
-                <div className="dropdown-subcategory">Community</div>
-                <div className="dropdown-items-row">
-                  <Link href="/members/alumni" className="navbar-dropdown-item">
-                    <Network className="w-4 h-4" aria-hidden />
-                    <span>Alumni Network</span>
-                  </Link>
-                  <Link href="/members/benefits" className="navbar-dropdown-item">
-                    <Gift className="w-4 h-4" aria-hidden />
-                    <span>Member Benefits</span>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        )
-      }
-
-      {
-        activeDropdown === "officers" && !isCompressed && (
-          <div className="dropdown-menu-container dropdown-expanded">
-            <div className="navbar-dropdown-menu">
-              <div className="dropdown-section">
-                <div className="dropdown-subcategory">Officer Tools</div>
-                <div className="dropdown-items-row">
-                  <Link
-                    href="/officers/link-shortener"
-                    className="navbar-dropdown-item"
-                  >
-                    <LinkIcon className="w-4 h-4" aria-hidden />
-                    <span>Link Shortener</span>
-                  </Link>
-                  <Link
-                    href="/officers/database"
-                    className="navbar-dropdown-item"
-                  >
-                    <Database className="w-4 h-4" aria-hidden />
-                    <span>Database</span>
-                  </Link>
-                </div>
-              </div>
-
-              <div className="dropdown-section">
-                <div className="dropdown-subcategory">Management</div>
-                <div className="dropdown-items-row">
-                  <Link href="/officers/members" className="navbar-dropdown-item">
-                    <UserCheck className="w-4 h-4" aria-hidden />
-                    <span>Member Management</span>
-                  </Link>
-                  <Link href="/officers/events" className="navbar-dropdown-item">
-                    <CalendarDays className="w-4 h-4" aria-hidden />
-                    <span>Event Administration</span>
-                  </Link>
-                </div>
-              </div>
-
-              <div className="dropdown-section">
-                <div className="dropdown-subcategory">Resources</div>
-                <div className="dropdown-items-row">
-                  <Link
-                    href="/officers/resources"
-                    className="navbar-dropdown-item"
-                  >
-                    <FileText className="w-4 h-4" aria-hidden />
-                    <span>Resource Management</span>
-                  </Link>
-                  <Link
-                    href="/officers/analytics"
-                    className="navbar-dropdown-item"
-                  >
-                    <BarChart3 className="w-4 h-4" aria-hidden />
-                    <span>Analytics Dashboard</span>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        )
-      }
-
-
+      {NAV_CONFIG.map((item) => (
+        <DropdownMenu
+          key={item.id}
+          item={item}
+          activeDropdown={activeDropdown}
+          isCompressed={isCompressed}
+        />
+      ))}
     </>
   );
 }
