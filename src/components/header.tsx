@@ -27,6 +27,7 @@ import {
   LogOut,
   AlertCircle,
   Lock,
+  X,
 } from "lucide-react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
@@ -393,37 +394,45 @@ const HeaderContent = ({
         <div className={`login-container ${session ? "logged-in" : ""}`}>
           <div
             className={`login-pill ${isLoginExpanded ? "expanded" : ""}`}
-            onClick={(e) => {
-              e.stopPropagation(); // Prevent document click handler
-              toggleLogin();
-            }}
           >
-            <div className="login-trigger">
+            <div
+              className="login-trigger"
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent document click handler
+                toggleLogin();
+              }}
+            >
               {session ? (
-                // Show profile picture when logged in
-                <>
-                  {session.user?.image ? (
-                    <Image
-                      src={session.user.image}
-                      alt={session.user?.name || "User"}
-                      width={48}
-                      height={48}
-                      className="profile-picture"
-                      onError={(e) => {
-                        // Fallback to UserCircle icon if image fails to load
-                        e.currentTarget.style.display = "none";
-                        const fallback = e.currentTarget
-                          .nextElementSibling as HTMLElement;
-                        if (fallback) fallback.style.display = "block";
-                      }}
+                // Show profile picture when logged in, X when expanded
+                isLoginExpanded ? (
+                  <span className="close-icon-wrapper">
+                    <X className="w-7 h-7 close-icon" aria-hidden />
+                  </span>
+                ) : (
+                  <>
+                    {session.user?.image ? (
+                      <Image
+                        src={session.user.image}
+                        alt={session.user?.name || "User"}
+                        width={48}
+                        height={48}
+                        className="profile-picture"
+                        onError={(e) => {
+                          // Fallback to UserCircle icon if image fails to load
+                          e.currentTarget.style.display = "none";
+                          const fallback = e.currentTarget
+                            .nextElementSibling as HTMLElement;
+                          if (fallback) fallback.style.display = "block";
+                        }}
+                      />
+                    ) : null}
+                    <UserCircle
+                      className="w-5 h-5 profile-fallback"
+                      aria-hidden
+                      style={{ display: session.user?.image ? "none" : "block" }}
                     />
-                  ) : null}
-                  <UserCircle
-                    className="w-5 h-5 profile-fallback"
-                    aria-hidden
-                    style={{ display: session.user?.image ? "none" : "block" }}
-                  />
-                </>
+                  </>
+                )
               ) : (
                 // Show lock icon when not logged in
                 <>
