@@ -435,10 +435,18 @@ const HeaderContent = ({
                 )
               ) : (
                 // Show lock icon when not logged in
-                <>
-                  <Lock className="w-4 h-4" aria-hidden />
-                  <span>Login</span>
-                </>
+                // Check if expanded to show Close button
+                isLoginExpanded ? (
+                  <>
+                    <X className="w-4 h-4" aria-hidden />
+                    <span>Close</span>
+                  </>
+                ) : (
+                  <>
+                    <Lock className="w-4 h-4" aria-hidden />
+                    <span>Login</span>
+                  </>
+                )
               )}
             </div>
 
