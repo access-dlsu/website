@@ -11,7 +11,11 @@ export function Button({
 }: ButtonProps) {
   const variantClasses = {
     primary: "hero-button-primary text-white",
+<<<<<<< HEAD
     secondary: "hero-button-secondary text-zinc-200 dark:text-gray-300",
+=======
+    secondary: "hero-button-secondary text-gray-300",
+>>>>>>> origin/test
   };
 
   return (

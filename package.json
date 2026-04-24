@@ -8,6 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv env.d.ts"
   },
   "dependencies": {
@@ -28,13 +30,14 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "autoprefixer": "^10",
+    "baseline-browser-mapping": "^2.9.7",
     "comment-json": "^4",
     "eslint": "^9",
     "eslint-config-next": "^15",
     "glob": "^11",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "wrangler": "^4"
+    "wrangler": "^4.42.2"
   },
   "browserslist": [
     "defaults",

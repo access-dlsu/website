@@ -1,19 +1,21 @@
+"use client";
+
+import PageHeader from "@/components/ui/page-header";
+import Placeholder from "@/components/ui/placeholder";
+
 export default function ProjectsPage() {
   return (
     <main className="pt-32 pb-20 px-6 max-w-7xl mx-auto">
-      <div className="text-center space-y-6">
-        <h1 className="text-5xl font-bold text-white" style={{ fontFamily: 'var(--font-poppins)' }}>
-          Project Gallery
-        </h1>
-        <p className="text-xl text-gray-300 max-w-3xl mx-auto" style={{ fontFamily: 'var(--font-manrope)' }}>
-          Explore past projects and get inspiration for your own work.
-        </p>
-        <div className="glass-card p-12 rounded-2xl mt-12">
-          <p className="text-gray-400 text-lg" style={{ fontFamily: 'var(--font-manrope)' }}>
-            Content coming soon...
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="Project Gallery"
+        description="Explore past projects and get inspiration for your own work."
+      >
+        <Placeholder
+          icon="FolderOpen"
+          title="Project Showcase"
+          message="Our project gallery is under construction. Soon you'll be able to explore student projects, capstone works, and innovative solutions developed by ACCESS members."
+        />
+      </PageHeader>
     </main>
   );
 }

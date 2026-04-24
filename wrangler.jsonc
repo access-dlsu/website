@@ -3,34 +3,45 @@
  * https://developers.cloudflare.com/workers/wrangler/configuration/
  */
 {
-  "name": "website",
-  "main": ".open-next/worker.js",
-  "compatibility_date": "2025-09-01",
-  "compatibility_flags": [
-    "nodejs_compat"
-  ],
-  "assets": {
-    "directory": ".open-next/assets",
-    "binding": "ASSETS"
-  },
-  "build": {
-    "command": "node scripts/generate-sitemap.mjs"
-  },
-  "observability": {
-    "logs": {
-      "enabled": true
-    }
-  },
-  "vars": {
-    "AUTH_URL": "https://accessdlsu.com",
-    "AUTH_TRUST_HOST": "true"
-  },
-  "env": {
-    "staging": {
-      "vars": {
-        "AUTH_URL": "https://staging.accessdlsu.com",
-        "AUTH_TRUST_HOST": "true"
-      }
-    }
-  }
+	"name": "website",
+	"main": ".open-next/worker.js",
+	"compatibility_date": "2025-09-01",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"assets": {
+		"directory": ".open-next/assets",
+		"binding": "ASSETS"
+	},
+	"build": {
+		"command": "node scripts/generate-sitemap.mjs"
+	},
+	"observability": {
+		"logs": {
+			"enabled": true
+		}
+	},
+	"vars": {
+		"AUTH_URL": "https://accessdlsu.com",
+		"AUTH_TRUST_HOST": "true"
+	},
+	"env": {
+		"staging": {
+			"vars": {
+				"AUTH_URL": "https://staging.accessdlsu.com",
+				"AUTH_TRUST_HOST": "true"
+			}
+		}
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "access_dlsu_db",
+			"database_id": "8edf3d43-ed8b-45a4-9a7a-b7d1538769e3"
+		}
+	]
+	,
+	"triggers": {
+		"crons": ["0 0 * * *"]
+	}
 }

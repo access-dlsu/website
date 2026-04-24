@@ -24,17 +24,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async signIn({ user }) {
       // Only allow DLSU email addresses
       const isAllowed = user.email?.endsWith("@dlsu.edu.ph") || false;
-      
+
       return isAllowed;
     },
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
-      const isProtectedRoute = nextUrl.pathname.startsWith("/members");
-      
+      const isProtectedRoute = nextUrl.pathname.startsWith("/members") || nextUrl.pathname.startsWith("/officers");
+
       if (isProtectedRoute && !isLoggedIn) {
         return false;
       }
-      
+
       return true;
     },
   },

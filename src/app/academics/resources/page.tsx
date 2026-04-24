@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 import ResourcesClient from './client';
 
@@ -60,6 +61,64 @@ const PREVIOUS_ACADEMIC_YEAR_TAG = '24-25';
 const FILE_FORMAT_REGEX = /^([^_]+)_(\d{2})-(\d{2})-T(\d)(?:_|$)/;
 
 export default function ResourcesPage() {
+=======
+'use client';
+
+import { useEffect, useState, useRef } from 'react';
+import { useSession } from 'next-auth/react';
+import { BookOpen, FileText, Video, Code, Lock, Download } from 'lucide-react';
+import { PageHeader } from '@/components/ui/page-header';
+import { SearchInput } from '@/components/ui/search-input';
+import { FilterGroup } from '@/components/ui/filter-group';
+import type { FilterOption } from '@/components/ui/filter-group';
+import { Notification } from '@/components/ui/notification';
+import { useNotification } from '@/components/ui/notification/useNotification';
+import { LoadingProgress } from '@/components/ui/loading-progress';
+import { AuthWarning } from '@/components/ui/auth-warning';
+import { EmptyState } from '@/components/ui/empty-state';
+
+// Resource categories
+const categories: FilterOption[] = [
+  { id: 'all', label: 'All Resources', icon: BookOpen },
+  { id: 'notes', label: 'Reviewers', icon: FileText },
+  { id: 'textbooks', label: 'Textbooks', icon: BookOpen },
+  { id: 'videos', label: 'Video Tutorials', icon: Video },
+  { id: 'code', label: 'Code Examples', icon: Code },
+];
+
+interface DriveFile {
+  id: string;
+  name: string;
+  mimeType?: string;
+  size?: number;
+  modifiedTime?: string;
+}
+
+interface ResourcesApiResponse {
+  files?: DriveFile[];
+  error?: string;
+}
+
+interface GroupedFile extends DriveFile {
+  category: string;
+  restricted: boolean;
+  displayName: string;
+  courseCode?: string | null;
+  fileType?: string;
+  quizNumber?: number | null;
+}
+
+interface CourseGroup {
+  academicYearTerm: string | null;
+  files: GroupedFile[];
+}
+
+const CURRENT_ACADEMIC_YEAR_TAG = '25-26';
+const PREVIOUS_ACADEMIC_YEAR_TAG = '24-25';
+const FILE_FORMAT_REGEX = /^([^_]+)_(\d{2})-(\d{2})-T(\d)(?:_|$)/;
+
+export default function ResourcesPage() {
+>>>>>>> origin/test
   const { data: session } = useSession();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -178,6 +237,7 @@ export default function ResourcesPage() {
     return `${match[2]}-${match[3]}`;
   }
 
+<<<<<<< HEAD
   function formatAcademicYearTag(tag: string | null): string | null {
     if (!tag) return null;
     const match = tag.match(/^(\d{2})-(\d{2})$/);
@@ -185,6 +245,8 @@ export default function ResourcesPage() {
     return `A.Y. 20${match[1]} - 20${match[2]}`;
   }
 
+=======
+>>>>>>> origin/test
   function isCurrentAcademicYear(filename: string): boolean {
     return extractAcademicYearTag(filename) === CURRENT_ACADEMIC_YEAR_TAG;
   }
@@ -240,7 +302,10 @@ export default function ResourcesPage() {
         restricted: isRestricted(file.name),
         displayName: file.name.replace(/\[restricted\]/gi, '').replace(/\[members\]/gi, '').trim(),
         courseCode: extractCourseCode(file.name),
+<<<<<<< HEAD
         academicYearTag: extractAcademicYearTag(file.name),
+=======
+>>>>>>> origin/test
         fileType: getFileTypeCategory(file.name),
         quizNumber: extractQuizNumber(file.name),
       }));
@@ -251,16 +316,27 @@ export default function ResourcesPage() {
     const grouped = new Map<string, CourseGroup>();
     
     files.forEach(file => {
+<<<<<<< HEAD
       const key = `${file.courseCode || 'Other'}::${file.academicYearTag || 'Unknown'}`;
       if (!grouped.has(key)) {
         grouped.set(key, {
           academicYearTerm: formatAcademicYearTag(file.academicYearTag) || extractAcademicYearTerm(file.name),
+=======
+      const key = file.courseCode || 'Other';
+      if (!grouped.has(key)) {
+        grouped.set(key, {
+          academicYearTerm: extractAcademicYearTerm(file.name),
+>>>>>>> origin/test
           files: []
         });
       }
       // Update academic year/term if we find one and don't have it yet
       if (!grouped.get(key)!.academicYearTerm) {
+<<<<<<< HEAD
         const ayTerm = formatAcademicYearTag(file.academicYearTag) || extractAcademicYearTerm(file.name);
+=======
+        const ayTerm = extractAcademicYearTerm(file.name);
+>>>>>>> origin/test
         if (ayTerm) {
           grouped.get(key)!.academicYearTerm = ayTerm;
         }
@@ -340,6 +416,7 @@ export default function ResourcesPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {Array.from(groupedData.entries())
           .sort(([a], [b]) => a.localeCompare(b))
+<<<<<<< HEAD
           .map(([courseKey, courseData]) => {
             const [courseCode] = courseKey.split('::');
 
@@ -436,9 +513,198 @@ export default function ResourcesPage() {
     );
   }
 >>>>>>> Stashed changes
+=======
+          .map(([courseCode, courseData]) => (
+            <div key={courseCode} className="course-card p-6 h-fit">
+              {/* Course Header */}
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-1" style={{ fontFamily: 'var(--font-poppins)' }}>
+                  {courseCode}
+                </h2>
+                {courseData.academicYearTerm && (
+                  <p className="text-sm text-zinc-700 dark:text-zinc-400" style={{ fontFamily: 'var(--font-manrope)' }}>
+                    {courseData.academicYearTerm}
+                  </p>
+                )}
+              </div>
+
+              {/* Group by file type within course */}
+              {(() => {
+                const byType = new Map<string, GroupedFile[]>();
+                courseData.files.forEach(file => {
+                  const type = file.fileType || 'other';
+                  if (!byType.has(type)) byType.set(type, []);
+                  byType.get(type)!.push(file);
+                });
+
+                return Array.from(byType.entries()).map(([fileType, typeFiles]) => (
+                  <div key={fileType} className="mb-6 last:mb-0">
+                    {/* File Type Label */}
+                    <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-400 mb-3 uppercase tracking-wide" style={{ fontFamily: 'var(--font-manrope)' }}>
+                      {fileType === 'quiz' ? 'Quizzes' : 
+                        fileType === 'exam' ? 'Exams' : 
+                        fileType === 'notes' ? 'Notes' :
+                        fileType === 'lab' ? 'Labs' :
+                        fileType === 'project' ? 'Projects' : 'Resources'}
+                    </h3>
+
+                    {/* Buttons for each file */}
+                    <div className="flex flex-wrap gap-2">
+                      {typeFiles.map((file) => {
+                        const isLocked = file.restricted && !session;
+                        return (
+                          <div key={file.id} className="relative group">
+                            <button
+                              onClick={() => {
+                                if (isLocked) {
+                                  showNotification('Sign in to access this file', 'error');
+                                } else {
+                                  initiateDownload(file.id, file.name);
+                                }
+                              }}
+                              disabled={isLocked}
+                              className={`resource-button ${isLocked ? 'resource-button-locked' : ''} flex items-center gap-2 px-4 py-2.5 font-medium text-sm text-white`}
+                              style={{ fontFamily: 'var(--font-manrope)' }}
+                            >
+                              {isLocked && <Lock className="w-3.5 h-3.5" />}
+                              {file.quizNumber ? (
+                                `${fileType === 'quiz' ? 'Quiz' : fileType === 'exam' ? 'Exam' : 'Test'} ${file.quizNumber}`
+                              ) : (
+                                <span className="max-w-[150px] truncate">{file.displayName}</span>
+                              )}
+                              <Download className="w-3.5 h-3.5" />
+                            </button>
+                            
+                            {/* File size tooltip - shows on hover */}
+                            {file.size && (
+                              <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20">
+                                <div className="file-size-tooltip" style={{ fontFamily: 'var(--font-manrope)' }}>
+                                  {getFileSize(file.size)}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ));
+              })()}
+            </div>
+          ))}
+      </div>
+    );
+  }
+
+>>>>>>> origin/test
   return (
     <div className="min-h-screen">
-      <ResourcesClient />
+      <div className="pt-32 pb-8 px-6 max-w-7xl mx-auto">
+        {notification && (
+          <Notification
+            message={notification.message}
+            type={notification.type}
+            onClose={hideNotification}
+          />
+        )}
+
+        <PageHeader
+          title="Learning Resources"
+          description="Access textbooks, lecture notes, video tutorials, and code examples to support your learning journey."
+          className="mb-12"
+        />
+
+        <SearchInput
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder="Search resources..."
+        />
+
+        <FilterGroup
+          options={categories}
+          selectedId={selectedCategory}
+          onSelect={setSelectedCategory}
+        />
+
+        {showAuthWarning && (
+          <AuthWarning
+            title="Sign in to access restricted resources"
+            message="Some resources require DLSU authentication. Sign in with your @dlsu.edu.ph email to access all materials."
+            isFading={isAuthWarningFading}
+          />
+        )}
+
+        {loading && (
+          <LoadingProgress progress={loadingProgress} />
+        )}
+
+        {/* Resources Grid - Grouped by Course */}
+        {!loading && (
+          selectedCategory === 'notes' || selectedCategory === 'all' ? (
+            <div className="space-y-10">
+              <section>
+                <div className="mb-4">
+                  <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100" style={{ fontFamily: 'var(--font-poppins)' }}>
+                    This Academic Year
+                  </h2>
+                  <p className="text-sm text-zinc-700 dark:text-zinc-400" style={{ fontFamily: 'var(--font-manrope)' }}>
+                    Reviewer files tagged with A.Y. 25-26.
+                  </p>
+                </div>
+                {groupedReviewersThisYear.size > 0 ? (
+                  renderCourseGrid(groupedReviewersThisYear)
+                ) : (
+                  <EmptyState message="No reviewer files found for this academic year." />
+                )}
+              </section>
+
+              <section>
+                <div className="mb-4">
+                  <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100" style={{ fontFamily: 'var(--font-poppins)' }}>
+                    Previous Academic Years
+                  </h2>
+                  <p className="text-sm text-zinc-700 dark:text-zinc-400" style={{ fontFamily: 'var(--font-manrope)' }}>
+                    Reviewer files tagged with A.Y. 24-25.
+                  </p>
+                </div>
+                {groupedReviewersPreviousYears.size > 0 ? (
+                  renderCourseGrid(groupedReviewersPreviousYears)
+                ) : (
+                  <EmptyState message="No reviewer files found for previous academic years." />
+                )}
+              </section>
+
+              {selectedCategory === 'all' && groupedNonReviewerFiles.size > 0 && (
+                <section>
+                  <div className="mb-4">
+                    <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100" style={{ fontFamily: 'var(--font-poppins)' }}>
+                      Other Resources
+                    </h2>
+                    <p className="text-sm text-zinc-700 dark:text-zinc-400" style={{ fontFamily: 'var(--font-manrope)' }}>
+                      Textbooks, videos, code examples, and other materials.
+                    </p>
+                  </div>
+                  {renderCourseGrid(groupedNonReviewerFiles)}
+                </section>
+              )}
+            </div>
+          ) : (
+            renderCourseGrid(groupedByCourse)
+          )
+        )}
+
+        {!loading && filteredFiles.length === 0 && (
+          <EmptyState
+            message={
+              resourcesError
+                ? `Unable to load resources: ${resourcesError}`
+                : 'No resources found. Try adjusting your search or filters.'
+            }
+          />
+        )}
+
+        <a ref={downloadRef} style={{ display: 'none' }} />
+      </div>
     </div>
   );
 }

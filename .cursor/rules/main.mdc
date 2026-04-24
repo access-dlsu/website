@@ -1,7 +1,0 @@
----
-alwaysApply: true
----
-deny: |
-  Do not generate or modify README files.
-  Do not add unnecessary explanations or commentary ("yap").
-  // The website logos are located in the public/logo/ directory.

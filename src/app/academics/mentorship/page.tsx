@@ -1,19 +1,21 @@
+"use client";
+
+import PageHeader from "@/components/ui/page-header";
+import Placeholder from "@/components/ui/placeholder";
+
 export default function MentorshipPage() {
   return (
     <main className="pt-32 pb-20 px-6 max-w-7xl mx-auto">
-      <div className="text-center space-y-6">
-        <h1 className="text-5xl font-bold text-white" style={{ fontFamily: 'var(--font-poppins)' }}>
-          Mentorship Program
-        </h1>
-        <p className="text-xl text-gray-300 max-w-3xl mx-auto" style={{ fontFamily: 'var(--font-manrope)' }}>
-          Connect with upperclassmen and alumni for academic guidance.
-        </p>
-        <div className="glass-card p-12 rounded-2xl mt-12">
-          <p className="text-gray-400 text-lg" style={{ fontFamily: 'var(--font-manrope)' }}>
-            Content coming soon...
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="Mentorship Program"
+        description="Connect with upperclassmen and alumni for academic guidance."
+      >
+        <Placeholder
+          icon="HeartHandshake"
+          title="Mentorship Platform"
+          message="Our mentorship matching platform is in development. Soon you'll be able to connect with experienced students and alumni for guidance in your academic journey."
+        />
+      </PageHeader>
     </main>
   );
 }
