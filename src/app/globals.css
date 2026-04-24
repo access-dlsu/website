@@ -1,8 +1,14 @@
 @import "tailwindcss";
 
 :root {
+<<<<<<< Updated upstream
   --background: #ffffff;
   --foreground: #171717;
+=======
+    --background: #ffffff;
+    --foreground: #171717;
+    color-scheme: light;
+>>>>>>> Stashed changes
 }
 
 @theme inline {
@@ -11,10 +17,18 @@
 }
 
 @media (prefers-color-scheme: dark) {
+<<<<<<< Updated upstream
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+=======
+    :root {
+        --background: #0a0a0a;
+        --foreground: #ededed;
+        color-scheme: dark;
+    }
+>>>>>>> Stashed changes
 }
 
 /* Hero Button Styles */
@@ -39,6 +53,12 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
   box-shadow: inset 0 0 200px rgba(0, 0, 0, 0.6);
+}
+
+@media (prefers-color-scheme: light) {
+    body {
+        box-shadow: inset 0 0 140px rgba(148, 163, 184, 0.18);
+    }
 }
 
 /* Header visibility transitions */
@@ -784,6 +804,7 @@ body {
 
 /* File size tooltip - 3D glassmorphism */
 .file-size-tooltip {
+<<<<<<< Updated upstream
   background: rgba(28, 28, 28, 0.95);
   border-radius: 0.5rem;
   -webkit-backdrop-filter: blur(40px) saturate(180%) brightness(1.2);
@@ -800,6 +821,363 @@ body {
     0 2px 8px rgba(0, 0, 0, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.2),
     inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+=======
+    background: rgba(28, 28, 28, 0.95);
+    border-radius: 0.5rem;
+    -webkit-backdrop-filter: blur(40px) saturate(180%) brightness(1.2);
+    backdrop-filter: blur(40px) saturate(180%) brightness(1.2);
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    padding: 0.375rem 0.75rem;
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.6),
+        0 2px 8px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Light mode overrides for resources glass UI */
+@media (prefers-color-scheme: light) {
+    body {
+        background:
+            radial-gradient(circle at top, rgba(94, 148, 50, 0.08), transparent 32%),
+            linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+        color: #0f172a;
+        box-shadow: inset 0 0 140px rgba(148, 163, 184, 0.18);
+    }
+
+    .navbar,
+    .logo-pill,
+    .login-pill,
+    .footer,
+    .login-expanded-content,
+    .modal-panel,
+    .auth-warning-container,
+    .input-3d,
+    .navbar-dropdown-menu {
+        background: rgba(255, 255, 255, 0.72);
+        border-color: rgba(203, 213, 225, 0.85);
+        box-shadow:
+            0 12px 32px rgba(15, 23, 42, 0.14),
+            0 2px 8px rgba(15, 23, 42, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.82),
+            inset 0 -1px 0 rgba(148, 163, 184, 0.1);
+    }
+
+    .navbar,
+    .logo-pill,
+    .login-pill,
+    .footer,
+    .login-expanded-content,
+    .modal-panel,
+    .auth-warning-container,
+    .navbar-dropdown-menu,
+    .glass-card,
+    .glass-card-3d {
+        backdrop-filter: blur(28px) saturate(170%) brightness(1.04);
+        -webkit-backdrop-filter: blur(28px) saturate(170%) brightness(1.04);
+    }
+
+    .navbar,
+    .logo-pill,
+    .login-pill,
+    .footer {
+        color: #0f172a;
+    }
+
+    .navbar::before,
+    .logo-pill::before,
+    .login-pill::before,
+    .footer::before,
+    .auth-warning-container::before,
+    .glass-card::before,
+    .glass-card-3d::before {
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.55) 0%,
+            rgba(241, 245, 249, 0.24) 50%,
+            rgba(148, 163, 184, 0.12) 100%
+        );
+    }
+
+    .navbar,
+    .logo-pill,
+    .login-pill,
+    .search-bar,
+    .category-filter,
+    .resource-button,
+    .glass-card,
+    .glass-card,
+    .glass-card-3d,
+    .course-card,
+    .auth-warning-container,
+    .navbar-dropdown-menu,
+    .glass-card,
+    .glass-card-3d {
+    }
+
+    .navbar {
+        color: #1e293b;
+        text-shadow: none;
+    }
+
+    .navbar-links a,
+    .navbar-item,
+    .navbar-dropdown-trigger,
+    .navbar-label,
+    .login-description,
+    .footer-text,
+    .footer-links,
+    .footer-links a,
+    .navbar-dropdown-item,
+    .input-3d,
+    .auth-warning-container,
+    .modal-panel,
+    .login-header,
+    .login-expanded-content {
+        color: #0f172a;
+        text-shadow: none;
+    }
+
+    .navbar-links a:hover,
+    .navbar-item:hover,
+    .navbar-dropdown-trigger:hover {
+        color: #4e8d1f;
+    }
+
+    .navbar-dropdown-item:hover,
+    .navbar-dropdown-trigger:hover,
+    .footer-links a:hover {
+        background: rgba(94, 148, 50, 0.08);
+    }
+
+    .resource-button {
+        color: #ffffff;
+    }
+
+    .resource-button-locked {
+        background: rgba(148, 163, 184, 0.16);
+        border-color: rgba(148, 163, 184, 0.28);
+        color: #475569;
+    }
+
+    .search-bar,
+    .category-filter,
+    .input-3d,
+    .navbar-dropdown-menu,
+    .navbar-dropdown-item,
+    .modal-panel,
+    .login-expanded-content {
+        color: #0f172a;
+    }
+
+    .input-3d::placeholder,
+    .search-bar input::placeholder {
+        color: #64748b;
+    }
+
+    .modal-backdrop {
+        background: rgba(226, 232, 240, 0.55);
+        backdrop-filter: blur(18px) saturate(120%);
+    }
+
+    .glass-card,
+    .glass-card-3d,
+    .course-card,
+    .auth-warning-container {
+        background: linear-gradient(
+            135deg,
+            rgba(78, 141, 31, 0.96) 0%,
+            rgba(94, 148, 50, 0.92) 100%
+        );
+        border: 1.5px solid rgba(255, 255, 255, 0.18);
+        box-shadow:
+            0 12px 34px rgba(78, 141, 31, 0.22),
+            0 3px 10px rgba(15, 23, 42, 0.08),
+            inset 0 1px rgba(255, 255, 255, 0.18),
+            inset 0 -1px rgba(15, 23, 42, 0.12);
+    }
+
+    .glass-card:hover,
+    .glass-card-3d:hover,
+    .course-card:hover,
+    .auth-warning-container:hover {
+        background: linear-gradient(
+            135deg,
+            rgba(68, 127, 27, 0.98) 0%,
+            rgba(78, 141, 31, 0.96) 100%
+        );
+        border-color: rgba(255, 255, 255, 0.22);
+        box-shadow:
+            0 16px 42px rgba(78, 141, 31, 0.28),
+            0 6px 16px rgba(15, 23, 42, 0.1),
+            inset 0 1px rgba(255, 255, 255, 0.2),
+            inset 0 -1px rgba(15, 23, 42, 0.12);
+    }
+
+    .glass-card h1,
+    .glass-card h2,
+    .glass-card h3,
+    .glass-card h4,
+    .glass-card h5,
+    .glass-card h6,
+    .glass-card p,
+    .glass-card span,
+    .glass-card label,
+    .glass-card small,
+    .glass-card-3d h1,
+    .glass-card-3d h2,
+    .glass-card-3d h3,
+    .glass-card-3d h4,
+    .glass-card-3d h5,
+    .glass-card-3d h6,
+    .glass-card-3d p,
+    .glass-card-3d span,
+    .glass-card-3d label,
+    .glass-card-3d small,
+    .course-card h1,
+    .course-card h2,
+    .course-card h3,
+    .course-card h4,
+    .course-card h5,
+    .course-card h6,
+    .course-card p,
+    .course-card span,
+    .course-card label,
+    .course-card small,
+    .auth-warning-container h1,
+    .auth-warning-container h2,
+    .auth-warning-container h3,
+    .auth-warning-container h4,
+    .auth-warning-container h5,
+    .auth-warning-container h6,
+    .auth-warning-container p,
+    .auth-warning-container span,
+    .auth-warning-container label,
+    .auth-warning-container small {
+        color: #ffffff;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+    }
+
+    .glass-card svg,
+    .glass-card-3d svg,
+    .course-card svg,
+    .auth-warning-container svg {
+        color: #ffffff;
+    }
+
+    .hero-button-secondary {
+        background: rgba(255, 255, 255, 0.72);
+        border-color: rgba(203, 213, 225, 0.9);
+        color: #0f172a;
+        box-shadow:
+            0 4px 16px rgba(15, 23, 42, 0.12),
+            0 1px 4px rgba(15, 23, 42, 0.08),
+            inset 0 1px rgba(255, 255, 255, 0.8);
+    }
+
+    .hero-button-secondary:hover {
+        background: rgba(255, 255, 255, 0.88);
+    }
+
+    .course-card::before {
+        background: linear-gradient(
+            140deg,
+            rgba(255, 255, 255, 0.12) 0%,
+            rgba(255, 255, 255, 0.05) 50%,
+            rgba(15, 23, 42, 0.08) 100%
+        );
+    }
+
+    .glass-card::before,
+    .glass-card-3d::before,
+    .auth-warning-container::before {
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.12) 0%,
+            rgba(255, 255, 255, 0.04) 50%,
+            rgba(15, 23, 42, 0.08) 100%
+        );
+    }
+
+    .file-size-tooltip {
+        background: rgba(255, 255, 255, 0.94);
+        border: 1px solid rgba(148, 163, 184, 0.55);
+        color: #0f172a;
+        box-shadow:
+            0 8px 24px rgba(15, 23, 42, 0.2),
+            0 2px 8px rgba(15, 23, 42, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.85),
+            inset 0 -1px 0 rgba(148, 163, 184, 0.18);
+    }
+
+    .glass-card-3d {
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.78) 0%,
+            rgba(248, 250, 252, 0.7) 100%
+        );
+        border: 1.5px solid rgba(255, 255, 255, 0.82);
+        box-shadow:
+            0 8px 32px rgba(15, 23, 42, 0.14),
+            inset 0 1px rgba(255, 255, 255, 0.85),
+            inset 0 -1px rgba(148, 163, 184, 0.1);
+    }
+
+    .glass-card-3d:hover {
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.88) 0%,
+            rgba(241, 245, 249, 0.8) 100%
+        );
+        border-color: rgba(203, 213, 225, 0.9);
+        box-shadow:
+            0 12px 48px rgba(15, 23, 42, 0.18),
+            0 4px 16px rgba(15, 23, 42, 0.12),
+            inset 0 1px rgba(255, 255, 255, 0.95),
+            inset 0 -1px rgba(148, 163, 184, 0.12);
+    }
+
+    .search-bar,
+    .category-filter {
+        background: rgba(255, 255, 255, 0.72);
+        border-color: rgba(203, 213, 225, 0.8);
+        box-shadow:
+            0 8px 24px rgba(15, 23, 42, 0.12),
+            0 2px 8px rgba(15, 23, 42, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    .search-bar:focus-within,
+    .category-filter:hover {
+        border-color: rgba(94, 148, 50, 0.45);
+        box-shadow:
+            0 10px 28px rgba(15, 23, 42, 0.14),
+            0 0 0 3px rgba(94, 148, 50, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.85);
+    }
+
+    .resource-button {
+        box-shadow:
+            0 4px 16px rgba(94, 148, 50, 0.18),
+            0 1px 4px rgba(15, 23, 42, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.22),
+            inset 0 -1px 0 rgba(15, 23, 42, 0.08);
+    }
+
+    .resource-button:hover:not(:disabled) {
+        box-shadow:
+            0 8px 24px rgba(94, 148, 50, 0.22),
+            0 2px 8px rgba(15, 23, 42, 0.12),
+            0 0 0 2px rgba(94, 148, 50, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.28),
+            inset 0 -1px 0 rgba(15, 23, 42, 0.08);
+    }
+>>>>>>> Stashed changes
 }
 
 /* Login container and expandable box */
@@ -1704,6 +2082,113 @@ body {
     inset 0 1px rgba(255, 255, 255, 0.15),
     inset 0 -1px rgba(0, 0, 0, 0.15);
   transform: translateY(-4px) scale(1.02);
+}
+
+@media (prefers-color-scheme: light) {
+    .glass-card,
+    .glass-card-3d,
+    .course-card,
+    .auth-warning-container,
+    .modal-panel,
+    .login-expanded-content {
+        background: linear-gradient(
+            135deg,
+            rgba(78, 141, 31, 0.98) 0%,
+            rgba(94, 148, 50, 0.94) 100%
+        ) !important;
+        border-color: rgba(255, 255, 255, 0.2) !important;
+        box-shadow:
+            0 14px 36px rgba(78, 141, 31, 0.24),
+            0 4px 14px rgba(15, 23, 42, 0.1),
+            inset 0 1px rgba(255, 255, 255, 0.2),
+            inset 0 -1px rgba(15, 23, 42, 0.12) !important;
+    }
+
+    .glass-card:hover,
+    .glass-card-3d:hover,
+    .course-card:hover,
+    .auth-warning-container:hover,
+    .modal-panel:hover {
+        background: linear-gradient(
+            135deg,
+            rgba(68, 127, 27, 0.98) 0%,
+            rgba(78, 141, 31, 0.98) 100%
+        ) !important;
+        border-color: rgba(255, 255, 255, 0.24) !important;
+    }
+
+    .glass-card h1,
+    .glass-card h2,
+    .glass-card h3,
+    .glass-card h4,
+    .glass-card h5,
+    .glass-card h6,
+    .glass-card p,
+    .glass-card span,
+    .glass-card label,
+    .glass-card small,
+    .glass-card-3d h1,
+    .glass-card-3d h2,
+    .glass-card-3d h3,
+    .glass-card-3d h4,
+    .glass-card-3d h5,
+    .glass-card-3d h6,
+    .glass-card-3d p,
+    .glass-card-3d span,
+    .glass-card-3d label,
+    .glass-card-3d small,
+    .course-card h1,
+    .course-card h2,
+    .course-card h3,
+    .course-card h4,
+    .course-card h5,
+    .course-card h6,
+    .course-card p,
+    .course-card span,
+    .course-card label,
+    .course-card small,
+    .auth-warning-container h1,
+    .auth-warning-container h2,
+    .auth-warning-container h3,
+    .auth-warning-container h4,
+    .auth-warning-container h5,
+    .auth-warning-container h6,
+    .auth-warning-container p,
+    .auth-warning-container span,
+    .auth-warning-container label,
+    .auth-warning-container small,
+    .modal-panel h1,
+    .modal-panel h2,
+    .modal-panel h3,
+    .modal-panel h4,
+    .modal-panel h5,
+    .modal-panel h6,
+    .modal-panel p,
+    .modal-panel span,
+    .modal-panel label,
+    .modal-panel small,
+    .login-expanded-content h1,
+    .login-expanded-content h2,
+    .login-expanded-content h3,
+    .login-expanded-content h4,
+    .login-expanded-content h5,
+    .login-expanded-content h6,
+    .login-expanded-content p,
+    .login-expanded-content span,
+    .login-expanded-content label,
+    .login-expanded-content small {
+        color: #ffffff !important;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35) !important;
+    }
+
+    .glass-card svg,
+    .glass-card-3d svg,
+    .course-card svg,
+    .auth-warning-container svg,
+    .modal-panel svg,
+    .login-expanded-content svg {
+        color: #ffffff !important;
+    }
 }
 
 /* Custom green color overrides for brand color #4e8d1f */
