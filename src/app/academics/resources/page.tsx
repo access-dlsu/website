@@ -30,6 +30,11 @@ interface DriveFile {
   modifiedTime?: string;
 }
 
+interface ResourcesApiResponse {
+  files?: DriveFile[];
+  error?: string;
+}
+
 interface GroupedFile extends DriveFile {
   category: string;
   restricted: boolean;
@@ -46,6 +51,7 @@ export default function ResourcesPage() {
   const [files, setFiles] = useState<DriveFile[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadingProgress, setLoadingProgress] = useState(0);
+  const [resourcesError, setResourcesError] = useState<string | null>(null);
   const { notification, showNotification, hideNotification } = useNotification();
   const [showAuthWarning, setShowAuthWarning] = useState(true);
   const [isAuthWarningFading, setIsAuthWarningFading] = useState(false);
@@ -80,15 +86,27 @@ export default function ResourcesPage() {
     (async () => {
       try {
         const res = await fetch('/api/resources');
-        const data = await res.json();
+        const data: ResourcesApiResponse = await res.json();
+
+        if (!res.ok) {
+          const message = data.error || 'Failed to fetch resources';
+          setResourcesError(message);
+          setFiles(data.files || []);
+          showNotification(message, 'error');
+          return;
+        }
+
+        setResourcesError(null);
         setFiles(data.files || []);
       } catch {
+        setResourcesError('Failed to fetch resources');
         setFiles([]);
+        showNotification('Failed to fetch resources', 'error');
       } finally {
         setLoading(false);
       }
     })();
-  }, []);
+  }, [showNotification]);
 
   // Animate loading progress
   useEffect(() => {
@@ -394,7 +412,13 @@ export default function ResourcesPage() {
         )}
 
         {!loading && filteredFiles.length === 0 && (
-          <EmptyState message="No resources found. Try adjusting your search or filters." />
+          <EmptyState
+            message={
+              resourcesError
+                ? `Unable to load resources: ${resourcesError}`
+                : 'No resources found. Try adjusting your search or filters.'
+            }
+          />
         )}
 
         <a ref={downloadRef} style={{ display: 'none' }} />
