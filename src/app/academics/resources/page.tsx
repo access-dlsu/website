@@ -310,6 +310,8 @@ export default function ResourcesPage() {
 
   const filteredFiles = getFilteredFiles();
   const groupedByCourse = groupByCourse(filteredFiles);
+  const nonReviewerFiles = filteredFiles.filter((file) => file.category !== 'notes');
+  const groupedNonReviewerFiles = groupByCourse(nonReviewerFiles);
   const reviewerFilesThisYear = filteredFiles.filter(
     (file) => file.category === 'notes' && isCurrentAcademicYear(file.name),
   );
@@ -328,11 +330,11 @@ export default function ResourcesPage() {
             <div key={courseCode} className="course-card p-6 h-fit">
               {/* Course Header */}
               <div className="mb-6">
-                <h2 className="text-2xl font-bold text-white mb-1" style={{ fontFamily: 'var(--font-poppins)' }}>
+                <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-1" style={{ fontFamily: 'var(--font-poppins)' }}>
                   {courseCode}
                 </h2>
                 {courseData.academicYearTerm && (
-                  <p className="text-sm text-gray-400" style={{ fontFamily: 'var(--font-manrope)' }}>
+                  <p className="text-sm text-zinc-700 dark:text-zinc-400" style={{ fontFamily: 'var(--font-manrope)' }}>
                     {courseData.academicYearTerm}
                   </p>
                 )}
@@ -350,7 +352,7 @@ export default function ResourcesPage() {
                 return Array.from(byType.entries()).map(([fileType, typeFiles]) => (
                   <div key={fileType} className="mb-6 last:mb-0">
                     {/* File Type Label */}
-                    <h3 className="text-sm font-semibold text-gray-400 mb-3 uppercase tracking-wide" style={{ fontFamily: 'var(--font-manrope)' }}>
+                    <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-400 mb-3 uppercase tracking-wide" style={{ fontFamily: 'var(--font-manrope)' }}>
                       {fileType === 'quiz' ? 'Quizzes' : 
                         fileType === 'exam' ? 'Exams' : 
                         fileType === 'notes' ? 'Notes' :
@@ -449,14 +451,14 @@ export default function ResourcesPage() {
 
         {/* Resources Grid - Grouped by Course */}
         {!loading && (
-          selectedCategory === 'notes' ? (
+          selectedCategory === 'notes' || selectedCategory === 'all' ? (
             <div className="space-y-10">
               <section>
                 <div className="mb-4">
-                  <h2 className="text-xl font-bold text-white" style={{ fontFamily: 'var(--font-poppins)' }}>
+                  <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100" style={{ fontFamily: 'var(--font-poppins)' }}>
                     This Academic Year
                   </h2>
-                  <p className="text-sm text-gray-400" style={{ fontFamily: 'var(--font-manrope)' }}>
+                  <p className="text-sm text-zinc-700 dark:text-zinc-400" style={{ fontFamily: 'var(--font-manrope)' }}>
                     Reviewer files tagged with A.Y. 25-26.
                   </p>
                 </div>
@@ -469,10 +471,10 @@ export default function ResourcesPage() {
 
               <section>
                 <div className="mb-4">
-                  <h2 className="text-xl font-bold text-white" style={{ fontFamily: 'var(--font-poppins)' }}>
+                  <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100" style={{ fontFamily: 'var(--font-poppins)' }}>
                     Previous Academic Years
                   </h2>
-                  <p className="text-sm text-gray-400" style={{ fontFamily: 'var(--font-manrope)' }}>
+                  <p className="text-sm text-zinc-700 dark:text-zinc-400" style={{ fontFamily: 'var(--font-manrope)' }}>
                     Reviewer files tagged with A.Y. 24-25.
                   </p>
                 </div>
@@ -482,6 +484,20 @@ export default function ResourcesPage() {
                   <EmptyState message="No reviewer files found for previous academic years." />
                 )}
               </section>
+
+              {selectedCategory === 'all' && groupedNonReviewerFiles.size > 0 && (
+                <section>
+                  <div className="mb-4">
+                    <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100" style={{ fontFamily: 'var(--font-poppins)' }}>
+                      Other Resources
+                    </h2>
+                    <p className="text-sm text-zinc-700 dark:text-zinc-400" style={{ fontFamily: 'var(--font-manrope)' }}>
+                      Textbooks, videos, code examples, and other materials.
+                    </p>
+                  </div>
+                  {renderCourseGrid(groupedNonReviewerFiles)}
+                </section>
+              )}
             </div>
           ) : (
             renderCourseGrid(groupedByCourse)
