@@ -173,7 +173,7 @@ export default function ResourcesPage() {
     return `${match[2]}-${match[3]}`;
   }
 
-  function formatAcademicYearTag(tag: string | null): string | null {
+  function formatAcademicYearTag(tag: string | null | undefined): string | null {
     if (!tag) return null;
     const match = tag.match(/^(\d{2})-(\d{2})$/);
     if (!match) return tag;
