@@ -24,7 +24,6 @@ export default async function LinkShortenerPage() {
 
   return (
     <main className="pt-32 pb-20 px-6 max-w-7xl mx-auto">
-<<<<<<< HEAD
       <section className="course-card relative overflow-hidden p-10 md:p-14 mb-8">
         <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 via-transparent to-emerald-500/10 pointer-events-none" />
         <div className="relative text-center space-y-6">
@@ -41,18 +40,6 @@ export default async function LinkShortenerPage() {
       </section>
 
         <LinkShortenerClient />
-=======
-      <div className="text-center space-y-6">
-        <h1 className="text-5xl font-bold text-white" style={{ fontFamily: 'var(--font-poppins)' }}>
-          Link Shortener
-        </h1>
-        <p className="text-xl text-gray-300 max-w-3xl mx-auto" style={{ fontFamily: 'var(--font-manrope)' }}>
-          Create and manage shortened links for ACCESS resources and events.
-        </p>
-
-        <LinkShortenerClient />
-      </div>
->>>>>>> origin/test
     </main>
   );
 }
