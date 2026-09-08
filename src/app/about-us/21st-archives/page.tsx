@@ -69,11 +69,11 @@ const COMMITTEES = [
   },
   {
     role: 'Finance',
-    names: ['Johanna Alquitran', 'Alessandre Balmes', 'Evangeline Espiritu', 'Katrina Li Gao', 'Margaret Ramos', 'Ramon Recalde'],
+    names: ['Hazell Melody Chua', 'Johanna Alquitran', 'Alessandre Balmes', 'Evangeline Espiritu', 'Katrina Li Gao', 'Margaret Ramos', 'Ramon Recalde'],
   },
   {
     role: 'Logistics',
-    names: ['Hanns Angsanto', 'Emmanuel Edreisa', 'Rilen Gawat', 'Jared Lofamia', 'Jaekel Pangan', 'Jules Reyes', 'Rogelio Sebua Jr.'],
+    names: ['Pamela Calma', 'Jian Gabriel Toledo', 'Hanns Angsanto', 'Emmanuel Edreisa', 'Rilen Gawat', 'Jared Lofamia', 'Jaekel Pangan', 'Jules Reyes', 'Rogelio Sebua Jr.'],
   },
   {
     role: 'Documentations',
@@ -81,7 +81,7 @@ const COMMITTEES = [
   },
   {
     role: 'Alliances',
-    names: ['Marc Lim', 'Aldrich Lotas', 'John Roa', 'Wayne Tolentino', 'Zamanttha Sahidulla'],
+    names: ['Gill Whenzel Quijano', 'Marc Lim', 'Aldrich Lotas', 'John Roa', 'Wayne Tolentino', 'Zamanttha Sahidulla'],
   },
   {
     role: 'Affiliations',
@@ -89,15 +89,15 @@ const COMMITTEES = [
   },
   {
     role: 'Events',
-    names: ['Joshua Balingit', 'Caeljan Cristobal', 'Raizen Jocson', 'Janine Nobleza', 'John Politan'],
+    names: ['Estacio	Harold Braeden', 'Joshua Balingit', 'Caeljan Cristobal', 'Raizen Jocson', 'Janine Nobleza', 'John Politan'],
   },
   {
     role: 'Academics',
-    names: ['Win Sy', 'Faisal Tamano', 'Miguel Abad', 'Nathanael Bajamunde', 'Ryan So', 'Aaron Tristan', 'Ian Vahlois'],
+    names: ['Win Sy', 'Faisal Tamano', 'Zander Ivo Holoyohoy', 'Miguel Abad', 'Nathanael Bajamunde', 'Ryan So', 'Aaron Tristan', 'Ian Vahlois'],
   },
   {
     role: 'Human Resources',
-    names: ['Sidney Tan', 'Kristoff Cabangon', 'Jerome Cruz', 'Aaron Dionisio', 'Wendell Go', 'Evan Punzalan'],
+    names: ['Sidney Chelsea Tan', 'Ron Elmo Kristofer Cabangon', 'Jerome Cruz', 'Aaron Dionisio', 'Wendell Go', 'Evan Punzalan'],
   },
 ];
 
