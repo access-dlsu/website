@@ -141,7 +141,7 @@ export default function Archives21stPage() {
                 <Text variant="h3" className="mb-2">Seminars</Text>
                 <Text variant="body-relaxed" className="text-gray-400 mb-4">
                   Empowering our members with industry-leading knowledge through various
-                  technical and professional seminars.
+                  technical seminars.
                 </Text>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
                   <Slide src="/21st-archives/seminars/dungeons-and-datasets.jpg" label="Dungeons & Datasets: The Intelligence Behind the Machine" />
@@ -218,7 +218,7 @@ export default function Archives21stPage() {
                 <div className="absolute w-4 h-4 rounded-full bg-green-500 -left-[9px] top-1 shadow-[0_0_10px_rgba(34,197,94,0.5)]"></div>
                 <Text variant="h3" className="mb-2">Partnerships Established</Text>
                 <Text variant="body-relaxed" className="text-gray-400 mb-4">
-                  Forging strong ties with industry leaders, tech companies, and other student
+                  Forging strong ties with industry leaders, tech communities, and other student
                   organizations to create more opportunities.
                 </Text>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
