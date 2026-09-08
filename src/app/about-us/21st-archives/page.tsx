@@ -93,11 +93,11 @@ const COMMITTEES = [
   },
   {
     role: 'Academics',
-    names: ['Miguel Abad', 'Nathanael Bajamunde', 'Ryan So', 'Aaron Tristan', 'Ian Vahlois'],
+    names: ['Win Sy', 'Faisal Tamano', 'Miguel Abad', 'Nathanael Bajamunde', 'Ryan So', 'Aaron Tristan', 'Ian Vahlois'],
   },
   {
     role: 'Human Resources',
-    names: ['Jerome Cruz', 'Aaron Dionisio', 'Wendell Go', 'Evan Punzalan'],
+    names: ['Sidney Tan', 'Kristoff Cabangon', 'Jerome Cruz', 'Aaron Dionisio', 'Wendell Go', 'Evan Punzalan'],
   },
 ];
 
