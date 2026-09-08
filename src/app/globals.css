@@ -138,9 +138,13 @@ body {
     overflow: hidden;
 }
 
-/* Unified Navbar container styles */
-.navbar {
-    --tfc-dark-mode-text-primary: #e4e4e7;
+    /* Unified Navbar container styles */
+    .navbar {
+        /* Floor at the compressed pill width so expanding starts from the
+           compressed size instead of collapsing to zero first (the trigger
+           is position:absolute and does not size the pill). */
+        min-width: 180px;
+        --tfc-dark-mode-text-primary: #e4e4e7;
     --tfc-dark-mode-text-secondary: #71717a;
     --tfc-dark-mode-bg-primary: #27272a;
     --tfc-dark-mode-bg-primary-2: #3f3f46;
@@ -162,9 +166,9 @@ body {
     z-index: 10;
     background: rgba(28, 28, 28, 0.35); /* More transparent like dropdown */
     border-radius: 50px;
-    overflow: visible; /* Changed from hidden to allow dropdowns */
-    transition:
-        width 0.4s ease-in-out;
+    /* dropdown menus render outside the navbar; children clip themselves,
+       and vertical visibility keeps the glass drop-shadows uncut */
+    overflow: visible;
     opacity: 1;
     pointer-events: all;
     -webkit-backdrop-filter: blur(60px) saturate(200%) brightness(1.1); /* Match dropdown blur */
@@ -186,9 +190,8 @@ body {
         inset 0 -1px 0 rgba(0, 0, 0, 0.2);
 }
 
-.navbar.navbar-compressed {
-    min-width: 180px; /* Ensure space for "Navigation Bar" label */
-}
+/* min-width floor lives on the base .navbar (see above) so the pill never
+   collapses to zero between states. */
 
 /* Add a subtle inner backdrop for extra 3D effect */
 .navbar::before {
@@ -217,8 +220,11 @@ body {
     /* transform: translateX(-50%) translateY(-200px) !important; -> Removed */
 }
 
-/* Navbar content container */
+/* Navbar content container - relative anchor for the absolutely centered
+   compressed trigger, so it fades in place instead of being pushed around
+   by the expanding links. */
 .navbar-content {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -231,29 +237,39 @@ body {
    Note: keep the trigger present in layout (no display:none) so it can animate smoothly.
    We use opacity/max-width/visibility/pointer-events to transition between states. */
 .navbar-trigger {
+    /* Absolutely centered: does not participate in the links' flex layout,
+       so expanding links can't push it sideways - it fades/clips in place. */
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
     padding: 0 1rem;
-    flex-shrink: 0;
+    /* Match navbar item height so text descenders (g, y) are not
+       clipped by overflow: hidden while the box animates */
+    height: 48px;
 
-    /* Start visually hidden but animatable - avoid display:none */
+    /* Start visually hidden but animatable - avoid display:none.
+       Content clips in place (x-clipped + centered) so the trigger never
+       slides or scales while collapsing; y stays visible for shadows. */
+    overflow: hidden;
+    overflow-x: clip;
+    overflow-y: visible;
     opacity: 0;
     max-width: 0;
     padding-left: 0;
     padding-right: 0;
-    transform: translateY(0) scale(0.98);
     visibility: hidden;
     pointer-events: none;
 
-    /* Smooth, slightly staggered transitions */
     transition:
-        opacity 0.28s ease-in-out,
-        max-width 0.36s ease-in-out,
-        padding 0.28s ease-in-out,
-        transform 0.28s ease-in-out,
-        visibility 0s linear 0.36s;
+        /* Expanding (trigger disappearing): fade out fast, no delay */
+        opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+        max-width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+        padding 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
     background: none;
     border: none;
@@ -266,30 +282,41 @@ body {
 .navbar-links {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.25rem; /* Reduced from 0.75rem for tighter spacing */
     padding: 0 4px; /* Reduced from 10px for tighter edge spacing */
 
-    /* Default full state */
+    /* Default full state. x clips the collapse animation; y stays visible
+       so item shadows aren't cut (clip+visible is a valid pair; hidden
+       would force y to auto and clip the glass shadows too).
+       Centered so clipping is symmetric: items expand/collapse from the
+       middle. Expanding: opacity slightly delayed so the fading-out
+       trigger hands over without an empty-looking pill. */
     opacity: 1;
     max-width: 1000px;
     overflow: hidden;
+    overflow-x: clip;
+    overflow-y: visible;
     transition:
-        opacity 0.28s ease-in-out,
-        max-width 0.36s cubic-bezier(0.4, 0, 0.2, 1);
+        opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1) 0.12s,
+        max-width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* When navbar is compressed (scrolled away from top) */
 /* Compressed state: reveal the trigger via animated properties, and collapse links */
 .navbar-compressed .navbar-trigger {
-    /* Reveal trigger smoothly */
+    /* Reveal trigger smoothly.
+       Compressing (trigger appearing): delay until the links have cleared,
+       so the pill never looks empty mid-transition. */
     opacity: 1;
     max-width: 220px;
     padding: 0 1rem;
-    transform: translateY(0) scale(1);
     visibility: visible;
     pointer-events: all;
-    /* Make visibility change immediate when becoming visible */
-    transition-delay: 0s;
+    transition:
+        opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1) 0.12s,
+        max-width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+        padding 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .navbar-compressed .navbar-links {
@@ -299,59 +326,33 @@ body {
     flex: 0 0 0 !important;
     padding: 0 !important;
     margin: 0 !important;
-    transform: scale(0.95);
     pointer-events: none; /* Disable interactions when compressed */
     visibility: hidden;
     transition:
-        opacity 0.28s ease-in-out,
-        max-width 0.36s ease-in-out,
-        transform 0.36s cubic-bezier(0.4, 0, 0.2, 1);
-    transition-delay: 0s;
+        /* Compressing (links disappearing): fade out fast, no delay */
+        opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+        max-width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.navbar-compressed .navbar-links > * {
-    opacity: 1;
-    transform: none;
-    transition: none;
-}
-
-/* Utility to suppress the compress transition when the navbar is being
-   revealed from a hidden state. This prevents the compressed->expanded
-   animation from playing and instead makes the compressed layout appear
-   instantly (useful when scrolling up to reveal the navbar). */
+/* Utility to suppress ALL nav transitions while the navbar is revealed
+   from a hidden state: the compressed pill (icon + label) must appear
+   fully-formed with no expanding animation. Suppression persists until
+   the navbar expands (the header removes the class then) — states still
+   come from the normal compressed/expanded rules, only transitions are
+   disabled. */
 .navbar-no-compress-transition .navbar-links,
 .navbar-no-compress-transition .navbar-links > *,
 .navbar-no-compress-transition .navbar-trigger,
 .navbar-no-compress-transition .navbar-label {
-    /* Remove transitions so the compressed state appears instantly */
     transition: none !important;
-    transition-delay: 0s !important;
-
-    /* Ensure the visual state is immediately applied */
-    opacity: 1 !important;
-    max-width: none !important;
-    padding: initial !important;
-    visibility: visible !important;
-    pointer-events: all !important;
-}
-
-/* Instantly hide trigger and label when expanding */
-.navbar-no-compress-transition .navbar-trigger,
-.navbar-no-compress-transition .navbar-label {
-    transition: none !important;
-    opacity: 0 !important;
-    max-width: 0 !important;
-    padding: 0 !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
 }
 
 .navbar-label {
     opacity: 1;
     max-width: 200px;
     transition:
-        opacity 0.3s ease-in-out,
-        max-width 0.3s ease-in-out;
+        opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+        max-width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Navbar link styles */
@@ -626,9 +627,9 @@ body {
 .navbar-dropdown {
     transition:
         opacity 0s ease-in-out,
-        max-width 0.3s ease-in-out,
-        padding 0.3s ease-in-out,
-        margin 0.3s ease-in-out;
+        max-width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+        padding 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+        margin 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .navbar-item-hidden {
@@ -638,12 +639,6 @@ body {
     margin: 0 !important;
     overflow: hidden !important;
     pointer-events: none !important;
-}
-
-/* Focus mode - navbar adjusts width */
-.navbar.navbar-focus-mode {
-    width: auto;
-    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Remove gap between navbar links when dropdown is active (focus mode) */

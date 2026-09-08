@@ -176,11 +176,10 @@ const HeaderContent = ({
   const [isOfficer, setIsOfficer] = useState(false);
   const [officerChecked, setOfficerChecked] = useState(false);
 
-  // When true, temporarily suppress the compress transition so revealing the navbar
-  // from the hidden state displays instantly in the compressed layout without the
-  // compress animation.
-  const [suppressCompressTransition, setSuppressCompressTransition] =
-    useState(false);
+  // When true, suppress all nav transitions so the compressed pill appears
+  // fully-formed when revealed from a hidden state (no expanding animation).
+  // Persists until the navbar expands (trigger click or scroll to top).
+  const [revealInstant, setRevealInstant] = useState(false);
 
   // Memoize boolean to keep dependency array stable
   const hasActiveDropdown = useMemo(
@@ -201,6 +200,7 @@ const HeaderContent = ({
       if (currentScrollY < 10) {
         setIsVisible(true);
         setIsCompressed(false);
+        setRevealInstant(false);
       }
       // Hide header when scrolling down
       else if (currentScrollY > lastScrollY && currentScrollY > 100) {
@@ -213,26 +213,21 @@ const HeaderContent = ({
       }
       // Show compressed navbar when scrolling up (not at top)
       else if (currentScrollY < lastScrollY && currentScrollY > 100) {
-        // If we're revealing from a hidden state, temporarily suppress the compress transition
-        // so the navbar appears immediately in compressed form without the compress animation.
+        // Only compress when revealing from a hidden state; an already
+        // visible navbar keeps its current size (expanded stays expanded)
+        // so it doesn't compress-then-re-expand on the way to the top.
         if (!isVisible) {
-          setIsVisible(true);
-          setIsCompressed(true);
-          setSuppressCompressTransition(true);
-          // Restore transitions shortly after showing
-          window.setTimeout(() => {
-            setSuppressCompressTransition(false);
-          }, 80);
-        } else {
-          setIsVisible(true);
+          setRevealInstant(true);
           setIsCompressed(true);
         }
+        setIsVisible(true);
         // Don't reset isExpanded - keep it if already expanded
       }
       // Show full header when scrolling up near top
       else if (currentScrollY < lastScrollY && currentScrollY <= 100) {
         setIsVisible(true);
         setIsCompressed(false);
+        setRevealInstant(false);
       }
 
       setLastScrollY(currentScrollY);
@@ -291,7 +286,8 @@ const HeaderContent = ({
 
   const handleCompressedClick = () => {
     // Toggle compressed state when user clicks the menu trigger
-    setIsCompressed((prev) => !prev);
+    if (isCompressed) setRevealInstant(false);
+    setIsCompressed(!isCompressed);
   };
 
   const toggleDropdown = (dropdownName: string) => {
@@ -362,7 +358,7 @@ const HeaderContent = ({
 
         {/* Unified Navbar - switches between full and compressed states */}
         <div
-          className={`navbar ${isCompressed ? "navbar-compressed" : ""} ${isFocusMode ? "navbar-focus-mode" : ""} ${suppressCompressTransition ? "navbar-no-compress-transition" : ""}`}
+          className={`navbar ${isCompressed ? "navbar-compressed" : ""} ${isFocusMode ? "navbar-focus-mode" : ""} ${revealInstant ? "navbar-no-compress-transition" : ""}`}
         >
           <div className="navbar-content">
             {/* Compressed trigger - only visible when compressed and not expanded */}

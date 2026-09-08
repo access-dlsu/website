@@ -6,6 +6,15 @@ Keep this updated at the end of every work session. It exists so a future sessio
 
 ## Last updated: 2026-09-08
 
+### Completed this session (2026-09-08, part 2 — nav animation fixes)
+
+Desktop nav animation rework (`globals.css` + `header.tsx`), root causes found and fixed:
+- Reveal-from-hidden glitch: the old `.navbar-no-compress-transition` block had two conflicting `!important` rules — the later one forced the trigger invisible during suppression, so after the 80 ms timer expired the trigger played its full expand (the "comes from somewhere" animation). Replaced with a single transition-only suppression block; suppression is now the `revealInstant` state that persists until the navbar expands (trigger click or scroll-to-top clears it) — no more timer.
+- Symmetric expand/collapse: `.navbar-links` + `.navbar-trigger` now `justify-content: center` + `overflow: hidden` (navbar itself too — dropdowns render outside), removed `transform: scale` from trigger states → items clip in place, expand from the middle instead of sliding from a side.
+- Delay: unified every nav transition to 0.25s (was a 0.4s/0.36s/0.3s stack plus a `visibility 0s linear 0.36s` delayed flip); removed dead `width` transitions (navbar width is content-driven `auto`).
+- Verified in a real browser at 1440px: reveal = compressed pill instantly (trigger opacity 1, links 0px/opacity 0, pill 180px); trigger click expands and clears suppression (links 1000px/opacity 1). Note: `globals.css` has a second nav block inside `@media (max-width: 1200px)` with `!important` overrides (tablet layout keeps links visible when compressed) — desktop fixes don't touch that range.
+- Follow-up clipping fixes: compressed trigger got `height: 48px` (matches nav items) so text descenders aren't cut by its overflow clip; `.navbar-links`/`.navbar-trigger` use `overflow-x: clip; overflow-y: visible` (with `overflow: hidden` fallback first) so the glass drop-shadows below nav buttons paint freely while the horizontal collapse still clips. `.navbar` back to `overflow: visible` — children self-clip. Local dev D1 initialized (migrations applied via `wrangler d1 execute --local`), officer check works on localhost:3000.
+
 ### Repo state snapshot
 
 - Site: ACCESS DLSU official website — **Next.js 16.3.4**, React 19.2.8, Tailwind v4.3.3, **TypeScript 6.0.3** (7.0.2 pre-verified working; blocked only by typescript-eslint until it supports ≥7.1 — flip documented in the upgrade plan), Cloudflare Workers + D1, NextAuth v5 beta.32 (Google OAuth, @dlsu.edu.ph only).
