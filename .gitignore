@@ -28,6 +28,10 @@ Thumbs.db
 ._*
 *.pem
 
+# local code intelligence / analysis caches
+.codegraph/
+.fallow/
+
 # debug
 npm-debug.log*
 yarn-debug.log*
