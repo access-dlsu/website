@@ -274,8 +274,8 @@ const HeaderContent = ({
       if (session?.user?.email) {
         try {
           const response = await fetch("/api/officers/check");
-          const data = await response.json();
-          setIsOfficer(data.isOfficer);
+          const data = (await response.json()) as { isOfficer?: boolean };
+          setIsOfficer(data.isOfficer ?? false);
         } catch (error) {
           console.error("Error checking officer status:", error);
           setIsOfficer(false);

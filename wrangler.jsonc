@@ -39,5 +39,15 @@
 			"database_name": "access_dlsu_db",
 			"database_id": "8edf3d43-ed8b-45a4-9a7a-b7d1538769e3"
 		}
+	],
+	"r2_buckets": [
+		{
+			"binding": "NEXT_INC_CACHE_R2_BUCKET",
+			"bucket_name": "access-website-inc-cache"
+		},
+		{
+			"bucket_name": "access-website-inc-cache",
+			"binding": "access_website_inc_cache"
+		}
 	]
 }
