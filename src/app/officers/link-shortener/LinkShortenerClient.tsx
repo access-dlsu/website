@@ -84,42 +84,42 @@ export default function LinkShortenerClient() {
           <div className="modal-backdrop" onClick={() => setIsModalOpen(false)} aria-hidden />
           <div className="modal-panel glass-card-3d">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium text-white">New Short Link</h3>
-              <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-white" aria-label="Close">×</button>
+              <h3 className="text-lg font-medium text-zinc-950 dark:text-white">New Short Link</h3>
+              <button onClick={() => setIsModalOpen(false)} className="text-zinc-500 hover:text-zinc-950 dark:text-gray-400 dark:hover:text-white" aria-label="Close">×</button>
             </div>
             <form onSubmit={async (e) => { await handleCreate(e); setIsModalOpen(false); }} className="space-y-4">
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium text-gray-300 text-left">Destination URL</label>
+                <label className="text-sm font-medium text-zinc-700 dark:text-gray-300 text-left">Destination URL</label>
                 <input
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
                   type="url"
                   placeholder="https://example.com/very-long-url"
-                  className="input-3d w-full placeholder-gray-400"
+                  className="input-3d w-full placeholder:text-zinc-400 dark:placeholder:text-gray-400"
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium text-gray-300 text-left">Short Link</label>
+                <label className="text-sm font-medium text-zinc-700 dark:text-gray-300 text-left">Short Link</label>
                 <input
                   value={alias}
                   onChange={(e) => setAlias(e.target.value)}
                   type="text"
                   placeholder="my-link"
-                  className="input-3d w-full placeholder-gray-400"
+                  className="input-3d w-full placeholder:text-zinc-400 dark:placeholder:text-gray-400"
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium text-gray-300 text-left">Expires at (optional)</label>
+                <label className="text-sm font-medium text-zinc-700 dark:text-gray-300 text-left">Expires at (optional)</label>
                 <input
                   value={expiresAt ?? ''}
                   onChange={(e) => setExpiresAt(e.target.value || null)}
                   type="datetime-local"
-                  className="input-3d w-full placeholder-gray-400"
+                  className="input-3d w-full placeholder:text-zinc-400 dark:placeholder:text-gray-400"
                 />
               </div>
               <div className="modal-actions justify-end">
                 {error && <p className="text-red-400 text-sm mr-4">{error}</p>}
-                <button type="button" onClick={() => setIsModalOpen(false)} className="px-3 py-1.5 text-sm text-gray-300 bg-transparent rounded-md hover:bg-white/5">Cancel</button>
+                <button type="button" onClick={() => setIsModalOpen(false)} className="px-3 py-1.5 text-sm text-zinc-700 dark:text-gray-300 bg-transparent rounded-md hover:bg-zinc-950/5 dark:hover:bg-white/5">Cancel</button>
                 <button disabled={loading} className="resource-button px-4 py-2 text-white font-medium flex items-center gap-2 text-sm">
                   <Rocket className="w-4 h-4" aria-hidden />
                   {loading ? 'Confirming…' : 'Confirm'}
@@ -133,30 +133,30 @@ export default function LinkShortenerClient() {
       <div className="course-card p-12 rounded-2xl mt-6">
         <div className="text-left space-y-6">
           <div>
-            <h2 className="text-2xl font-semibold text-white mb-4">Create Short Link</h2>
+            <h2 className="text-2xl font-semibold text-zinc-950 dark:text-white mb-4">Create Short Link</h2>
           </div>
 
           </div>
 
-        <div className="border-t border-gray-600 pt-6">
-          <h2 className="text-2xl font-semibold text-white mb-4">Recent Links</h2>
+        <div className="border-t border-zinc-200 dark:border-gray-600 pt-6">
+          <h2 className="text-2xl font-semibold text-zinc-950 dark:text-white mb-4">Recent Links</h2>
           <div className="space-y-3">
-            {links.length === 0 && <p className="text-gray-400">No links yet.</p>}
+            {links.length === 0 && <p className="text-zinc-600 dark:text-gray-400">No links yet.</p>}
             {links.map((l) => (
               <div key={l.id} className="course-card p-4 rounded-lg">
                 <div className="flex justify-between items-center">
                   <div>
-                    <p className="text-white font-medium">{typeof window !== 'undefined' ? `${window.location.host}/${l.slug}` : l.slug}</p>
-                    <p className="text-gray-400 text-sm">→ {l.target_url}</p>
-                    {l.expires_at && <p className="text-xs text-yellow-300">Expires: {new Date(l.expires_at).toLocaleString()}</p>}
+                    <p className="text-zinc-950 dark:text-white font-medium">{typeof window !== 'undefined' ? `${window.location.host}/${l.slug}` : l.slug}</p>
+                    <p className="text-zinc-600 dark:text-gray-400 text-sm">→ {l.target_url}</p>
+                    {l.expires_at && <p className="text-xs text-amber-700 dark:text-yellow-300">Expires: {new Date(l.expires_at).toLocaleString()}</p>}
                   </div>
                   <div className="text-right">
-                    <p className="text-gray-400 text-sm">Clicks: {l.clicks}</p>
+                    <p className="text-zinc-600 dark:text-gray-400 text-sm">Clicks: {l.clicks}</p>
                     <button onClick={async () => {
                       if (!confirm('Delete this link?')) return;
                       await fetch('/api/link-shortener', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: l.id }) });
                       fetchLinks();
-                    }} className="text-red-400 hover:text-red-300 text-sm">Delete</button>
+                    }} className="text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 text-sm">Delete</button>
                   </div>
                 </div>
               </div>

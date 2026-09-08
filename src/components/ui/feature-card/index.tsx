@@ -22,13 +22,13 @@ export function FeatureCard({
         {title}
       </h3>
       <p
-        className="text-gray-300 mb-4"
+        className="text-white/90 mb-4"
         style={{ fontFamily: "var(--font-manrope)" }}
       >
         {description}
       </p>
       <span
-        className="text-green-400 flex items-center gap-2 font-semibold"
+        className="text-white flex items-center gap-2 font-semibold"
         style={{ fontFamily: "var(--font-manrope)" }}
       >
         {linkText} <ArrowRight className="w-4 h-4" />

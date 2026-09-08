@@ -4,15 +4,15 @@ import { ElementType } from "react";
 import { TextProps, TextVariant } from "./types";
 
 const variantStyles: Record<TextVariant, string> = {
-  h1: "text-5xl font-bold text-white",
-  h2: "text-3xl font-bold text-white",
-  h3: "text-xl font-semibold text-white",
-  h4: "text-lg font-semibold text-white",
-  body: "text-gray-300",
-  "body-relaxed": "text-gray-300 leading-relaxed",
-  description: "text-gray-300 text-xl",
-  caption: "text-sm font-semibold text-gray-400 uppercase tracking-wide",
-  label: "text-sm text-gray-400",
+  h1: "text-5xl font-bold text-zinc-950 dark:text-white",
+  h2: "text-3xl font-bold text-zinc-950 dark:text-white",
+  h3: "text-xl font-semibold text-zinc-950 dark:text-white",
+  h4: "text-lg font-semibold text-zinc-950 dark:text-white",
+  body: "text-zinc-600 dark:text-gray-300",
+  "body-relaxed": "text-zinc-600 dark:text-gray-300 leading-relaxed",
+  description: "text-zinc-600 dark:text-gray-300 text-xl",
+  caption: "text-sm font-semibold text-zinc-500 dark:text-gray-400 uppercase tracking-wide",
+  label: "text-sm text-zinc-500 dark:text-gray-400",
 };
 
 const variantFonts: Record<TextVariant, string> = {

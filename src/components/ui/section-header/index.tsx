@@ -5,7 +5,7 @@ import { SectionHeaderProps } from "./types";
 export function SectionHeader({ title, className = "" }: SectionHeaderProps) {
   return (
     <h2
-      className={`text-4xl md:text-5xl font-bold text-white text-center mb-16 ${className}`}
+      className={`text-4xl md:text-5xl font-bold text-zinc-950 dark:text-white text-center mb-16 ${className}`}
       style={{ fontFamily: "var(--font-poppins)" }}
     >
       {title}

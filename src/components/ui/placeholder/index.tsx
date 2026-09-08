@@ -24,13 +24,13 @@ export function Placeholder({
         <Icon className="w-16 h-16 text-green-400" />
         <div className="space-y-4">
           <h2
-            className="text-2xl font-bold text-white text-center"
+            className="text-2xl font-bold text-zinc-950 dark:text-white text-center"
             style={{ fontFamily: "var(--font-poppins)" }}
           >
             {title}
           </h2>
           <p
-            className="text-gray-400 text-lg text-center"
+            className="text-zinc-600 dark:text-gray-400 text-lg text-center"
             style={{ fontFamily: "var(--font-manrope)" }}
           >
             {message}

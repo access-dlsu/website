@@ -40,6 +40,7 @@ interface GroupedFile extends DriveFile {
   restricted: boolean;
   displayName: string;
   courseCode?: string | null;
+  academicYearTag?: string | null;
   fileType?: string;
   quizNumber?: number | null;
 }
@@ -172,6 +173,13 @@ export default function ResourcesPage() {
     return `${match[2]}-${match[3]}`;
   }
 
+  function formatAcademicYearTag(tag: string | null | undefined): string | null {
+    if (!tag) return null;
+    const match = tag.match(/^(\d{2})-(\d{2})$/);
+    if (!match) return tag;
+    return `A.Y. 20${match[1]} - 20${match[2]}`;
+  }
+
   function isCurrentAcademicYear(filename: string): boolean {
     return extractAcademicYearTag(filename) === CURRENT_ACADEMIC_YEAR_TAG;
   }
@@ -227,6 +235,7 @@ export default function ResourcesPage() {
         restricted: isRestricted(file.name),
         displayName: file.name.replace(/\[restricted\]/gi, '').replace(/\[members\]/gi, '').trim(),
         courseCode: extractCourseCode(file.name),
+        academicYearTag: extractAcademicYearTag(file.name),
         fileType: getFileTypeCategory(file.name),
         quizNumber: extractQuizNumber(file.name),
       }));
@@ -237,16 +246,16 @@ export default function ResourcesPage() {
     const grouped = new Map<string, CourseGroup>();
     
     files.forEach(file => {
-      const key = file.courseCode || 'Other';
+      const key = `${file.courseCode || 'Other'}::${file.academicYearTag || 'Unknown'}`;
       if (!grouped.has(key)) {
         grouped.set(key, {
-          academicYearTerm: extractAcademicYearTerm(file.name),
+          academicYearTerm: formatAcademicYearTag(file.academicYearTag) || extractAcademicYearTerm(file.name),
           files: []
         });
       }
       // Update academic year/term if we find one and don't have it yet
       if (!grouped.get(key)!.academicYearTerm) {
-        const ayTerm = extractAcademicYearTerm(file.name);
+        const ayTerm = formatAcademicYearTag(file.academicYearTag) || extractAcademicYearTerm(file.name);
         if (ayTerm) {
           grouped.get(key)!.academicYearTerm = ayTerm;
         }
@@ -326,88 +335,101 @@ export default function ResourcesPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {Array.from(groupedData.entries())
           .sort(([a], [b]) => a.localeCompare(b))
-          .map(([courseCode, courseData]) => (
-            <div key={courseCode} className="course-card p-6 h-fit">
-              {/* Course Header */}
-              <div className="mb-6">
-                <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-1" style={{ fontFamily: 'var(--font-poppins)' }}>
-                  {courseCode}
-                </h2>
-                {courseData.academicYearTerm && (
-                  <p className="text-sm text-zinc-700 dark:text-zinc-400" style={{ fontFamily: 'var(--font-manrope)' }}>
-                    {courseData.academicYearTerm}
-                  </p>
-                )}
-              </div>
+          .map(([courseKey, courseData]) => {
+            const [courseCode] = courseKey.split('::');
 
-              {/* Group by file type within course */}
-              {(() => {
-                const byType = new Map<string, GroupedFile[]>();
-                courseData.files.forEach(file => {
-                  const type = file.fileType || 'other';
-                  if (!byType.has(type)) byType.set(type, []);
-                  byType.get(type)!.push(file);
-                });
+            return (
+              <div key={courseKey} className="course-card p-6 h-fit">
+                <div className="mb-6">
+                  <h2
+                    className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-1"
+                    style={{ fontFamily: 'var(--font-poppins)' }}
+                  >
+                    {courseCode}
+                  </h2>
+                  {courseData.academicYearTerm && (
+                    <p
+                      className="text-sm text-zinc-700 dark:text-zinc-400"
+                      style={{ fontFamily: 'var(--font-manrope)' }}
+                    >
+                      {courseData.academicYearTerm}
+                    </p>
+                  )}
+                </div>
 
-                return Array.from(byType.entries()).map(([fileType, typeFiles]) => (
-                  <div key={fileType} className="mb-6 last:mb-0">
-                    {/* File Type Label */}
-                    <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-400 mb-3 uppercase tracking-wide" style={{ fontFamily: 'var(--font-manrope)' }}>
-                      {fileType === 'quiz' ? 'Quizzes' : 
-                        fileType === 'exam' ? 'Exams' : 
-                        fileType === 'notes' ? 'Notes' :
-                        fileType === 'lab' ? 'Labs' :
-                        fileType === 'project' ? 'Projects' : 'Resources'}
-                    </h3>
+                {(() => {
+                  const byType = new Map<string, GroupedFile[]>();
+                  courseData.files.forEach((file) => {
+                    const type = file.fileType || 'other';
+                    if (!byType.has(type)) byType.set(type, []);
+                    byType.get(type)!.push(file);
+                  });
 
-                    {/* Buttons for each file */}
-                    <div className="flex flex-wrap gap-2">
-                      {typeFiles.map((file) => {
-                        const isLocked = file.restricted && !session;
-                        return (
-                          <div key={file.id} className="relative group">
-                            <button
-                              onClick={() => {
-                                if (isLocked) {
-                                  showNotification('Sign in to access this file', 'error');
-                                } else {
-                                  initiateDownload(file.id, file.name);
-                                }
-                              }}
-                              disabled={isLocked}
-                              className={`resource-button ${isLocked ? 'resource-button-locked' : ''} flex items-center gap-2 px-4 py-2.5 font-medium text-sm text-white`}
-                              style={{ fontFamily: 'var(--font-manrope)' }}
-                            >
-                              {isLocked && <Lock className="w-3.5 h-3.5" />}
-                              {file.quizNumber ? (
-                                `${fileType === 'quiz' ? 'Quiz' : fileType === 'exam' ? 'Exam' : 'Test'} ${file.quizNumber}`
-                              ) : (
-                                <span className="max-w-[150px] truncate">{file.displayName}</span>
-                              )}
-                              <Download className="w-3.5 h-3.5" />
-                            </button>
-                            
-                            {/* File size tooltip - shows on hover */}
-                            {file.size && (
-                              <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20">
-                                <div className="file-size-tooltip" style={{ fontFamily: 'var(--font-manrope)' }}>
-                                  {getFileSize(file.size)}
+                  return Array.from(byType.entries()).map(([fileType, typeFiles]) => (
+                    <div key={fileType} className="mb-6 last:mb-0">
+                      <h3
+                        className="text-sm font-semibold text-zinc-700 dark:text-zinc-400 mb-3 uppercase tracking-wide"
+                        style={{ fontFamily: 'var(--font-manrope)' }}
+                      >
+                        {fileType === 'quiz'
+                          ? 'Quizzes'
+                          : fileType === 'exam'
+                            ? 'Exams'
+                            : fileType === 'notes'
+                              ? 'Notes'
+                              : fileType === 'lab'
+                                ? 'Labs'
+                                : fileType === 'project'
+                                  ? 'Projects'
+                                  : 'Resources'}
+                      </h3>
+
+                      <div className="flex flex-wrap gap-2">
+                        {typeFiles.map((file) => {
+                          const isLocked = file.restricted && !session;
+                          return (
+                            <div key={file.id} className="relative group">
+                              <button
+                                onClick={() => {
+                                  if (isLocked) {
+                                    showNotification('Sign in to access this file', 'error');
+                                  } else {
+                                    initiateDownload(file.id, file.name);
+                                  }
+                                }}
+                                disabled={isLocked}
+                                className={`resource-button ${isLocked ? 'resource-button-locked' : ''} flex items-center gap-2 px-4 py-2.5 font-medium text-sm text-white`}
+                                style={{ fontFamily: 'var(--font-manrope)' }}
+                              >
+                                {isLocked && <Lock className="w-3.5 h-3.5" />}
+                                {file.quizNumber ? (
+                                  `${fileType === 'quiz' ? 'Quiz' : fileType === 'exam' ? 'Exam' : 'Test'} ${file.quizNumber}`
+                                ) : (
+                                  <span className="max-w-[150px] truncate">{file.displayName}</span>
+                                )}
+                                <Download className="w-3.5 h-3.5" />
+                              </button>
+
+                              {file.size && (
+                                <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20">
+                                  <div className="file-size-tooltip" style={{ fontFamily: 'var(--font-manrope)' }}>
+                                    {getFileSize(file.size)}
+                                  </div>
                                 </div>
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
-                ));
-              })()}
-            </div>
-          ))}
+                  ));
+                })()}
+              </div>
+            );
+          })}
       </div>
     );
   }
-
   return (
     <div className="min-h-screen">
       <div className="pt-32 pb-8 px-6 max-w-7xl mx-auto">

@@ -14,7 +14,7 @@ export function StatCard({
     <Card className={`p-8 text-center ${className}`}>
       <Icon className="w-12 h-12 text-green-400 mb-4 group-hover:scale-110 transition-transform mx-auto" />
       <div
-        className="text-5xl font-bold text-green-400 mb-3"
+        className="text-5xl font-bold text-white mb-3"
         style={{ fontFamily: "var(--font-poppins)" }}
       >
         {value}
@@ -26,7 +26,7 @@ export function StatCard({
         {title}
       </h3>
       <p
-        className="text-gray-300 mb-4"
+        className="text-white/90 mb-4"
         style={{ fontFamily: "var(--font-manrope)" }}
       >
         {description}

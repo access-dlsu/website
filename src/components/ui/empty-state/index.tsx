@@ -6,7 +6,7 @@ export function EmptyState({ message, className = "" }: EmptyStateProps) {
   return (
     <div className={`text-center py-12 ${className}`}>
       <p
-        className="text-gray-400 text-lg"
+        className="text-zinc-600 dark:text-gray-400 text-lg"
         style={{ fontFamily: "var(--font-manrope)" }}
       >
         {message}
