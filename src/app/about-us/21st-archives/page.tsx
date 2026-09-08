@@ -175,7 +175,7 @@ export default function Archives21stPage() {
                 <Text variant="h3" className="mb-2">Academic Support: Reviewers</Text>
                 <Text variant="body-relaxed" className="text-gray-400 mb-4">
                   Providing comprehensive academic resources, reviewers, and study sessions to
-                  help Computer Engineering students excel — "ACCESSing Reviewers" covered long
+                  help Computer Engineering students excel — &quot;ACCESSing Reviewers&quot; covered long
                   quizzes across the CpE curriculum this academic year.
                 </Text>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
