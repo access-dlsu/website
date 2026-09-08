@@ -2,7 +2,7 @@
 
 The official website of ACCESS DLSU (Association of Computer Engineering Students, De La Salle University). Central hub for events, academic resources, officer directory, and member benefits. Users: members (CpE students), officers (content management/analytics), general public.
 
-**Stack**: Next.js 16 + React 19, TypeScript, TailwindCSS v4, Cloudflare Workers (D1 + opennextjs-cloudflare), NextAuth v5 (Google OAuth).
+**Stack**: Next.js 16 + React 19, TypeScript 6 (7-ready, see `docs/upgrades/`), TailwindCSS v4, Cloudflare Workers (D1 + opennextjs-cloudflare), NextAuth v5 (Google OAuth).
 
 **Single source of truth**: this file. `CLAUDE.md` is a symlink to it. Longer planning docs live in `docs/` (index: `docs/README.md`; session memory: `docs/PROGRESS.md`) — read `docs/PROGRESS.md` when resuming.
 

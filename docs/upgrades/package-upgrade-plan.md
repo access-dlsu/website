@@ -1,6 +1,13 @@
 # Package Upgrade Plan
 
-**Status: Phases 0–5 EXECUTED on 2026-09-08.** Now on: next 16.3.4, react 19.2.8, eslint-config-next 16.3.4 (native flat config, FlatCompat removed), next-auth 5.0.0-beta.32, framer-motion 13.2.0, lucide-react 1.43.0 (footer brand icons → inline SVGs), tailwind 4.3.3, wrangler 4.129.1, @opennextjs/cloudflare 1.20.6, @cloudflare/workers-types 5.20260908.1, @types/node ^24. `middleware.ts` → `src/proxy.ts` done; `npm run typecheck` (tsc --noEmit) added — Next 16 no longer typechecks during build. `workers-types@5` pulled in early (wrangler 4.129 peer) — fallout fixed via `getDB()` helper + explicit `res.json()` casts. R2 binding `NEXT_INC_CACHE_R2_BUCKET` added to wrangler.jsonc (create the real bucket before remote deploy: `wrangler r2 bucket create access-website-inc-cache`). Phase 6 items remain deferred.
+**Status: Phases 0–5 EXECUTED 2026-09-08. Phase 6 executed 2026-09-08 (see table).** Now on: next 16.3.4, react 19.2.8, eslint-config-next 16.3.4 (native flat config, FlatCompat removed), next-auth 5.0.0-beta.32, framer-motion 13.2.0, lucide-react 1.43.0 (footer brand icons → inline SVGs), tailwind 4.3.3, wrangler 4.129.1, @opennextjs/cloudflare 1.20.6, @cloudflare/workers-types 5.20260908.1, @types/node ^24, **typescript 6.0.3** (7-ready; see Phase 6), glob 13. `middleware.ts` → `src/proxy.ts` done; `npm run typecheck` (cf-typegen + tsc --noEmit) added — Next 16 no longer typechecks during build. `workers-types@5` pulled in early (wrangler 4.129 peer) — fallout fixed via `getDB()` helper + explicit `res.json()` casts. Incremental cache = static-assets (no R2/KV binding); staging has its own D1 (`access_dlsu_db_staging`). `env.d.ts` is generated + gitignored.
+
+**Phase 6 outcome:**
+- `typescript@7` — **DONE**, empirically verified: native `tsc --noEmit` passes (error-probe confirmed it really typechecks), Turbopack build passes, opennextjs build (internal tsc) passes. Caveat: editor tooling — the workspace `typescript` package no longer ships the JS tsserver, so "use workspace TypeScript version" in editors won't work; editors should use their bundled TS 5/6 or the tsgo LSP.
+- `eslint@10` — **STILL BLOCKED**: eslint-config-next 16.3.4 declares `eslint >= 9` but its bundled `eslint-plugin-react` crashes on ESLint 10 (`contextOrFilename.getFilename is not a function` in `react/display-name`). Retry when eslint-config-next ships a v10-compatible eslint-plugin-react.
+- `@cloudflare/workers-types@5` — DONE (pulled in early by wrangler peer).
+- `glob@13` — DONE (sitemap script verified).
+- `next-auth` v5 stable — still beta-only; stay on beta.
 
 Last verified: 2026-09-08 (versions from `npm outdated` on this date).
 
@@ -101,23 +108,17 @@ Guide: https://nextjs.org/docs/app/guides/upgrading/version-16
 4. next-auth v5 beta on Next 16: smoke-test the full OAuth flow (sign in, `/officers` gate, sign out) before promoting — beta libraries are the usual source of Next-major breakage.
 5. Full verification: staging deploy (`test` branch), then production.
 
-## Phase 6 — Deferred majors (revisit, don't do now)
+## Phase 6 — Majors (executed 2026-09-08)
 
-| Package | When | Why deferred |
+| Package | Outcome | Evidence / remaining blocker |
 |---|---|---|
-| `typescript@7` | When Next.js docs state TS 7 support | See analysis below |
-| `eslint@10` | When `eslint-config-next` allows `^10` in peers | Flat config already used, so migration is small: Node >=20.19, `eslint-env` comments removed. v9→v10 codemod: `npx codemod @eslint/v9-to-v10` |
-| `@cloudflare/workers-types@5` | With the next `npm run cf-typegen` cycle | v5 (CF changelog 2026-07-03) exposes only the latest runtime types — the dated entrypoints (`@cloudflare/workers-types/2023-07-01` etc.) are **removed**. Types must match your compatibility date/flags, which is exactly what `npm run cf-typegen` (`wrangler types`) generates — prefer regenerating `env.d.ts` over pinning the npm package directly. Only fix needed: drop any dated imports if present, then re-run typecheck |
-| `glob@13` | Next time the sitemap script is touched | ESM-only — script is already `.mjs`, so likely drop-in |
-| `next-auth` v5 stable | When it ships | v4 is npm "latest" but is the older line; stay on v5 beta |
+| `typescript@6` → 7 when possible | **Done at 6.0.3** (bridge release); 7.0.2 pre-verified | TS 7.0.2 was installed and passed typecheck (error-probe verified), Turbopack build, and the opennextjs internal tsc — but `typescript-eslint` (used by eslint-config-next) hard-errors on TS 7.0 ("support for TS >=7.1", tracking typescript-eslint#10940). So: 6.0.3 is the supported floor today; flip to `typescript@^7.1` the moment typescript-eslint ships support — everything else is already proven |
+| `eslint@10` | **Blocked (retry later)** | eslint-config-next 16.3.4 peers say `>=9` but its bundled `eslint-plugin-react` crashes on ESLint 10 (`contextOrFilename.getFilename is not a function` in `react/display-name`). Retry when eslint-config-next ships a v10-compatible plugin. On retry: Node >=20.19, `eslint-env` comments removed, codemod `npx codemod @eslint/v9-to-v10` |
+| `@cloudflare/workers-types@5` | **Done** (pulled in early by wrangler 4.129 peer) | v5 drops dated entrypoints; types match compatibility date via `npm run cf-typegen` |
+| `glob@13` | **Done** | ESM-only; `scripts/generate-sitemap.mjs` verified |
+| `next-auth` v5 stable | Waiting | v4 is npm "latest" but is the older line; stay on v5 beta |
 
-### TypeScript 7 — compatibility analysis (why it's deferred)
-
-TypeScript 7 is the native Go compiler (`tsgo`); the 7.0 RC renamed the binary back to `tsc` and moved it into the `typescript` package, with TS 6.x as the bridge release keeping the old JS compiler + compiler API.
-
-- **Workers runtime impact: none.** TS never runs at runtime on Workers — wrangler/opennextjs ship compiled JS. The only touchpoints are typechecking (`tsc --noEmit`) and editor tooling, so a TS upgrade cannot break the deploy itself.
-- **Build-tooling risk: real.** Next 16's own typechecking step, `eslint-config-next`/`@typescript-eslint` (compiler-API consumers), and `tsconfig.tsbuildinfo` incremental mode are the compat surfaces. TS 7's project-references / `--build` support was still landing during RC, and ecosystem tooling (typescript-eslint line, framework typechecks) was still transitioning past 7.0.
-- **Decision**: stay on `typescript@^5.9` (or TS 6.x bridge when the rest of the stack is ready). Upgrade trigger: Next.js upgrade guide states TS 7 support AND `@typescript-eslint` declares a compatible peer. Low value for this repo anyway — the codebase is small; the 10x typecheck speed is a nice-to-have, not a need.
+Historical analysis (kept for the record): TypeScript 7 is the native Go compiler (`tsgo`); the 7.0 RC renamed the binary back to `tsc` inside the `typescript` package, TS 6.x is the bridge release. Workers runtime impact: none — TS never ships to the runtime; the touchpoints are typechecking and editor tooling, which is exactly what the empirical test above verified.
 
 ## Free-plan gate (applies to every phase)
 
