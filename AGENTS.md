@@ -12,11 +12,11 @@ The official website of ACCESS DLSU (Association of Computer Engineering Student
 npm install        # no lockfile by design — resolves fresh (versions pinned in package.json)
 npm run dev        # Turbopack (default), http://localhost:3000
 npm run build      # Turbopack build — does NOT typecheck (Next 16 removed it) and does NOT exercise the Cloudflare runtime
-npm run typecheck  # tsc --noEmit — run this explicitly, CI-less repo
+npm run typecheck  # regenerates env.d.ts then tsc --noEmit — run this explicitly, CI-less repo
 npm run lint       # bare `eslint`, no --fix
 npm run preview    # opennextjs-cloudflare build + preview (use before deploy)
 npm run deploy     # opennextjs-cloudflare build + deploy
-npm run cf-typegen # regenerates env.d.ts after wrangler.jsonc binding changes
+npm run cf-typegen # regenerates env.d.ts after wrangler.jsonc binding changes (env.d.ts is gitignored, like next-env.d.ts)
 ```
 
 No test framework, no Prettier config (CONTRIBUTING mentions Prettier; none configured — follow existing style). ESLint is `next/core-web-vitals` + `next/typescript` presets, no custom rules.
@@ -41,7 +41,7 @@ Copy `.env.example` → `.env.local`: `AUTH_SECRET` (`openssl rand -base64 32`),
 - Auth (`src/lib/auth.ts`, `src/proxy.ts`): Google OAuth restricted to `@dlsu.edu.ph` in `signIn` callback; proxy gates `/members/*` + `/officers/*` (Next 16 renamed middleware→proxy; nodejs runtime). Matcher skips `api/auth`, `_next/*`, favicon, images. Officer privilege ≠ login: pages verify via D1 `officers` lookup (see `/api/officers/check`); extract to one `requireOfficer()` helper is planned (`docs/modularization.md`).
 - Routes: `src/app/{about-us,academics,events,members,officers}/…`, API under `src/app/api/` (auth, link-shortener, officers/check, resources, set-user-info). `/[slug]` = short-link redirect.
 - Sitemap: `scripts/generate-sitemap.mjs` runs as wrangler `build.command` — keep it working when routes change. (fallow flags it "unused"; it's not.)
-- Deploy target: `.open-next/worker.js` + `.open-next/assets` per `wrangler.jsonc`. R2 appears only in `open-next.config.ts` (incremental cache) — currently missing its binding, see `docs/cloudflare-optimization.md`.
+- Deploy target: `.open-next/worker.js` + `.open-next/assets` per `wrangler.jsonc`. Incremental cache = static-assets override (`open-next.config.ts`) — no R2/KV bindings; add them only when the site starts using ISR/revalidation. Staging (`env.staging`) does NOT inherit top-level bindings — every binding (D1, future ones) must be duplicated under `env.staging`.
 - Known dead code (`src/worker-scheduled.ts`, `src/lib/auth.config.ts`, `auth-provider.tsx`, `page-transition.tsx`, `components/loading.tsx`) and planned cleanups: `docs/simplification.md`.
 
 ## Design system (must match existing UI)
@@ -69,7 +69,7 @@ Copy `.env.example` → `.env.local`: `AUTH_SECRET` (`openssl rand -base64 32`),
 3. Tailwind v4 (`@import "tailwindcss"`, `@tailwindcss/postcss`) — no `tailwind.config.js`; globals.css custom classes can override utilities.
 4. NextAuth v5 is beta; API surface can shift on package bumps.
 5. React 19 / Next 16: async APIs (params, searchParams are Promises; sync access fully removed) — follow existing page patterns.
-6. DB changes need wrangler D1 migration on the real DB — staging and production are separate databases.
+6. DB changes need wrangler D1 migration on the real DB — staging (`access_dlsu_db_staging`) and production (`access_dlsu_db`) are separate databases; apply migrations to both.
 7. Browserslist: `defaults, Safari >= 14` — keep `-webkit-backdrop-filter` prefixes.
 8. npm install-scripts: `allowScripts` in package.json must stay unpinned (`workerd`, `esbuild`, `sharp`, `@tailwindcss/oxide`, `unrs-resolver`) — pinned entries break CI on version drift since there is no lockfile.
 9. `npm run lint` flags the new react-hooks v6 rules (`set-state-in-effect`, refs-during-render) — fix patterns, don't disable rules.

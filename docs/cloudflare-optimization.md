@@ -34,11 +34,11 @@ Enforcement habit: after any wrangler.jsonc or route change, `npm run preview` (
 
 ## Issues found in this repo (fix these first)
 
-### 1. R2 incremental cache binding — RESOLVED 2026-09-08
+### 1. Incremental cache — RESOLVED 2026-09-08 (final: no external cache needed)
 
-`open-next.config.ts` uses `@opennextjs/cloudflare/overrides/incremental-cache/r2-incremental-cache`, which requires an R2 bucket binding (default name `NEXT_INC_CACHE_R2_BUCKET`). The binding is now declared in `wrangler.jsonc`.
+`open-next.config.ts` now uses the **static-assets incremental cache** (`@opennextjs/cloudflare/overrides/incremental-cache/static-assets-incremental-cache`) — read-only, served from the existing `ASSETS` binding, zero extra bindings. Correct for this site because every page is prerendered static (no `use cache`, no ISR revalidation).
 
-**Remaining manual step**: create the real bucket before the next remote deploy — `wrangler r2 bucket create access-website-inc-cache` (free plan supports R2; see the free-plan table below for why KV was not an option). Until the bucket exists, `wrangler deploy` will fail on the R2 binding.
+History: an R2 override was tried first (`NEXT_INC_CACHE_R2_BUCKET`), but opennextjs requires the binding at deploy for R2 — and since wrangler does **not** inherit top-level bindings into named environments, `env.staging` would have needed its own copy plus a real bucket. R2/KV caches only pay off once the site actually uses ISR/revalidation; revisit then (see `load-handling.md` for the free-plan constraints at that point — KV is never viable, R2 is).
 
 ### 2. D1 query patterns
 

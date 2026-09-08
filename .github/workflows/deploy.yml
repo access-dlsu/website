@@ -11,6 +11,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('package.json') }}
+          restore-keys: |
+            node-modules-${{ runner.os }}-
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
@@ -18,6 +26,9 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+
+      - name: Generate Cloudflare types
+        run: npm run cf-typegen
 
       - name: Build with OpenNext
         run: npx @opennextjs/cloudflare build

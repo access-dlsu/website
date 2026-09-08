@@ -36,13 +36,12 @@ Keep this updated at the end of every work session. It exists so a future sessio
 
 ### Next steps (in recommended order)
 
-1. **Create the R2 bucket before next deploy** — `wrangler r2 bucket create access-website-inc-cache` (binding already in wrangler.jsonc; deploys fail without it). Free-plan friendly.
-2. **Deploy to staging** — push to `test`, verify OAuth sign-in flow + link shortener + resources on staging.accessdlsu.com (runtime OAuth with real Google credentials could not be exercised locally).
-3. **Simplification pass** — `docs/simplification.md`: delete remaining dead files (`auth.config.ts`, `auth-provider.tsx`, `loading.tsx`, `worker-scheduled.ts` — keep-or-wire decision pending), fix `init_db.sql` schema drift.
-4. **Modularization P1** — `docs/modularization.md`: `requireOfficer()` extraction (6 pages; `getDB()` already landed as the pattern).
-5. UI standardization + remaining modularization (P2–P6) — see respective docs.
-6. Load handling improvements (Cache API on `[slug]`, click-count batching) — `docs/load-handling.md`.
-7. Phase 6 majors (TS 7, ESLint 10, glob 13) — deferred; triggers documented in the upgrade plan.
+1. **Push to `test` and verify staging** — staging deploy should now pass: staging has its own D1 (`access_dlsu_db_staging`, migrations 001–004 applied 2026-09-08: 6 officers, links schema present) and the incremental cache needs no external binding (static-assets cache). Verify OAuth sign-in + link shortener + resources on staging.accessdlsu.com.
+2. **Simplification pass** — `docs/simplification.md`: delete remaining dead files (`auth.config.ts`, `auth-provider.tsx`, `loading.tsx`, `worker-scheduled.ts` — keep-or-wire decision pending), fix `init_db.sql` schema drift.
+3. **Modularization P1** — `docs/modularization.md`: `requireOfficer()` extraction (6 pages; `getDB()` already landed as the pattern).
+4. UI standardization + remaining modularization (P2–P6) — see respective docs.
+5. Load handling improvements (Cache API on `[slug]`, click-count batching) — `docs/load-handling.md`.
+6. Phase 6 majors (TS 7, ESLint 10, glob 13) — deferred; triggers documented in the upgrade plan.
 
 ### Constraints (hard)
 

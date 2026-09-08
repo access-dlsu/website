@@ -11,7 +11,7 @@
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv env.d.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "npm run cf-typegen && tsc --noEmit"
   },
   "dependencies": {
     "framer-motion": "^13.2.0",

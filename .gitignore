@@ -52,3 +52,6 @@ wrangler.toml
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# cloudflare generated types (npm run cf-typegen)
+/env.d.ts
