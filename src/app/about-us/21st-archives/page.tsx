@@ -219,7 +219,7 @@ export default function Archives21stPage() {
                 <Text variant="h3" className="mb-2">Partnerships Established</Text>
                 <Text variant="body-relaxed" className="text-gray-400 mb-4">
                   Forging strong ties with industry leaders, tech communities, and other student
-                  organizations to create more opportunities.
+                  organizations to create more opportunities—including proud partnerships with ASME, Red Cross Youth, and UVMW 2026.
                 </Text>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
                   <Slide src="/21st-archives/partnerships/animo-christmas.jpg" label="Partnerships Established — ANIMO Christmas, Arduino Day 2026, Baylayn 2026" />
