@@ -65,39 +65,39 @@ const EXECUTIVE_BOARD = [
 const COMMITTEES = [
   {
     role: 'Promotions',
-    names: ['Gabrielle Calma', 'Sophia Lansangan', 'Justine Lumilan', 'Charles Mercado', 'Justin Pallasigui', 'Yohann Rigo', 'Martin Valdez'],
+    names: ['Charles Rodley Mercado', 'Gabrielle Calma', 'Justin Maenard Pallasigui', 'Justine Lumilan', 'Martin Cross Valdez', 'Sophia Kathleen Lansangan', 'Yohann Elijah Rigo'],
   },
   {
     role: 'Finance',
-    names: ['Hazell Melody Chua', 'Johanna Alquitran', 'Alessandre Balmes', 'Evangeline Espiritu', 'Katrina Li Gao', 'Margaret Ramos', 'Ramon Recalde'],
+    names: ['Alessandre James Balmes', 'Evangeline Beatriz Espiritu', 'Hazel Melody Chua', 'Johanna Claudia Marice Alquitran', 'Katrina Gao', 'Margaret Ramos', 'Ramon Miguel Recalde'],
   },
   {
     role: 'Logistics',
-    names: ['Pamela Calma', 'Jian Gabriel Toledo', 'Hanns Angsanto', 'Emmanuel Edreisa', 'Rilen Gawat', 'Jared Lofamia', 'Jaekel Pangan', 'Jules Reyes', 'Rogelio Sebua Jr.'],
+    names: ['Emmanuel Edreisa', 'Hanns Dominic Angsanto', 'Jaekel Terrence Pangan', 'Jared Joshua Lofamia', 'Jian Gabriel Toledo', 'Jules Emmanuel Reyes', 'Pamela Beatrice Calma', 'Rilen Gawat', 'Rogelio Sebua Jr.'],
   },
   {
     role: 'Documentations',
-    names: ['Joshua Bout', 'Shamelle Mangubat', 'Mark Prieto', 'Eliseo Quinsaat IV', 'Carl Tafalla'],
+    names: ['Carl Andrei Tafalla', 'Eliseo Miguel Quinsaat IV', 'Joshua Bout', 'Mark Gerald Prieto', 'Shamelle Raine Mangubat'],
   },
   {
     role: 'Alliances',
-    names: ['Gill Whenzel Quijano', 'Marc Lim', 'Aldrich Lotas', 'John Roa', 'Wayne Tolentino', 'Zamanttha Sahidulla'],
+    names: ['Aldrich Justin Lotas', 'Gill Whenzel Quijano', 'John Carlo Cheng Roa', 'Marc Jairo Lim', 'Wayne Ian Tolentino', 'Zamanttha Zyrah Sahidulla'],
   },
   {
     role: 'Affiliations',
-    names: ['Miguel Cabangon', 'Luis Cantor', 'Khyler Chua', 'Kirsten Cudo', 'Cyrill Dasalla', 'Miguel Lirazan', 'Ysabella Santos'],
+    names: ['Anton Cabangon', 'Cyrill Dasalla', 'Khyler Chua', 'Kirsten Cudo', 'Luis Cantor', 'Miguel Antonio Lirazan', 'Ysabella Santos'],
   },
   {
     role: 'Events',
-    names: ['Estacio	Harold Braeden', 'Joshua Balingit', 'Caeljan Cristobal', 'Raizen Jocson', 'Janine Nobleza', 'John Politan'],
+    names: ['Caeljan Cristobal', 'Harold Braeden Estacio', 'Janine Claire Nobleza', 'John Carl Polintan', 'Joshua Andrei Balingit', 'Raizen Jorel Jocson'],
   },
   {
     role: 'Academics',
-    names: ['Win Sy', 'Faisal Tamano', 'Zander Ivo Holoyohoy', 'Miguel Abad', 'Nathanael Bajamunde', 'Ryan So', 'Aaron Tristan', 'Ian Vahlois'],
+    names: ['Aaron Abel Tristan', 'Faisal Richard Tamano Jr.', 'Ian Brandon Vahlois', 'Miguel Andrei Abad', 'Nathanael Bajamunde', 'Ryan Justin So', 'Win Clarence Sy', 'Zander Ivo Holoyohoy'],
   },
   {
     role: 'Human Resources',
-    names: ['Sidney Chelsea Tan', 'Ron Elmo Kristofer Cabangon', 'Jerome Cruz', 'Aaron Dionisio', 'Wendell Go', 'Evan Punzalan'],
+    names: ['Aaron Dionisio', 'Evan Punzalan', 'Jerome Cruz', 'Ron Elmo Kristofer Cabangon', 'Sidney Chelsea Tan', 'Wendell Jarett Go'],
   },
 ];
 
