@@ -174,7 +174,7 @@ export default function Archives21stPage() {
                 <div className="absolute w-4 h-4 rounded-full bg-green-500 -left-[9px] top-1 shadow-[0_0_10px_rgba(34,197,94,0.5)]"></div>
                 <Text variant="h3" className="mb-2">Academic Support: Reviewers</Text>
                 <Text variant="body-relaxed" className="text-gray-400 mb-4">
-                  Providing comprehensive academic resources, reviewers, and study sessions to
+                  Providing comprehensive academic resources, reviewers to
                   help Computer Engineering students excel — &quot;ACCESSing Reviewers&quot; covered long
                   quizzes across the CpE curriculum this academic year.
                 </Text>
