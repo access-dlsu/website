@@ -45,8 +45,22 @@ const NAV_CONFIG: NavItem[] = [
   {
     id: "about",
     label: "About Us",
-    href: "/about-us",
     icon: Info,
+    isDropdown: true,
+    dropdownContent: [
+      {
+        title: "Who We Are",
+        items: [
+          { label: "About ACCESS", href: "/about-us", icon: Info },
+        ],
+      },
+      {
+        title: "Accomplishments",
+        items: [
+          { label: "21st Archives", href: "/about-us/21st-archives", icon: Trophy },
+        ],
+      },
+    ],
   },
   {
     id: "events",
