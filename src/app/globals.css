@@ -3205,25 +3205,6 @@ body {
    feature simply doesn't match, so non-foldables are unaffected.
    ============================================================== */
 
-/* === Duo-like frosted-glass fold (web port) =====================
-   Port of elijah-semyonov/DuoLikeAnimation (SwiftUI + Metal) to the web.
-   Model: the page stays on its plane and the eye stays put; a glass
-   plane hinged on the fold edge tilts toward the eye, and whatever is
-   seen through it is blurred + dimmed in proportion to the gap between
-   the glass and the page:
-     radius      = blurSpread * distanceFromHinge * sin(tilt)
-     attenuation = 1 - darkening * radius
-   Browsers can't ray-reproject live DOM per pixel, so reprojection is
-   approximated by tilting the glass in CSS 3D (perspective = eye
-   distance) and the frost is banded by distance from the hinge.
-   Tilt comes from device orientation (first sample = calibrated zero)
-   or the pointer on desktop, and everything is inert unless the device
-   is in the segmented (folded) posture.
-   ============================================================== */
-.duo {
-    display: none;
-}
-
 /* Corner grips + the ball for the folded nav rail (revealed by the fold query). */
 .nav-grip,
 .nav-grip-bead {
@@ -3233,42 +3214,6 @@ body {
 /* Resize hint: folded-only (the resize state can't happen elsewhere). */
 .navbar-resizing {
     display: none;
-}
-
-@media (horizontal-viewport-segments: 2) and (vertical-viewport-segments: 1) {
-    .duo {
-        display: block;
-        position: fixed;
-        inset: 0;
-        z-index: 2000;
-        pointer-events: none;
-        perspective: var(--duo-eye, 1920px);
-        perspective-origin: 50% 50%;
-    }
-
-    .duo-glass {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        transform-style: preserve-3d;
-        transform-origin: var(--duo-origin, left center);
-        transform: rotateY(var(--duo-rotate, 0deg));
-    }
-
-    .duo-strip {
-        flex: 1 1 0;
-        position: relative;
-        /* backdrop-filter blur and --duo-dim are written per band by
-           duo-fold.tsx from the tilt (see the radius formula above). */
-    }
-
-    .duo-strip::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: #000;
-        opacity: var(--duo-dim, 0);
-    }
 }
 
 @media (horizontal-viewport-segments: 2) and (vertical-viewport-segments: 1) {
