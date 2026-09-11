@@ -71,7 +71,7 @@ export function Footer() {
   return (
     <footer className={`footer ${isAtBottom ? 'footer-visible' : 'footer-hidden'}`}>
       <p className="footer-text">
-        <Image src={accessLogoSrc} alt="ACCESS Logo" width={32} height={32} className="footer-logo" />
+        <Image src={accessLogoSrc} alt="ACCESS Logo" width={32} height={32} className="footer-logo h-8 w-8" />
         <span className="max-lg:hidden">© 2025 by The Association of Computer Engineering Students</span>
         <span className="lg:hidden">© ACCESS 2025</span>
       </p>
